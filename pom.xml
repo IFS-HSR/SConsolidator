@@ -12,7 +12,7 @@
 	<properties>
 		<encoding>UTF-8</encoding>
 		<tycho-version>0.20.0</tycho-version>
-		<compiler-version>1.7</compiler-version>
+		<compiler-version>1.6</compiler-version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -34,8 +34,8 @@
 				<artifactId>tycho-compiler-plugin</artifactId>
 				<version>${tycho-version}</version>
 				<configuration>
-					<source>1.7</source>
-					<target>1.7</target>
+					<source>1.6</source>
+					<target>1.6</target>
 				</configuration>
 			</plugin>
 			<plugin>
