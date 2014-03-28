@@ -1,0 +1,91 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<link rel="stylesheet" type="text/css" href="../help.css">
+	<title>What's new in SConsolidator</title>
+</head>
+<body>
+<h1>What's new in SConsolidator</h1>
+<p><b>Changelog</b></p>
+
+<ul>
+<li><b>0.6.0</b>
+<ul>
+<li>The two supported modes <i>managed</i> (projects where SConsolidator creates and updates the SCons build files) vs. <i>existing</i> (projects 
+where the user provides the SCons build files) are now clearly reflected in the UI; the SCons project menu now has two separate entries:
+<ul>
+<li>Use self-provided SCons build (<i>existing</i>)</li>
+<li>Use generated SCons build (<i>managed</i>)</li>
+</ul>
+</li>
+<li>It is now possible to add SCons support to multiple projects in the Eclipse project explorer by selecting them and using the corresponding project context menu</li>
+<li>Improved support for C projects</li>
+<li>Possibility to specify the SCons executable name in the workspace settings non-absolute (SConsolidator determines the path by using the PATH environment variable)</li>
+</ul>
+</ul>
+
+<ul>
+<li><b>0.5.0</b>
+<ul>
+<li>Adding SCons to an existing CDT managed project now offers to choose between a managed SCons project (SConsolidator creates
+and maintains the SConstruct file) and the possibility to use a self-provided SConstruct file
+</li>
+<li>Compatibility with Eclipse Juno
+</li>
+</ul>
+</ul>
+
+<ul>
+<li><b>0.4.0</b>
+<ul>
+<li>Possibility to change environment variables for running SCons on a project level
+</li>
+<li>Various minor bug fixes
+</li>
+</ul>
+</ul>
+
+<ul>
+<li><b>0.3.0</b>
+<ul>
+<li>No need for specifying "dry-run" option anymore for projects making use of SCons Autobuild (Configure) feature
+</li>
+<li>Various minor bug fixes
+</li>
+</ul>
+</ul>
+
+<ul>
+<li><b>0.2.0</b>
+<ul>
+<li>Basic support for non-C/C++ projects (so far, only C/C++ projects were supported):
+To add SCons support to an existing non-C/C++ project, just right click on the project in the project explorer
+and choose "SCons-&gt;Add SCons Support". Afterwards, if you request a build, SCons is called. SConsolidator's target and 
+dependency view also work together with non-C/C++ projects. However, interactive builds are currently not supported yet.
+</li>
+</ul>
+</ul>
+
+<ul>
+<li><b>0.1.0</b>
+<ul>
+<li>SConsolidator plug-ins are now signed</li>
+<li>Various little bug fixes</li>
+</ul>
+</li>
+
+<li><b>0.0.4</b>
+<ul>
+<li>Support for SCons v2.1.0: changes were necessary since v2.1.0 SCons uses tuples instead of plain old strings for its environment variable CPPDEFINES</li>
+<li>Env variables can be specified with "${env_name}" in the build settings now to eliminate potential differences when working with SCons in a shell environment</li>
+<li>Improved compatibility to Eclipse Helios release</li>
+<li>Check for SCons installation path is now only done one when the plug-in is loaded instead of when building a project</li>
+</ul>
+</li>
+
+<li><b>0.0.3</b> - First public available release</li>
+</ul>
+</body>
+</html>

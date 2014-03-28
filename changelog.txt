@@ -1,0 +1,56 @@
+0.6.0
+
+* The two supported modes managed (projects where SConsolidator creates and updates the SCons build files) vs. existing (projects 
+where the user provides the SCons build files) are now clearly reflected in the UI; the SCons project menu now has two separate entries:
+  - Use self-provided SCons build existing
+  - Use generated SCons build (managed)
+
+* It is now possible to add SCons support to multiple projects in the Eclipse project explorer by selecting them and using the corresponding project context menu</li>
+  - Improved support for C projects</li>
+  - Possibility to specify the SCons executable name in the workspace settings non-absolute (SConsolidator determines the path by using the PATH environment variable)</li>
+
+
+0.5.0
+
+* Adding SCons to an existing CDT managed project now offers to choose between a managed SCons project (SConsolidator creates
+and maintains the SConstruct file) and the possibility to use a self-provided SConstruct file
+* Compatibility with Eclipse Juno
+
+
+0.4.0
+
+* Possibility to change environment variables for running SCons on a project level
+* Various minor bug fixes
+
+
+0.3.0
+
+* No need for specifying "dry-run" option anymore for projects making use of SCons Autobuild (Configure) feature
+* Various minor bug fixes
+
+
+0.2.0
+
+* Basic support for non-C/C++ projects (so far, only C/C++ projects were supported): To add SCons support to an existing
+non-C/C++ project, just right click on the project in the project explorer and choose "SCons->Add SCons Support". Afterwards, 
+if you request a build, SCons is called. SConsolidator's target and dependency view also work together with non-C/C++ projects.
+However, interactive builds are currently not supported yet.
+
+
+0.1.0
+
+* SConsolidator plug-ins are now signed
+* Various little bug fixes
+
+
+0.0.4
+
+* Support for SCons v2.1.0: changes were necessary since v2.1.0 SCons uses tuples instead of plain old strings for its environment variable CPPDEFINES
+* Env variables can be specified with "${env_name}" in the build settings now to eliminate potential differences when working with SCons in a shell environment
+* Improved compatibility to Eclipse Helios release
+* Check for SCons installation path is now only done one when the plug-in is loaded instead of when building a project
+
+
+0.0.3
+
+* First public available release

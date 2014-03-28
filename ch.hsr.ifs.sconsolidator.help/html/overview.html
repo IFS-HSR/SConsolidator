@@ -1,0 +1,38 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<link rel="stylesheet" type="text/css" href="../help.css">
+	<title>SConsolidator Overview</title>
+</head>
+<body>
+<h1>SConsolidator - Eclipse plug-in for SCons</h1>
+
+<p>SCons is an open source software build tool which tries to fix the numerous
+weaknesses of make and its derivatives. For example, the missing automatic
+dependency extraction, make's complex syntax to describe build properties and cross-
+platform issues when using shell commands and scripts. SCons is a self-contained tool
+which is independent of existing platform utilities. Because it is based on Python a SCons
+user has the full power of a programming language to deal with all build related issues.</p>
+
+<p>However, maintaining a SCons-based C/C++ project with Eclipse CDT meant, that all the
+intelligence SCons puts into your project dependencies had to be re-entered into Eclipse
+CDT's project settings, so that CDT's indexer and parser would be able to know your
+code's compile settings and enable many of CDTs features. In addition, SCons' intelligence
+comes at the price of relatively long build startup times, when SCons (re-) analyses the
+project dependencies which can become annoying when you just fix a simple syntax error.</p>
+
+<p>SConsolidator addresses these issues and provides tool integration for SCons in Eclipse
+for a convenient development experience. The plug-in features:</p>
+
+<ul>
+<li>Conversion of existing C/C++ managed build projects to SCons projects</li>
+<li>Import of existing SCons projects into Eclipse with wizard support</li>
+<li>Interactive mode to quickly build single C/C++ source files speeding up round trip times</li>
+<li>A special view for a convenient build target management of all workspace projects</li>
+<li>Graph visualization of build dependencies that helps in debugging SCons build problems</li>
+</ul>
+
+</body>
+</html>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<introContent>
+  	<extensionContent id="ch.hsr.ifs.sconsolidator.help" style="css/tutorial.css" 
+  	                  alt-style="css/sconsolidator_tutorial.properties"
+  	                  name="Eclipse plug-in for SCons" path="tutorials/@">
+		<group label="Eclipse plug-in for SCons" id="sconsolidator" style-id="content-group">
+    	<link style-id="content-link" label="Using SConsolidator" 
+       		      url="http://org.eclipse.ui.intro/showHelpTopic?id=/ch.hsr.ifs.sconsolidator.help/html/gettingstarted.html"  
+       		      id="sconsolidator">
+          		<text>Learn how to use SConsolidator for building your projects.</text></link>
+       	</group>
+  	</extensionContent>
+</introContent>

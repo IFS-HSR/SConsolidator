@@ -1,0 +1,6 @@
+env = Environment()
+env.Append(CPPDEFINES={'Foo': 42,  'Bar': 'YES'})
+env.Append(CPPPATH=['cute/', 'src/shapes', '/usr/include/xorg'])
+env.Append(CCFLAGS='-O3')
+env.StaticLibrary('gartenbau', Glob('src/shapes/*.cpp'))
+env.Program('test/gartenbau_tests.cpp', LIBS=['gartenbau'], LIBPATH='.')

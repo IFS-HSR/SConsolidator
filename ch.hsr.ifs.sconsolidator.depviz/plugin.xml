@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+    <extension
+         point="org.eclipse.ui.views">
+      <category
+            name="%SconsCategoryName"
+            id="ch.hsr.ifs.sconsolidator.core">
+      </category>
+      <view
+            name="%SconsDepVizViewName"
+            icon="icons/depviz_view.png"
+            category="ch.hsr.ifs.sconsolidator.core"
+            class="ch.hsr.ifs.sconsolidator.depviz.view.DependencyTreeView"
+            id="ch.hsr.ifs.sconsolidator.depviz.DepVizView">
+      </view>
+   </extension>
+</plugin>

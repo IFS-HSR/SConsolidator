@@ -1,0 +1,761 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+<!-- Managed C/C++ Project Nature -->
+   <extension
+         id="ch.hsr.ifs.sconsolidator.ManagedNature"
+         name="%NatureManagedName"
+         point="org.eclipse.core.resources.natures">
+      <runtime>
+         <run
+            class="ch.hsr.ifs.sconsolidator.core.managed.SConsManagedNature">
+         </run>
+      </runtime>
+      <one-of-nature id="ch.hsr.ifs.sconsolidator.natures"/>
+      <requires-nature id="org.eclipse.cdt.core.cnature"/>
+      <builder
+            id="ch.hsr.ifs.sconsolidator.Builder">
+      </builder>
+   </extension>
+   <!-- Existing C/C++ Code Project Nature -->
+   <extension
+         id="ch.hsr.ifs.sconsolidator.ExistingCodeNature"
+         name="%NatureExistingCodeName"
+         point="org.eclipse.core.resources.natures">
+      <runtime>
+         <run
+            class="ch.hsr.ifs.sconsolidator.core.existingbuild.SConsExistingCodeNature">
+         </run>
+      </runtime>
+      <one-of-nature id="ch.hsr.ifs.sconsolidator.natures"/>
+      <requires-nature id="org.eclipse.cdt.core.cnature"/>
+      <builder
+            id="ch.hsr.ifs.sconsolidator.Builder">
+      </builder>
+   </extension>
+   <!-- Non-C/C++ Nature -->
+   <extension
+         id="ch.hsr.ifs.sconsolidator.NonCppNature"
+         name="%NatureNoncppName"
+         point="org.eclipse.core.resources.natures">
+      <runtime>
+         <run
+            class="ch.hsr.ifs.sconsolidator.core.noncpp.SConsNonCppNature">
+         </run>
+      </runtime>
+      <one-of-nature id="ch.hsr.ifs.sconsolidator.natures"/>
+      <builder
+            id="ch.hsr.ifs.sconsolidator.Builder">
+      </builder>
+   </extension>
+   <!-- Builder Config -->
+   <extension
+         id="ch.hsr.ifs.sconsolidator.Builder"
+         name="%BuilderName"
+         point="org.eclipse.core.resources.builders">
+      <builder callOnEmptyDelta="true">
+         <run
+           class="ch.hsr.ifs.sconsolidator.core.SConsBuilder">
+         </run>
+      </builder>
+   </extension>
+   <!-- Context Menus -->
+   <extension
+          point="org.eclipse.ui.popupMenus">
+       <!-- Enable "Managed Build" Project Nature -->
+       <objectContribution
+             id="ch.hsr.ifs.sconsolidator.addManagedNatureAction"
+             objectClass="java.lang.Object">
+         <visibility>
+         	  <and>
+                 <or>
+	              <and>
+		             <objectClass name="org.eclipse.core.resources.IProject"/>
+		             <objectState name="nature" value="org.eclipse.cdt.core.cnature"/>
+	              </and>
+	              <objectClass name="org.eclipse.cdt.core.model.ICProject"/>
+	             </or>
+                  <not>
+	                  <objectState name="nature"
+	                        value="ch.hsr.ifs.sconsolidator.ManagedNature">
+	                  </objectState>
+	               </not>
+	               <not>
+	                  <objectState name="nature"
+	                        value="ch.hsr.ifs.sconsolidator.ExistingCodeNature">
+	                  </objectState>
+	               </not>
+	          </and>
+         </visibility>
+         <menu
+               id="ch.hsr.ifs.sconsolidator"
+               label="%PluginVisibleName"
+               path="buildGroup">
+            <groupMarker name="rebuild"/>
+            <separator name="nature"/>
+         </menu>
+         <action
+               class="ch.hsr.ifs.sconsolidator.core.managed.actions.AddManagedNatureAction"
+               enablesFor="+"
+               id="ch.hsr.ifs.sconsolidator.addManagedNatureAction"
+               label="%MenuAddSConsManagedNature"
+               style="push"
+               menubarPath="ch.hsr.ifs.sconsolidator/nature">
+           </action>
+        </objectContribution>
+        <!-- Enable "Existing Code" Project Nature -->
+         <objectContribution
+             id="ch.hsr.ifs.sconsolidator.addExistingCodeNatureAction"
+             objectClass="java.lang.Object">
+         <visibility>
+         	<and>
+                 <or>
+	              <and>
+		             <objectClass name="org.eclipse.core.resources.IProject"/>
+		             <objectState name="nature" value="org.eclipse.cdt.core.cnature"/>
+	              </and>
+	              <objectClass name="org.eclipse.cdt.core.model.ICProject"/>
+	             </or>
+                  <not>
+	                  <objectState name="nature"
+	                        value="ch.hsr.ifs.sconsolidator.ManagedNature">
+	                  </objectState>
+	               </not>
+	               <not>
+	                  <objectState name="nature"
+	                        value="ch.hsr.ifs.sconsolidator.ExistingCodeNature">
+	                  </objectState>
+	               </not>
+	          </and>
+         </visibility>
+         <menu
+               id="ch.hsr.ifs.sconsolidator"
+               label="%PluginVisibleName"
+               path="buildGroup">
+            <groupMarker name="rebuild"/>
+            <separator name="nature"/>
+         </menu>
+         <action
+               class="ch.hsr.ifs.sconsolidator.core.existingbuild.actions.AddExistingNatureAction"
+               enablesFor="+"
+               id="ch.hsr.ifs.sconsolidator.addExistingNatureAction"
+               label="%MenuAddSConsExistingNature"
+               style="push"
+               menubarPath="ch.hsr.ifs.sconsolidator/nature">
+           </action>
+        </objectContribution>
+        <!-- Non-C/C++ Project Nature -->
+         <objectContribution adaptable="true"
+             id="ch.hsr.ifs.sconsolidator.addNonCppNatureAction" objectClass="org.eclipse.core.resources.IProject">
+         <visibility>
+           <and>
+              <not>
+                <or>
+                  <and>
+	                <objectClass name="org.eclipse.core.resources.IProject"/>
+	                <objectState name="nature" value="org.eclipse.cdt.core.cnature"/>
+                  </and>
+              	  <objectState name="nature" value="org.eclipse.cdt.core.model.ICProject"/>
+              	</or>
+              </not>
+              <not>
+                  <objectState name="nature" value="ch.hsr.ifs.sconsolidator.NonCppNature"/>
+              </not>
+	       </and>
+         </visibility>
+         <menu
+               id="ch.hsr.ifs.sconsolidator"
+               label="%PluginVisibleName"
+               path="buildGroup">
+            <groupMarker name="rebuild"/>
+            <separator name="nature"/>
+         </menu>
+         <action
+               class="ch.hsr.ifs.sconsolidator.core.noncpp.AddNonCppNatureAction"
+               id="ch.hsr.ifs.sconsolidator.addNonCppNatureAction"
+               label="%MenuAddSConsNature"
+               enablesFor="+"
+               style="push"
+               menubarPath="ch.hsr.ifs.sconsolidator/nature">
+         </action>
+       </objectContribution>
+       <!-- SCons Project-wide Contributions -->
+       <objectContribution adaptable="true"
+             id="ch.hsr.ifs.sconsolidator.sconsContributions"
+             objectClass="org.eclipse.core.resources.IProject">
+         <visibility>
+           <or>
+              <objectState name="nature"
+                value="ch.hsr.ifs.sconsolidator.ExistingCodeNature">
+              </objectState>
+              <objectState name="nature"
+                value="ch.hsr.ifs.sconsolidator.ManagedNature">
+              </objectState>
+              <objectState name="nature"
+                value="ch.hsr.ifs.sconsolidator.NonCppNature">
+              </objectState>
+           </or>
+         </visibility>
+         <menu
+               id="ch.hsr.ifs.sconsolidator"
+               label="%PluginVisibleName"
+               path="buildGroup">
+            <groupMarker name="rebuild"/>
+            <separator name="nature"/>
+         </menu>
+          <action
+                class="ch.hsr.ifs.sconsolidator.core.RemoveSConsNatureAction"
+                definitionId="ch.hsr.ifs.sconsolidator.removeNature"
+                id="ch.hsr.ifs.sconsolidator.removeNatureAction"
+                label="%MenuRemoveNature"
+                enablesFor="+"
+                menubarPath="ch.hsr.ifs.sconsolidator/nature"
+                style="push">
+          </action>
+       </objectContribution>
+       <!-- SCons C/C++ Project Contributions -->
+       <objectContribution
+             id="ch.hsr.ifs.sconsolidator.sconsContributions"
+             objectClass="java.lang.Object">
+         <visibility>
+           <and>
+              <or>
+	              <and>
+		             <objectClass name="org.eclipse.core.resources.IProject"/>
+		             <objectState name="nature" value="org.eclipse.cdt.core.cnature"/>
+	              </and>
+	              <objectClass name="org.eclipse.cdt.core.model.ICProject"/>
+	          </or>
+              <or>
+                  <objectState name="nature"
+                      value="ch.hsr.ifs.sconsolidator.ExistingCodeNature">
+                  </objectState>
+                  <objectState name="nature"
+                      value="ch.hsr.ifs.sconsolidator.ManagedNature">
+                  </objectState>
+              </or>
+            </and>
+         </visibility>
+         <menu
+               id="ch.hsr.ifs.sconsolidator"
+               label="%PluginVisibleName"
+               >
+            <groupMarker name="rebuild"/>
+            <separator name="nature"/>
+         </menu>
+          <action
+                class="ch.hsr.ifs.sconsolidator.core.console.interactive.actions.StartInteractiveConsoleAction"
+                definitionId="ch.hsr.ifs.sconsolidator.startInteractiveConsole"
+                id="ch.hsr.ifs.sconsolidator.startInteractiveConsoleAction"
+                label="%MenuStartInteractiveConsole"
+                enablesFor="1"
+                menubarPath="ch.hsr.ifs.sconsolidator/nature"
+                style="push">
+          </action>
+          <action
+               label="%MenuLastTargetBuildName"
+               class="ch.hsr.ifs.sconsolidator.core.targets.actions.BuildLastTargetAction"
+               menubarPath="ch.hsr.ifs.sconsolidator/nature"
+               definitionId="ch.hsr.ifs.sconsolidator.buildLastTarget"
+               enablesFor="1"
+               id="ch.hsr.ifs.sconsolidator.popup.BuildLastTargetAction">
+         </action>
+         <action
+               class="ch.hsr.ifs.sconsolidator.core.RescanImplicitDepsAction"
+               id="ch.hsr.ifs.sconsolidator.rescanImplicitDependencies"
+               label="%MenuRescanDependencies"
+               menubarPath="ch.hsr.ifs.sconsolidator/nature">
+         </action>
+       </objectContribution>
+       <!-- SCons "Existing Code" Project Contributions -->
+        <objectContribution
+             id="ch.hsr.ifs.sconsolidator.SConsContribution"
+             objectClass="java.lang.Object">
+         <visibility>
+           <and>
+              <or>
+	              <and>
+		             <objectClass name="org.eclipse.core.resources.IProject"/>
+		             <objectState name="nature" value="org.eclipse.cdt.core.cnature"/>
+	              </and>
+	              <objectClass name="org.eclipse.cdt.core.model.ICProject"/>
+	          </or>
+              <objectState
+                 name="projectNature"
+                 value="ch.hsr.ifs.sconsolidator.ExistingCodeNature"/>
+           </and>
+         </visibility>
+         <menu
+               id="ch.hsr.ifs.sconsolidator"
+               label="%PluginVisibleName"
+               path="buildGroup">
+            <groupMarker name="rebuild"/>
+            <separator name="nature"/>
+         </menu>
+          <action
+                class="ch.hsr.ifs.sconsolidator.core.existingbuild.actions.RefreshProjectFromSConsAction"
+                definitionId="ch.hsr.ifs.sconsolidator.refreshFromSCons"
+                id="ch.hsr.ifs.sconsolidator.refreshFromSConsAction"
+                label="%MenuRefreshProjectFromSCons"
+                enablesFor="+"
+                menubarPath="ch.hsr.ifs.sconsolidator/nature"
+                style="push">
+          </action>
+       </objectContribution>
+      <!-- SCons "Managed Build" Project Contributions -->
+      <objectContribution
+             id="ch.hsr.ifs.sconsolidator.SConsContribution"
+             objectClass="java.lang.Object">
+         <visibility>
+           <and>
+              <or>
+	              <and>
+		             <objectClass name="org.eclipse.core.resources.IProject"/>
+		             <objectState name="nature" value="org.eclipse.cdt.core.cnature"/>
+	              </and>
+	              <objectClass name="org.eclipse.cdt.core.model.ICProject"/>
+	          </or>
+              <objectState
+                 name="projectNature"
+                 value="ch.hsr.ifs.sconsolidator.ManagedNature"/>
+            </and>
+         </visibility>
+         <menu
+               id="ch.hsr.ifs.sconsolidator"
+               label="%PluginVisibleName"
+               path="buildGroup">
+            <groupMarker name="rebuild"/>
+            <separator name="nature"/>
+         </menu>
+          <action
+                class="ch.hsr.ifs.sconsolidator.core.managed.actions.RecreateSConsFilesAction"
+                definitionId="ch.hsr.ifs.sconsolidator.recreateSConsFiles"
+                id="ch.hsr.ifs.sconsolidator.recreateSConsFilesAction"
+                label="%MenuRecreateSConsFiles"
+                enablesFor="+"
+                menubarPath="ch.hsr.ifs.sconsolidator/nature"
+                style="push">
+          </action>
+       </objectContribution>
+      <!-- SCons C/C++ File Contributions -->
+    <objectContribution
+             id="ch.hsr.ifs.sconsolidator.SConsSourceFileContribution"
+             adaptable="true"
+             objectClass="org.eclipse.core.resources.IResource">
+         <menu
+               id="ch.hsr.ifs.sconsolidator"
+               label="%PluginVisibleName"
+               path="buildGroup">
+            <groupMarker name="rebuild"/>
+            <separator name="nature"/>
+         </menu>
+         <visibility>
+             <or>
+	            <objectState
+	                  name="projectNature"
+	                  value="ch.hsr.ifs.sconsolidator.ManagedNature">
+	            </objectState>
+	            <objectState
+	                  name="projectNature"
+	                  value="ch.hsr.ifs.sconsolidator.ExistingCodeNature">
+	            </objectState>
+            </or>
+         </visibility>
+         <action
+               label="%MenuInteractiveBuild"
+               class="ch.hsr.ifs.sconsolidator.core.console.interactive.actions.BuildProjectTargetAction"
+               enablesFor="1"
+               menubarPath="ch.hsr.ifs.sconsolidator/nature"
+               id="ch.hsr.ifs.sconsolidator.popup.SConsBuildAction">
+         </action>
+         <action
+               class="ch.hsr.ifs.sconsolidator.core.console.interactive.actions.CleanProjectTargetAction"
+               id="ch.hsr.ifs.sconsolidator.popup.SConsCleanAction"
+               enablesFor="1"
+               label="%MenuInteractiveClean"
+               menubarPath="ch.hsr.ifs.sconsolidator/nature">
+         </action>
+       </objectContribution>
+   </extension>
+   <!--Handler for 'Project Refresh' functionality -->
+   <extension point="org.eclipse.ui.handlers">
+		<handler
+            class="ch.hsr.ifs.sconsolidator.core.existingbuild.actions.RefreshProjectFromSConsHandler"
+            commandId="ch.hsr.ifs.sconsolidator.refreshFromSCons">
+			<enabledWhen>
+			  <or>
+				<with variable="activeEditorId">
+					<equals value="org.eclipse.cdt.ui.editor.CEditor"/>
+				</with>
+				<iterate ifEmpty="false" operator="or">
+				     <adapt type="org.eclipse.core.resources.IProject">
+               			<test
+                   			property="org.eclipse.core.resources.projectNature"
+                   			value="ch.hsr.ifs.sconsolidator.ExistingCodeNature">
+             			</test>
+             		 </adapt>
+            	</iterate>
+              </or>
+			</enabledWhen>
+		</handler>
+	</extension>
+	<!-- Toolbar Button for 'Project Refresh' functionality -->
+	<extension
+         point="org.eclipse.ui.menus">
+      <menuContribution
+            locationURI="toolbar:org.eclipse.ui.main.toolbar?after=additions">
+         <toolbar
+               id="ch.hsr.sconsolidator.toolbars.sconsToolbar"
+               label="%MenuRefreshProjectFromSCons">
+            <command
+                  commandId="ch.hsr.ifs.sconsolidator.refreshFromSCons"
+                  icon="icons/scons_target.png"
+                  tooltip="%MenuRefreshProjectFromSConsTooltip">
+            </command>
+         </toolbar>
+      </menuContribution>
+   </extension>
+   <!-- Commands -->
+   <extension
+       point="org.eclipse.ui.commands">
+    <command
+          id="ch.hsr.ifs.sconsolidator.refreshFromSCons"
+          name="%MenuRefreshProjectFromSCons">
+    </command>
+    <command
+          id="ch.hsr.ifs.sconsolidator.removeNature"
+          name="%MenuRemoveNature">
+    </command>
+    <command
+          id="ch.hsr.ifs.sconsolidator.recreateSConsFiles"
+          name="%MenuRecreateSConsFiles">
+    </command>
+    <command
+          id="ch.hsr.ifs.sconsolidator.startInteractiveConsole"
+          name="%MenuStartInteractiveConsole">
+    </command>
+    <command
+          id="ch.hsr.ifs.sconsolidator.buildLastTarget"
+          name="%MenuLastTargetBuildName">
+    </command>
+ 	</extension>
+   <extension
+         point="org.eclipse.ui.newWizards">
+      <wizard
+            canFinishEarly="true"
+            category="org.eclipse.cdt.ui.newCCWizards"
+            class="ch.hsr.ifs.sconsolidator.core.managed.wizards.ConvertSConsWizard"
+            finalPerspective="org.eclipse.cdt.ui.CPerspective"
+            hasPages="true"
+            icon="icons/scons_target.png"
+            id="ch.hsr.ifs.sconsolidator.wizards.ConvertSConsCCWizard"
+            name="%WizardConvertName"
+            project="false">
+         <selection
+               class="org.eclipse.cdt.core.model.ICProject">
+         </selection>
+      </wizard>
+      <wizard
+            canFinishEarly="true"
+            category="org.eclipse.cdt.ui.newCWizards"
+            class="ch.hsr.ifs.sconsolidator.core.managed.wizards.ConvertSConsWizard"
+            finalPerspective="org.eclipse.cdt.ui.CPerspective"
+            hasPages="true"
+            icon="icons/scons_target.png"
+            id="ch.hsr.ifs.sconsolidator.wizards.ConvertSConsCWizard"
+            name="%WizardConvertName"
+            project="false">
+         <selection
+               class="org.eclipse.cdt.core.model.ICProject">
+         </selection>
+      </wizard>
+      <wizard
+            category="org.eclipse.cdt.ui.newCWizards"
+            class="ch.hsr.ifs.sconsolidator.core.existingbuild.wizards.NewSConsProjectFromExistingWizard"
+            finalPerspective="org.eclipse.cdt.ui.CPerspective"
+            icon="icons/scons_target.png"
+            id="ch.hsr.ifs.sconsolidator.wizards.NewSConsProjectFromExistingWizard"
+            name="%WizardNewSConsFromExistingName"
+            project="true">
+         <description>
+            %WizardNewSConsFromExistingDescription
+         </description>
+      </wizard>
+   </extension>
+   <!-- Import Wizards -->
+   <extension
+           point="org.eclipse.ui.importWizards">
+        <wizard
+              category="org.eclipse.cdt.ui.importWizardCategory"
+              class="ch.hsr.ifs.sconsolidator.core.existingbuild.wizards.NewSConsProjectFromExistingWizard"
+              icon="icons/scons_target.png"
+              id="ch.hsr.ifs.sconsolidator.wizards.SConsProjectFromExistingWizard"
+              name="%WizardNewSConsFromExistingName">
+           <description>
+              %WizardNewSConsFromExistingDescription
+           </description>
+        </wizard>
+   </extension>
+   <!-- SCons File Filter -->
+   <extension
+         point="org.eclipse.ui.navigator.navigatorContent">
+      <commonFilter
+            activeByDefault="true"
+            class="ch.hsr.ifs.sconsolidator.core.SConsBuildFilesFilter"
+            description="%FilterHideSconsFilesDesc"
+            id="ch.hsr.ifs.sconsolidator.core.filters.HideBuildFiles"
+            name="%FilterHideSconsFilesName"
+            visibleInUI="true">
+      </commonFilter>
+   </extension>
+   <extension
+         point="org.eclipse.ui.navigator.viewer">
+      <viewerContentBinding
+            viewerId="org.eclipse.ui.navigator.ProjectExplorer">
+         <includes>
+            <contentExtension
+                  pattern="ch.hsr.ifs.sconsolidator.core.filters.HideBuildFiles.*">
+            </contentExtension>
+         </includes>
+      </viewerContentBinding>
+   </extension>
+   <!-- Python Content Types for SConstruct/SConscript -->
+   <extension point="org.eclipse.core.contenttype.contentTypes">
+	   <file-association content-type="org.python.pydev.pythonfile" file-names="SConstruct,SConscript"/>
+   </extension>
+   <!-- Preference Pages -->
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            class="ch.hsr.ifs.sconsolidator.core.preferences.pages.ExecutablePathPreferencePage"
+            id="ch.hsr.ifs.sconsolidator.core.ExecutablePathPreferencePage"
+            name="%PluginVisibleName">
+      </page>
+      <page
+         	category="ch.hsr.ifs.sconsolidator.core.ExecutablePathPreferencePage"
+            class="ch.hsr.ifs.sconsolidator.core.preferences.pages.BuildSettingsPreferencePage"
+            id="ch.hsr.ifs.sconsolidator.core.BuildSettingsPreferencePage"
+            name="%BuildsettingsPrefName">
+      </page>
+      <page
+         	category="ch.hsr.ifs.sconsolidator.core.ExecutablePathPreferencePage"
+            class="ch.hsr.ifs.sconsolidator.core.preferences.pages.PerformanceAccuracyPreferencePage"
+            id="ch.hsr.ifs.sconsolidator.core.PerformanceAccuracyPreferencePage"
+            name="%PerfaccuracyPrefName">
+      </page>
+      <page
+         	category="ch.hsr.ifs.sconsolidator.core.ExecutablePathPreferencePage"
+            class="ch.hsr.ifs.sconsolidator.core.preferences.pages.WarningsPreferencePage"
+            id="ch.hsr.ifs.sconsolidator.core.WarningsPreferencePage"
+            name="%WarningsPrefName">
+      </page>
+   </extension>
+   <!-- Property Pages -->
+   <extension
+         point="org.eclipse.ui.propertyPages">
+      <page
+      	 	name="%PluginVisibleName"
+            class="ch.hsr.ifs.sconsolidator.core.preferences.pages.BuildSettingsPreferencePage"
+            id="ch.hsr.ifs.sconsolidator.core.BuildSettingsPreferencePage">
+         	<enabledWhen>
+		    	<adapt type="org.eclipse.core.resources.IProject">
+		    		<or>
+					<test
+            			property="org.eclipse.core.resources.projectNature"
+            			value="ch.hsr.ifs.sconsolidator.ManagedNature" />
+            		<test
+            			property="org.eclipse.core.resources.projectNature"
+            			value="ch.hsr.ifs.sconsolidator.ExistingCodeNature" />
+            		<test
+            			property="org.eclipse.core.resources.projectNature"
+            			value="ch.hsr.ifs.sconsolidator.NonCppNature" />
+            		</or>
+		    	</adapt>
+         	</enabledWhen>
+      </page>
+      <page
+      		category="ch.hsr.ifs.sconsolidator.core.BuildSettingsPreferencePage"
+            class="ch.hsr.ifs.sconsolidator.core.preferences.pages.PerformanceAccuracyPreferencePage"
+            id="ch.hsr.ifs.sconsolidator.core.PerformanceAccuracyPreferencePage"
+            name="%PerfaccuracyPrefName">
+            <enabledWhen>
+		    	<adapt type="org.eclipse.core.resources.IProject">
+		    		<or>
+					<test
+            			property="org.eclipse.core.resources.projectNature"
+            			value="ch.hsr.ifs.sconsolidator.ManagedNature" />
+            		<test
+            			property="org.eclipse.core.resources.projectNature"
+            			value="ch.hsr.ifs.sconsolidator.ExistingCodeNature" />
+            		<test
+            			property="org.eclipse.core.resources.projectNature"
+            			value="ch.hsr.ifs.sconsolidator.NonCppNature" />
+            		</or>
+		    	</adapt>
+         	</enabledWhen>
+      </page>
+      <page
+      		category="ch.hsr.ifs.sconsolidator.core.BuildSettingsPreferencePage"
+            class="ch.hsr.ifs.sconsolidator.core.preferences.pages.WarningsPreferencePage"
+            id="ch.hsr.ifs.sconsolidator.core.WarningsPreferencePage"
+            name="%WarningsPrefName">
+            <enabledWhen>
+		    	<adapt type="org.eclipse.core.resources.IProject">
+		    		<or>
+					<test
+            			property="org.eclipse.core.resources.projectNature"
+            			value="ch.hsr.ifs.sconsolidator.ManagedNature" />
+            		<test
+            			property="org.eclipse.core.resources.projectNature"
+            			value="ch.hsr.ifs.sconsolidator.ExistingCodeNature" />
+            		<test
+            			property="org.eclipse.core.resources.projectNature"
+            			value="ch.hsr.ifs.sconsolidator.NonCppNature" />
+            		</or>
+		    	</adapt>
+         	</enabledWhen>
+      </page>
+      <page
+      		category="ch.hsr.ifs.sconsolidator.core.BuildSettingsPreferencePage"
+            class="ch.hsr.ifs.sconsolidator.core.preferences.pages.BuildTargetsPropertiesPage"
+            id="ch.hsr.ifs.sconsolidator.core.BuildTargetsPreferencePage"
+            name="%BuildtargetsPrefName">
+            <enabledWhen>
+		    	<adapt type="org.eclipse.core.resources.IProject">
+		    		<or>
+					<test
+            			property="org.eclipse.core.resources.projectNature"
+            			value="ch.hsr.ifs.sconsolidator.ManagedNature" />
+            		<test
+            			property="org.eclipse.core.resources.projectNature"
+            			value="ch.hsr.ifs.sconsolidator.ExistingCodeNature" />
+            		<test
+            			property="org.eclipse.core.resources.projectNature"
+            			value="ch.hsr.ifs.sconsolidator.NonCppNature" />
+            		</or>
+		    	</adapt>
+         	</enabledWhen>
+      </page>
+   </extension>
+   <!-- Interactive Console -->
+   <extension point="org.eclipse.ui.console.consolePageParticipants">
+      <consolePageParticipant
+            class="ch.hsr.ifs.sconsolidator.core.console.interactive.InteractiveConsoleParticipant"
+            id="ch.hsr.ifs.sconsolidator.interactiveConsoleParticipant">
+         <enablement>
+            <instanceof value="ch.hsr.ifs.sconsolidator.core.console.interactive.InteractiveConsole"/>
+         </enablement>
+      </consolePageParticipant>
+   </extension>
+   <!-- Key Binding for 'Build Last Target' functionality -->
+   <extension point="org.eclipse.ui.bindings">
+      <key
+            sequence="Shift+F4"
+            contextId="org.eclipse.ui.contexts.window"
+            commandId="ch.hsr.ifs.sconsolidator.core.targetBuildLastCommand"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"/>
+   </extension>
+    <extension
+      point="org.eclipse.ui.commands">
+      <command
+            categoryId="org.eclipse.ui.category.project"
+            defaultHandler="ch.hsr.ifs.sconsolidator.core.targets.actions.BuildLastTargetHandler"
+            description="%MenuLastTargetBuildDescription"
+            id="ch.hsr.ifs.sconsolidator.core.targetBuildLastCommand"
+            name="%MenuLastTargetBuildName">
+      </command>
+   </extension>
+   <extension
+         point="org.eclipse.ui.actionSets">
+      <actionSet
+            label="%MenuActionSetSConsLabel"
+            id="ch.hsr.ifs.sconsolidator.core.sconsTargetActionSet">
+            <menu
+               id="ch.hsr.ifs.sconsolidator.core.prjmenu"
+               label="%MenuSconsTargetLabel"
+               path="project/additions">
+               <groupMarker
+                  name="gm1">
+               </groupMarker>
+            </menu>
+            <action
+               definitionId="ch.hsr.ifs.sconsolidator.core.targetBuildLastCommand"
+               label="%MenuLastTargetBuildName"
+               class="ch.hsr.ifs.sconsolidator.core.targets.actions.BuildLastTargetAction"
+               menubarPath="project/ch.hsr.ifs.sconsolidator.core.prjmenu/gm1"
+               enablesFor="1"
+               id="ch.hsr.ifs.sconsolidator.core.actions.buildLastTargetAction">
+               <enablement>
+               <or>
+                  <objectClass
+                        name="org.eclipse.core.resources.IContainer">
+                  </objectClass>
+                  <objectClass
+                        name="org.eclipse.core.resources.IFile">
+                  </objectClass>
+                  <objectClass
+                        name="org.eclipse.cdt.core.model.ICContainer">
+                  </objectClass>
+                  <objectClass
+                        name="org.eclipse.cdt.core.model.ICProject">
+                  </objectClass>
+                  <objectClass
+                        name="ch.hsr.ifs.sconsolidator.core.targets.model.SConsBuildTarget">
+                  </objectClass>
+               </or>
+            </enablement>
+         </action>
+      </actionSet>
+   </extension>
+   <!-- Perspective Extensions -->
+   <extension
+         point="org.eclipse.ui.perspectiveExtensions">
+      <perspectiveExtension
+            targetID="org.eclipse.cdt.ui.CPerspective">
+         <actionSet
+               id="ch.hsr.ifs.sconsolidator.core.sconsTargetActionSet">
+         </actionSet>
+      </perspectiveExtension>
+   </extension>
+   <!-- SCons Target View -->
+   <extension
+         point="org.eclipse.ui.views">
+      <category
+            name="%SconsCategoryName"
+            id="ch.hsr.ifs.sconsolidator.core">
+      </category>
+      <view
+            name="%SconsTargetViewName"
+            icon="icons/scons_target.png"
+            category="ch.hsr.ifs.sconsolidator.core"
+            class="ch.hsr.ifs.sconsolidator.core.targets.SConsTargetView"
+            id="ch.hsr.ifs.sconsolidator.core.SConsTargetView">
+      </view>
+   </extension>
+   <!-- CDT Wizard extension for SCons projects -->
+	<extension
+         id="scons wizard"
+         name="%WizardNewSConsExecutable"
+         point="org.eclipse.cdt.ui.CDTWizard">
+      <wizard
+            class="ch.hsr.ifs.sconsolidator.core.managed.wizards.NewSConsExecutableProjectWizard"
+            name="SCons">
+      </wizard>
+      <wizard
+            class="ch.hsr.ifs.sconsolidator.core.managed.wizards.NewSConsStaticLibProjectWizard"
+            name="%WizardNewSConsStaticLib"
+            parent="ch.hsr.ifs.sconsolidator.core.managed.wizards.NewSConsExecutableProjectWizard">
+      </wizard>
+      <wizard
+          class="ch.hsr.ifs.sconsolidator.core.managed.wizards.NewSConsSharedLibProjectWizard"
+          name="%WizardNewSConsSharedLib"
+          parent="ch.hsr.ifs.sconsolidator.core.managed.wizards.NewSConsExecutableProjectWizard">
+      </wizard>
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="ch.hsr.ifs.sconsolidator.core.preferences.PreferenceInitializer">
+      </initializer>
+   </extension>
+</plugin>

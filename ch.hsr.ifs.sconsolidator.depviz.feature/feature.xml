@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="ch.hsr.ifs.sconsolidator.depviz.feature"
+      label="%featureName"
+      version="0.6.0.qualifier"
+      provider-name="%providerName"
+      plugin="ch.hsr.ifs.sconsolidator.depviz">
+
+   <description url="http://sconsolidator.com">
+      %description
+   </description>
+
+   <copyright>
+      %copyright
+   </copyright>
+
+   <license>
+      %license
+   </license>
+
+   <url>
+      <update label="%updateSiteName" url="http://sconsolidator.com/update"/>
+   </url>
+
+   <plugin
+         id="ch.hsr.ifs.sconsolidator.depviz"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+</feature>

@@ -1,0 +1,55 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<parent>
+		<groupId>ch.hsr.ifs.sconsolidator</groupId>
+		<artifactId>parent</artifactId>
+		<version>0.6.0-SNAPSHOT</version>
+	</parent>
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>ch.hsr.ifs.sconsolidator</groupId>
+	<artifactId>swtbottests</artifactId>
+	<version>0.6.0-SNAPSHOT</version>
+	<packaging>eclipse-test-plugin</packaging>
+	<name>SConsolidator - SWTBot Tests</name>
+	<build>
+		<sourceDirectory>src</sourceDirectory>
+		<plugins>
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>maven-osgi-test-plugin</artifactId>
+				<version>${tycho-version}</version>
+				<configuration>
+					<argLine>-Xmx2048m</argLine>
+					<testSuite>ch.hsr.ifs.sconsolidator.swtbottests</testSuite>
+					<testClass>ch.hsr.ifs.sconsolidator.swtbottests.AllTests</testClass>
+					<reportsDirectory>../sconsolidator_swtbot/surefire-reports</reportsDirectory>
+					<useUIHarness>true</useUIHarness>
+					<useUIThread>false</useUIThread>
+					<product>org.eclipse.epp.package.cpp.product</product>
+					<application>org.eclipse.ui.ide.workbench</application>
+					<dependencies>
+						<dependency>
+							<type>p2-installable-unit</type>
+							<artifactId>org.eclipse.sdk.ide</artifactId>
+							<version>0.0.0</version>
+						</dependency>
+					</dependencies>
+				</configuration>
+			</plugin>
+			<plugin>
+				<artifactId>maven-clean-plugin</artifactId>
+				<version>2.4.1</version>
+				<configuration>
+					<filesets>
+						<fileset>
+							<directory>screenshots</directory>
+							<includes>
+								<include>**/*.jpeg</include>
+							</includes>
+						</fileset>
+					</filesets>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+</project>
