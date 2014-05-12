@@ -43,8 +43,9 @@ def get_gcc_lang_param(lang):
 def collect_sys_includes(lang, environ):
 
     def write_cpp_main(f, lang):
-        f.write('#include <%s>\nint main(){}' % 
+        f.write('#include <%s>\n#ifdef __cplusplus\nextern "C"\n#endif\nvoid _exit(int status) { while(1); }\nint main(){}' % 
             (('cstdlib' if lang == 'c++' else 'stdlib.h')))
+        f.flush()
 
     @contextmanager
     def temp_file(path, mode=None):
@@ -65,19 +66,20 @@ def collect_sys_includes(lang, environ):
         with temp_file(in_path, 'w') as in_file:
             with temp_file(out_path):
                 write_cpp_main(in_file, lang)
-                process = SCons.Action._subproc(environ, 
+                process = SCons.Action._subproc(environ,
                     [ get_compiler(environ), '-v', get_gcc_lang_param(lang), in_path, '-o', out_path ],
                     stdin='devnull', stderr=subprocess.PIPE, stdout=subprocess.PIPE)
                 (_, perr) = process.communicate()
                 return perr
 
     def parse_includes(cc_output):
+        cc_output = cc_output.replace('\r', '')
         re_incl = re.compile('#include <\.\.\.>.*:$\s((^ .*\s)*)', re.M)
         match = re_incl.search(cc_output)
         sysincludes = set()
         if match:
             for it in re.finditer('^ (.*)$', match.group(1), re.M):
-                sysincludes.add(it.groups()[0])
+                sysincludes.add(os.path.normpath(it.groups()[0]))
         return sysincludes
 
     cc_output = invoke_compiler(lang, environ)
@@ -147,8 +149,7 @@ def collect_sys_macros(lang, environ):
     sysmacros = set()
 
     for it in re.finditer('^#define (.*) (.*)$', pout, re.M):
-        sysmacros.add('%s=%s' % (it.groups()[0], it.groups()[1]))
-
+        sysmacros.add('%s=%s' % (it.groups()[0], it.groups()[1].strip()))
     return sysmacros
 
 
@@ -163,16 +164,21 @@ def get_start_nodes():
 
 def write_build_infos(includes, macros, environ):
 
-    def to_string(objects):
-        return ','.join([("'%s'" % '='.join(obj) 
-            if isinstance(obj, tuple) else "'%s'" % obj) for obj in objects])
+    def to_string(objects, environ):
+        strings = []
+        for obj in objects:
+            if isinstance(obj, tuple):
+                strings.append("'%s'" % '='.join(obj))
+            else:
+                strings.append("'%s'" % obj)
+        return ','.join([environ.subst(string) for string in strings])
 
-    print 'USER_INCLUDES = [%s]' % to_string(includes)
-    print 'SYS_C_INCLUDES = [%s]' % to_string(collect_sys_includes('cc', environ))
-    print 'SYS_CPP_INCLUDES = [%s]' % to_string(collect_sys_includes('c++', environ))
-    print 'MACROS = [%s]' % to_string(macros)
-    print 'SYS_C_MACROS = [%s]' % to_string(collect_sys_macros('cc', environ))
-    print 'SYS_CPP_MACROS = [%s]' % to_string(collect_sys_macros('c++', environ))
+    print 'USER_INCLUDES = [%s]' % to_string(includes, environ)
+    print 'SYS_C_INCLUDES = [%s]' % to_string(collect_sys_includes('cc', environ), environ)
+    print 'SYS_CPP_INCLUDES = [%s]' % to_string(collect_sys_includes('c++', environ), environ)
+    print 'MACROS = [%s]' % to_string(macros, environ)
+    print 'SYS_C_MACROS = [%s]' % to_string(collect_sys_macros('cc', environ), environ)
+    print 'SYS_CPP_MACROS = [%s]' % to_string(collect_sys_macros('c++', environ), environ)
 
 
 def collect_build_infos(super_nodes):
