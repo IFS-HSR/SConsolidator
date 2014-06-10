@@ -25,14 +25,20 @@ def collect_user_includes(environ):
         sconstruct_dir = re_sconstruct_dir.split(path)
         return path if len(sconstruct_dir) < 3 else os.path.abspath(sconstruct_dir[2])
 
-    user_includes = set()
-    for path in environ['CPPPATH']:
+    def add(includes, path):
         if isinstance(path, str):
             new_path = normalize(environ.subst(path))
             if os.path.isdir(new_path):
-                user_includes.add(new_path)
+                includes.add(new_path)
         elif isinstance(path, SCons.Node.FS.Dir):
-            user_includes.add(normalize(path.srcnode().abspath))
+            includes.add(normalize(path.srcnode().abspath))
+        elif isinstance(path, list):
+            for new_path in path:
+                add(includes, new_path)
+
+    user_includes = set()
+    for path in environ['CPPPATH']:
+        add(user_includes, path)
     return user_includes
 
 
