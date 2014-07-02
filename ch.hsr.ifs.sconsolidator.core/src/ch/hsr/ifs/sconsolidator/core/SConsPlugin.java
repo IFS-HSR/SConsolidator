@@ -15,13 +15,9 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.eclipse.ui.preferences.ScopedPreferenceStore;
 import org.eclipse.ui.statushandlers.StatusManager;
 import org.osgi.framework.BundleContext;
-import org.osgi.framework.BundleEvent;
-import org.osgi.framework.BundleListener;
 
 import ch.hsr.ifs.sconsolidator.core.base.utils.UIUtil;
-import ch.hsr.ifs.sconsolidator.core.preferences.PreferenceConstants;
 import ch.hsr.ifs.sconsolidator.core.preferences.PreferenceInitializer;
-import ch.hsr.ifs.sconsolidator.core.preferences.pages.ExecutableNotFoundHandler;
 import ch.hsr.ifs.sconsolidator.core.targets.model.SConsBuildTargetManager;
 
 public class SConsPlugin extends AbstractUIPlugin {
@@ -105,11 +101,6 @@ public class SConsPlugin extends AbstractUIPlugin {
   public void start(BundleContext context) throws Exception {
     super.start(context);
     plugin = this;
-    addBundleChangeListener(context);
-  }
-
-  private void addBundleChangeListener(BundleContext context) {
-    context.addBundleListener(new SConsPathConfiguredListener());
   }
 
   @Override
@@ -156,30 +147,5 @@ public class SConsPlugin extends AbstractUIPlugin {
   private static void showException(Exception e) {
     showException(SConsI18N.UIUtils_ExceptionTitleExceptionCaughtTitle,
         SConsI18N.UIUtils_ExceptionTitleExceptionCaughtMessage, e);
-  }
-
-  private static class SConsPathConfiguredListener implements BundleListener {
-    @Override
-    public void bundleChanged(BundleEvent event) {
-      if (!wasSConsolidatorBundleStarted(event))
-        return;
-
-      checkForSConsBinaryPath();
-    }
-
-    private boolean wasSConsolidatorBundleStarted(BundleEvent event) {
-      return event.getBundle().getSymbolicName().equals(PLUGIN_ID)
-          && event.getType() == BundleEvent.STARTED;
-    }
-
-    private void checkForSConsBinaryPath() {
-      if (getBinaryPath().isEmpty()) {
-        ExecutableNotFoundHandler.handleError();
-      }
-    }
-
-    private String getBinaryPath() {
-      return getConfigPreferenceStore().getString(PreferenceConstants.EXECUTABLE_PATH);
-    }
   }
 }
