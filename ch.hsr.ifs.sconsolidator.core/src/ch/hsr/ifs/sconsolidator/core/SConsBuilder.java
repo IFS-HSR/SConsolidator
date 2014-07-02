@@ -27,6 +27,7 @@ import ch.hsr.ifs.sconsolidator.core.commands.BuildCommand;
 import ch.hsr.ifs.sconsolidator.core.commands.CleanCommand;
 import ch.hsr.ifs.sconsolidator.core.console.BuildConsole;
 import ch.hsr.ifs.sconsolidator.core.managed.SConsFileWriter;
+import ch.hsr.ifs.sconsolidator.core.preferences.pages.ExecutableNotFoundHandler;
 
 public class SConsBuilder extends ACBuilder {
   public static final String BUILDER_ID = "ch.hsr.ifs.sconsolidator.Builder";
@@ -53,7 +54,7 @@ public class SConsBuilder extends ACBuilder {
     } catch (InterruptedException e) {
       // silently ignore, the user has chosen to cancel the build
     } catch (EmptySConsPathException e) {
-      // ignore
+      ExecutableNotFoundHandler.handleError();
     } catch (Exception e) {
       IStatus status = new Status(IStatus.ERROR, SConsPlugin.PLUGIN_ID, 0, e.getMessage(), e);
       throw new CoreException(status);
