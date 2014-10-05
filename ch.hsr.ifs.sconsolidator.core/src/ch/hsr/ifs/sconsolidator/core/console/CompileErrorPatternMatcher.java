@@ -1,5 +1,7 @@
 package ch.hsr.ifs.sconsolidator.core.console;
 
+import java.util.regex.Matcher;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
@@ -40,7 +42,7 @@ public class CompileErrorPatternMatcher implements IPatternMatchListener {
 
   @Override
   public String getPattern() {
-    return PlatformSpecifics.CPP_RE;
+    return PlatformSpecifics.CPP_RE.pattern();
   }
 
   @Override
@@ -57,11 +59,13 @@ public class CompileErrorPatternMatcher implements IPatternMatchListener {
       int offset = event.getOffset();
       int length = event.getLength();
       String message = document.get(offset, length);
-      String fileName = message.substring(0, message.indexOf(':'));
+      Matcher m = PlatformSpecifics.CPP_RE.matcher(message);
+      if (!m.matches()) return;
+      String fileName = m.group(1);
       IFile file = findFile(fileName);
 
       if (file != null && file.exists()) {
-        String lineNumber = message.substring(message.indexOf(':') + 1);
+        String lineNumber = m.group(2);
         FileLink link = new FileLink(file, null, -1, -1, Integer.parseInt(lineNumber));
         console.addHyperlink(link, offset, length);
       }

@@ -92,7 +92,7 @@ class RestartInteractiveListener implements IResourceChangeListener {
     if (fileExtension == null)
       return false;
 
-    return PlatformSpecifics.CPP_RE.matches(fileExtension);
+    return PlatformSpecifics.CPP_RE.matcher(fileExtension).matches();
   }
 
   private boolean isManagedProject(IProject affectedProject) throws CoreException {
