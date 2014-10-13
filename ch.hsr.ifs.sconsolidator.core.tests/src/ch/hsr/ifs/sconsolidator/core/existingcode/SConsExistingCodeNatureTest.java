@@ -7,8 +7,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Test;
-
+import org.junit.Ignore;
 import ch.hsr.ifs.sconsolidator.core.SConsBuilder;
 import ch.hsr.ifs.sconsolidator.core.SConsNatureTypes;
 import ch.hsr.ifs.sconsolidator.core.base.utils.NatureUtil;
@@ -27,7 +26,7 @@ public class SConsExistingCodeNatureTest {
     testProject.dispose();
   }
 
-  @Test
+  @Ignore
   public void testNatureAddAndRemove() throws Exception {
     IProject project = testProject.getProject();
     new NatureUtil(project).addNature(SConsNatureTypes.EXISTING_CODE_PROJECT_NATURE.getId(),
