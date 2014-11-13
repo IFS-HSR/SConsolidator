@@ -41,4 +41,12 @@ public class PlatformSpecificsTest {
     assertEquals("48", m.group(2));
   }
   
+  @Test
+  public void bug24HyperlinkingIssueWithGreedyRegexQuatifier() {
+    Matcher m = PlatformSpecifics.CPP_RE.matcher("ioengine\\DiskManager\\dmDisk.cpp(50) : fatal error C1083: Cannot open include file: 'config/access/caAttrBool.h2");
+    assertTrue(m.find());
+    assertEquals("ioengine\\DiskManager\\dmDisk.cpp", m.group(1));
+    assertEquals("50", m.group(2));
+  }
+  
 }
