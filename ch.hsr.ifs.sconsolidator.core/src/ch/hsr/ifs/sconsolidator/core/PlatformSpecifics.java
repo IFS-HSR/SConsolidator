@@ -7,7 +7,7 @@ import java.util.regex.Pattern;
 
 public final class PlatformSpecifics {
   public static final String NEW_LINE = System.getProperty("line.separator");
-  public static final Pattern CPP_RE = Pattern.compile("(.+(?:\\.(?:cpp|c|cc|C|cxx|h|hxx|hpp|ipp))):[(]?([\\d]+)[)]?");
+  public static final Pattern CPP_RE = Pattern.compile("(.+?(?:\\.(?:cpp|c|cc|C|cxx|h|hxx|hpp|ipp)))[:(]?([\\d]+)[)]?");
   public static final Pattern FORT_RE = Pattern.compile("(?i)(.+(?:\\.(?:f90|f|f77|for))):([\\d]+).([\\d]+):");
   private static final Pattern OBJ_FILE_RE = Pattern.compile("([^\\s]+)(\\.(o|os|obj))$");
   private static final String SCONS_EXECUTABLE_NAME = isWindows() ? "scons.bat" : "scons";
