@@ -45,6 +45,7 @@ import ch.hsr.ifs.sconsolidator.core.base.utils.FileUtil;
 import ch.hsr.ifs.sconsolidator.core.base.utils.StringUtil;
 import ch.hsr.ifs.sconsolidator.core.base.utils.UIUtil;
 import ch.hsr.ifs.sconsolidator.core.console.CompileErrorPatternMatcher;
+import ch.hsr.ifs.sconsolidator.core.console.FortranErrorPatternMatcher;
 import ch.hsr.ifs.sconsolidator.core.console.interactive.actions.BuildCurrentTargetAction;
 import ch.hsr.ifs.sconsolidator.core.console.interactive.actions.CleanCurrentTargetAction;
 import ch.hsr.ifs.sconsolidator.core.console.interactive.actions.RedoLastTargetAction;
@@ -90,6 +91,7 @@ public final class InteractiveConsole extends IOConsole {
 
   private void addCompileErrorListener() {
     addPatternMatchListener(new CompileErrorPatternMatcher(project));
+    addPatternMatchListener(new FortranErrorPatternMatcher(project));
   }
 
   private void initToolbarActions() {
