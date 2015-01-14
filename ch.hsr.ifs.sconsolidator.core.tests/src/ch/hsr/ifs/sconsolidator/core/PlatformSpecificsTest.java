@@ -49,4 +49,39 @@ public class PlatformSpecificsTest {
     assertEquals("50", m.group(2));
   }
   
+  @Test
+  public void gnuFortranErrorPatternMatchWithLinuxPath() {
+	  Matcher m = PlatformSpecifics.FORT_RE.matcher("src/shapes/Circle.for:6.28:");
+	  assertTrue(m.find());
+	  assertEquals("src/shapes/Circle.for", m.group(1));
+	  assertEquals("6", m.group(2));
+  }
+
+  @Test
+  public void gnuFortranErrorPatternMatchWithLinuxPathAndWhitespace() {
+    Matcher m = PlatformSpecifics.FORT_RE.matcher("src/shapes/test with whitespace.f90:3.1:");
+    assertTrue(m.find());
+    assertEquals("src/shapes/test with whitespace.f90", m.group(1));
+    assertEquals("3", m.group(2));
+  }
+
+  @Test
+  public void gnuFortranErrorPatternMatchWithWindowsPath() {
+    Matcher m = PlatformSpecifics.FORT_RE.matcher("platform\\windows\\bcSupport.f77:48.5:");
+    assertTrue(m.find());
+    assertEquals("platform\\windows\\bcSupport.f77", m.group(1));
+    assertEquals("48", m.group(2));
+  }
+  
+  public void gnuFortranErrorPatternMatchWithOtherExts() {
+	    Matcher m = PlatformSpecifics.FORT_RE.matcher("platform\\windows\\bcSupport.f:48.5:");
+	    assertTrue(m.find());
+	    assertEquals("platform\\windows\\bcSupport.f", m.group(1));
+	    assertEquals("48", m.group(2));
+	    m = PlatformSpecifics.FORT_RE.matcher("platform\\windows\\bcSupport.f95:48.5:");
+	    assertTrue(m.find());
+	    assertEquals("platform\\windows\\bcSupport.f95", m.group(1));
+	    assertEquals("48", m.group(2));
+  }
+  
 }
