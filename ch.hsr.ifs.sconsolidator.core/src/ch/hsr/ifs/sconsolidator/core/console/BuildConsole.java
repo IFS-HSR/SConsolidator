@@ -44,6 +44,7 @@ public class BuildConsole implements SConsConsole {
 
   private void addCompileErrorListener(IProject project) {
     console.addPatternMatchListener(new CompileErrorPatternMatcher(project));
+    console.addPatternMatchListener(new FortranErrorPatternMatcher(project));
   }
 
   private static String getConsoleName(IProject project) {
