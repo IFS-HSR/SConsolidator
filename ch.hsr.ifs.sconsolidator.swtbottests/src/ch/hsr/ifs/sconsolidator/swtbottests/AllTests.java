@@ -8,7 +8,7 @@ import org.junit.runners.Suite.SuiteClasses;
 @SuiteClasses({
 // @formatter:off
   NewManagedProjectWizardTest.class, 
-  ImportExistingCodeWizardTest. class
+  ImportExistingCodeWizardTest.class
 // @formatter:on
 })
 public class AllTests {

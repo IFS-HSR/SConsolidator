@@ -31,11 +31,4 @@
 		<nature>org.eclipse.jdt.core.javanature</nature>
 		<nature>org.python.pydev.pythonNature</nature>
 	</natures>
-	<linkedResources>
-		<link>
-			<name>junit-4.8.1.jar</name>
-			<type>1</type>
-			<location>/home/michael/.m2/repository/junit/junit/4.8.1/junit-4.8.1.jar</location>
-		</link>
-	</linkedResources>
 </projectDescription>
