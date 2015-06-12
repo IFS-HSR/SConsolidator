@@ -52,7 +52,8 @@ public class SConsFileWriter {
     try {
       ProjectSettingsReader pSettings = new ProjectSettingsReader(project);
       IPath destPath = new Path(SCONFIG_PY);
-      InputStream is = IOUtil.stringToStream(toString(pSettings));
+      String settingsString = toString(pSettings);
+      InputStream is = IOUtil.stringToStream(settingsString.replace("\\", "\\\\"));
       FileUtil.copyAndReplaceDerivedFile(is, project.getFile(destPath));
     } catch (BuildException e) {
       SConsPlugin.log(e);

@@ -14,6 +14,8 @@ import java.util.Set;
 
 import org.eclipse.cdt.core.CCProjectNature;
 import org.eclipse.cdt.core.CCorePlugin;
+import org.eclipse.cdt.core.cdtvariables.CdtVariableException;
+import org.eclipse.cdt.core.cdtvariables.ICdtVariableManager;
 import org.eclipse.cdt.core.model.CoreModel;
 import org.eclipse.cdt.core.settings.model.ICConfigurationDescription;
 import org.eclipse.cdt.core.settings.model.ICFolderDescription;
@@ -36,6 +38,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 
+import ch.hsr.ifs.sconsolidator.core.SConsPlugin;
 import ch.hsr.ifs.sconsolidator.core.base.utils.PythonUtil;
 import ch.hsr.ifs.sconsolidator.core.base.utils.StringUtil;
 
@@ -177,8 +180,10 @@ public class ProjectSettingsReader {
   }
 
   private void appendFile(Collection<File> paths, String workspacePath,
-      ICLanguageSettingEntry includePath) {
-    File path = new File(includePath.getValue());
+    ICLanguageSettingEntry includePath) {
+    String includePathValue = includePath.getValue(); 
+    includePathValue = replaceCdtVariables(includePathValue);
+    File path = new File(includePathValue);
 
     if ((includePath.getFlags() & ICSettingEntry.VALUE_WORKSPACE_PATH) == ICSettingEntry.VALUE_WORKSPACE_PATH) {
       path = new File(workspacePath, path.toString());
@@ -191,6 +196,25 @@ public class ProjectSettingsReader {
     }
 
     paths.add(path);
+  }
+
+  private String replaceCdtVariables(String pathValue) {
+    ICdtVariableManager varManager = CCorePlugin.getDefault().getCdtVariableManager();
+      try {
+        ICConfigurationDescription activeConfiguraiton = CoreModel.getDefault().getProjectDescription(project).getActiveConfiguration();
+        pathValue = varManager.resolveValue(pathValue, "", null, activeConfiguraiton);
+      } catch (CdtVariableException e) {
+        SConsPlugin.log(e);
+      }
+    return pathValue;
+  }
+
+  private String[] replaceAllCdtVariables(String[] paths) {
+    String[] replacedStrings = new String[paths.length];
+    for (int i = 0; i < paths.length; i++) {
+      replacedStrings[i] = replaceCdtVariables(paths[i]);
+    }
+    return replacedStrings;
   }
 
   public String getCompilerName() {
@@ -277,8 +301,9 @@ public class ProjectSettingsReader {
           if (o.getValueType() != linkerOption) {
             continue;
           }
-          return orderPreservingSet(linkerOption == IOption.LIBRARY_PATHS ? o.getLibraryPaths() : o
-              .getLibraries());
+          String[] libraries = linkerOption == IOption.LIBRARY_PATHS ? o.getLibraryPaths() : o
+              .getLibraries();
+          return orderPreservingSet(replaceAllCdtVariables(libraries));
         } catch (BuildException e) {
         }
       }
