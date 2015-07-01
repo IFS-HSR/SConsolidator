@@ -1,24 +1,23 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<?pde version="3.8"?><target name="ch.hsr.ifs.sconsolidator.core" sequenceNumber="38">
+<?pde version="3.8"?><target name="ch.hsr.ifs.sconsolidator.core" sequenceNumber="42">
 <locations>
-<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
-<unit id="org.eclipse.cdt.sdk.feature.group" version="8.0.2.201202111925"/>
-<repository location="http://download.eclipse.org/tools/cdt/releases/indigo/"/>
+<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
+<unit id="org.eclipse.sdk.ide" version="4.5.0.I20150603-2000"/>
+<unit id="org.eclipse.platform.sdk" version="4.5.0.I20150603-2000"/>
+<repository location="http://download.eclipse.org/eclipse/updates/4.5"/>
 </location>
-<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
-<unit id="org.eclipse.sdk.ide" version="3.7.2.M20120208-0800"/>
-<repository location="http://download.eclipse.org/releases/indigo/"/>
+<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
+<unit id="org.eclipse.gef.sdk.feature.group" version="3.10.0.201506010206"/>
+<unit id="org.eclipse.zest.sdk.feature.group" version="1.6.0.201506010206"/>
+<unit id="org.eclipse.cdt.feature.group" version="8.7.0.201506070905"/>
+<repository location="http://download.eclipse.org/releases/mars"/>
 </location>
-<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
-<unit id="org.eclipse.zest.feature.group" version="1.6.0.201409290206"/>
-<unit id="org.eclipse.draw2d.feature.group" version="3.10.0.201409290206"/>
-<unit id="org.eclipse.gef.feature.group" version="3.10.0.201409290206"/>
-<repository location="http://download.eclipse.org/tools/gef/updates/milestones/"/>
-</location>
-<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
-<unit id="org.eclipse.swtbot.feature.group" version="2.0.5.20111003_1754-3676ac8-dev-e36"/>
-<unit id="org.eclipse.swtbot.ide.feature.group" version="2.0.5.20111003_1754-3676ac8-dev-e36"/>
-<repository location="http://download.eclipse.org/technology/swtbot/helios/dev-build/update-site"/>
+<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
+<unit id="org.eclipse.swtbot.feature.group" version="2.3.0.201506081302"/>
+<unit id="org.eclipse.swtbot.forms.feature.group" version="2.3.0.201506081302"/>
+<unit id="org.eclipse.swtbot.eclipse.feature.group" version="2.3.0.201506081302"/>
+<unit id="org.eclipse.swtbot.ide.feature.group" version="2.3.0.201506081302"/>
+<repository location="http://download.eclipse.org/technology/swtbot/releases/latest"/>
 </location>
 </locations>
 </target>

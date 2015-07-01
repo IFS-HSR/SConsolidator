@@ -20,6 +20,15 @@
 					<useUIHarness>true</useUIHarness>
                   	<useUIThread>false</useUIThread>
 					<argLine>-Xmx512M</argLine>
+					<product>org.eclipse.epp.package.cpp.product</product>
+					<application>org.eclipse.ui.ide.workbench</application>
+					<dependencies>
+						<dependency>
+							<type>p2-installable-unit</type>
+							<artifactId>org.eclipse.sdk.ide</artifactId>
+							<version>0.0.0</version>
+						</dependency>
+					</dependencies>
 				</configuration>
 			</plugin>
             <plugin>

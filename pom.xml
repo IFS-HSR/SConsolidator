@@ -13,6 +13,7 @@
 		<encoding>UTF-8</encoding>
 		<tycho-version>0.20.0</tycho-version>
 		<compiler-version>1.6</compiler-version>
+		<target-file>ch.hsr.ifs.sconsolidator.core.target</target-file>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -86,18 +87,18 @@
 	</modules>
 	<repositories>
 		<repository>
-			<id>eclipse-indigo</id>
-			<url>http://download.eclipse.org/releases/indigo/</url>
+			<id>eclipse-mars</id>
+			<url>http://download.eclipse.org/releases/mars</url>
 			<layout>p2</layout>
 		</repository>
 		<repository>
-			<id>eclipse-cdt</id>
-			<url>http://download.eclipse.org/tools/cdt/updates/indigo</url>
+			<id>eclipse-updates</id>
+			<url>http://download.eclipse.org/eclipse/updates/4.5</url>
 			<layout>p2</layout>
 		</repository>
 		<repository>
 			<id>swtbot</id>
-			<url>http://download.eclipse.org/technology/swtbot/helios/dev-build/update-site</url>
+			<url>http://download.eclipse.org/technology/swtbot/releases/latest</url>
 			<layout>p2</layout>
 		</repository>
 	</repositories>
