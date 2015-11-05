@@ -156,6 +156,7 @@ public final class SConsI18N extends NLS {
   public static String NewSConsProjectFromExistingWizard_ImportFailedMessage;
   public static String NewSConsProjectFromExistingWizard_StartConvertingMsg;
   public static String NewSConsProjectFromExistingWizard_WindowTitle;
+  public static String NewSConsProjectWizard_CategoryName;
   public static String NewSConsSharedLibraryProjectWizard_SharedLibraryProjectName;
   public static String NewSConsStaticLibraryProjectWizard_StaticLibraryProjectName;
   public static String NewSourceFolderAction_AddingSConscriptsMessage;

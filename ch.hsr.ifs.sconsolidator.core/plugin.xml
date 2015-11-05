@@ -738,18 +738,20 @@
          name="%WizardNewSConsExecutable"
          point="org.eclipse.cdt.ui.CDTWizard">
       <wizard
+            class="ch.hsr.ifs.sconsolidator.core.managed.wizards.NewSConsProjectWizard"
+            name="SCons Category">
+      </wizard>
+      <wizard
             class="ch.hsr.ifs.sconsolidator.core.managed.wizards.NewSConsExecutableProjectWizard"
             name="SCons">
       </wizard>
       <wizard
             class="ch.hsr.ifs.sconsolidator.core.managed.wizards.NewSConsStaticLibProjectWizard"
-            name="%WizardNewSConsStaticLib"
-            parent="ch.hsr.ifs.sconsolidator.core.managed.wizards.NewSConsExecutableProjectWizard">
+            name="%WizardNewSConsStaticLib">
       </wizard>
       <wizard
           class="ch.hsr.ifs.sconsolidator.core.managed.wizards.NewSConsSharedLibProjectWizard"
-          name="%WizardNewSConsSharedLib"
-          parent="ch.hsr.ifs.sconsolidator.core.managed.wizards.NewSConsExecutableProjectWizard">
+          name="%WizardNewSConsSharedLib">
       </wizard>
    </extension>
    <extension
