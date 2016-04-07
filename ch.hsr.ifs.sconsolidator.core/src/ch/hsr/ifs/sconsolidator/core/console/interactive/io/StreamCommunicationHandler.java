@@ -4,11 +4,15 @@ import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.IOException;
 
+import org.eclipse.cdt.internal.ui.preferences.BuildConsolePreferencePage;
+import org.eclipse.cdt.ui.CUIPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.jface.preference.PreferenceConverter;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.console.IOConsoleInputStream;
 import org.eclipse.ui.console.IOConsoleOutputStream;
@@ -72,7 +76,7 @@ public class StreamCommunicationHandler {
     UIUtil.runInDisplayThread(new Runnable() {
       @Override
       public void run() {
-        Color color = Display.getCurrent().getSystemColor(SWT.COLOR_RED);
+        Color color = createColor(Display.getCurrent(), BuildConsolePreferencePage.PREF_BUILDCONSOLE_ERROR_COLOR);
         tmpbosErrInner.setColor(color);
       }
     });
@@ -82,10 +86,15 @@ public class StreamCommunicationHandler {
     UIUtil.runInDisplayThread(new Runnable() {
       @Override
       public void run() {
-        Color color = Display.getCurrent().getSystemColor(SWT.COLOR_BLUE);
+        Color color = createColor(Display.getCurrent(), BuildConsolePreferencePage.PREF_BUILDCONSOLE_INFO_COLOR);
         iStream.setColor(color);
       }
     });
+  }
+  
+  private Color createColor(final Display display, final String preference) {
+    RGB rgb = PreferenceConverter.getColor(CUIPlugin.getDefault().getPreferenceStore(), preference);
+    return new Color(display, rgb);
   }
 
   public IOConsoleOutputStream getConsoleOutputStream() {
