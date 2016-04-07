@@ -196,10 +196,16 @@ abstract class SConsCommand {
 
   private void printConsoleHeader() throws IOException {
     SimpleDateFormat format = new SimpleDateFormat();
+    console.println(getConsoleColorInfo());
     console.println(getSConsHeader(format));
     console.println(getCommandLine());
   }
 
+  private String getConsoleColorInfo() {
+    return NLS.bind(SConsI18N.AbstractSConsCommand_ConsoleColorInfo, 
+                  SConsI18N.AbstractSConsCommand_ConsoleColorInfoLinkText);
+  }
+  
   private String getCommandLine() {
     return NLS.bind(SConsI18N.AbstractSConsCommand_CommandLinePrefix, cmdLine.toString());
   }
@@ -225,6 +231,9 @@ abstract class SConsCommand {
       processStdErr.close();
     }
     printCommandDurationOnConsole();
+    // we have to defer linking to the build console preference page because if we do it right 
+    // away the link is not always rendered
+    console.addBuildConsoleColorLink(); 
   }
 
   private void raiseProblemIfNecessary(int exitValue, Exception e) {

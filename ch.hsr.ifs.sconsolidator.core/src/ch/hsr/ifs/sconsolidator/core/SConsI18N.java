@@ -42,6 +42,8 @@ public final class SConsI18N extends NLS {
   public static String MenuRefreshProjectFromSConsTooltip;
   public static String MenuRecreateSConsFiles;
   public static String AbstractSConsCommand_CommandLinePrefix;
+  public static String AbstractSConsCommand_ConsoleColorInfoLinkText;
+  public static String AbstractSConsCommand_ConsoleColorInfo;
   public static String AbstractSConsCommand_RunningSConsHeader;
   public static String AbstractSConsCommand_CommandDurationMsg;
   public static String AbstractSConsCommand_ProblemsOccuredCallingSCons;

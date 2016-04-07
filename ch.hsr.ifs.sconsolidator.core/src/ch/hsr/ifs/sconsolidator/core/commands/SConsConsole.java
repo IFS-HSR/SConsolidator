@@ -3,6 +3,9 @@ package ch.hsr.ifs.sconsolidator.core.commands;
 import java.io.IOException;
 import java.io.OutputStream;
 
+import org.eclipse.cdt.internal.ui.preferences.BuildConsolePreferencePage;
+import org.eclipse.cdt.ui.CUIPlugin;
+import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.swt.SWT;
 import org.eclipse.ui.PartInitException;
 
@@ -16,21 +19,23 @@ public interface SConsConsole {
   void show() throws PartInitException;
 
   void clear();
+  
+  void addBuildConsoleColorLink();
 
   enum ConsoleOutput {
     ERROR {
       @Override
-      public int getColor() {
-        return SWT.COLOR_RED;
+      public String getColorPreference() {
+        return BuildConsolePreferencePage.PREF_BUILDCONSOLE_ERROR_COLOR;
       }
     },
     NORMAL {
       @Override
-      public int getColor() {
-        return SWT.COLOR_BLUE;
+      public String getColorPreference() {
+        return BuildConsolePreferencePage.PREF_BUILDCONSOLE_OUTPUT_COLOR;
       }
     };
 
-    public abstract int getColor();
+    public abstract String getColorPreference();
   }
 }

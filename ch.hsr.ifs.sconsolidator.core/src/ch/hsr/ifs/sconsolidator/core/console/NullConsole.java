@@ -3,6 +3,7 @@ package ch.hsr.ifs.sconsolidator.core.console;
 import java.io.IOException;
 import java.io.OutputStream;
 
+import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.ui.PartInitException;
 
 import ch.hsr.ifs.sconsolidator.core.base.utils.NullOutputStream;
@@ -25,4 +26,8 @@ public class NullConsole implements SConsConsole {
 
   @Override
   public void clear() {}
+
+  @Override
+  public void addBuildConsoleColorLink() {}
+  
 }
