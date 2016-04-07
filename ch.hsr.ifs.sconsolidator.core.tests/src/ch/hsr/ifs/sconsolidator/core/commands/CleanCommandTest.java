@@ -22,7 +22,7 @@ import ch.hsr.ifs.sconsolidator.core.preferences.PreferenceConstants;
 
 public class CleanCommandTest {
   private static final String[] EXPECTED_ARGS = new String[] {
-      String.format("--jobs=%d", SConsHelper.getNumOfPreferredJobs()), "hello"};
+      String.format("--jobs=%d", PlatformSpecifics.getNumberOfAvalaibleProcessors()), "hello"};
   private static CppManagedTestProject testProject;
 
   @AfterClass
