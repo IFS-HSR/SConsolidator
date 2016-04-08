@@ -3,8 +3,10 @@ SConsolidator - An Eclipse plug-in for SCons
 
 [![Build Status](https://travis-ci.org/IFS-HSR/SConsolidator.png)](https://travis-ci.org/IFS-HSR/SConsolidator)
 
+### Install it from our Eclipse Update Site at http://www.sconsolidator.com/update
 
-## Description
+
+## Introduction
 
 SCons is an open source software build tool which tries to fix the 
 numerous weaknesses of Make clones like the missing automatic
@@ -22,8 +24,10 @@ at the University of Applied Sciences in Rapperswil - addresses this
 and provides tool integration for SCons in Eclipse for a convenient 
 C/C++ development experience.
 
+![Build console of SConsolidator](screenshot.png)
 
-## Features:
+
+## Features
 
 - Convertion of existing CDT managed build projects to SCons projects
 - Import of existing SCons projects into Eclipse with wizard support
@@ -32,7 +36,14 @@ C/C++ development experience.
 - Graph visualization of build dependencies that helps in debugging SCons build problems
 
 
-## Minimum Requirements to contribute
+## Documentation
+
+See this [getting started guide](http://sconsolidator.com/projects/sconsolidator/wiki/Getting_Started) for help on how to use SConsolidator with your C++ projects.
+
+
+## Contribution help
+
+### Minimum requirements to contribute
 
 - Java 7
 - Eclipse 3.7 (Indigo)
@@ -40,7 +51,7 @@ C/C++ development experience.
 - Maven v3 (because we use Tycho)
 
 
-## Eclipse Project Setup
+### Eclipse project setup
 
 - Install Eclipse and SCons
 - Import projects into Eclipse with the project wizard
@@ -48,14 +59,14 @@ C/C++ development experience.
   through "Set as Target Platform"
 
 
-## Build
+### Build
 
 We use Tycho and Maven to build the project artifacts:
 
 $ mvn compile
 
 
-## Run tests
+### Run tests
 
 $ mvn integration-test
 
@@ -64,33 +75,33 @@ or if you prefer to run the tests in a X screen buffer, you can use the followin
 $ runtests.sh
 
 
-## Project Layout
+### Project layout
 
-### ch.hsr.ifs.sconsolidator.core
+#### ch.hsr.ifs.sconsolidator.core
 SConsoldator's core functionality including all UI stuff, project wizards, builders,
 Python files for collection build information from existing projects, etc.
 
-### ch.hsr.ifs.sconsolidator.core.tests
+#### ch.hsr.ifs.sconsolidator.core.tests
 All Junit tests for SConsolidator's core functionality as well as the tests for
 collecting build information from existing projects
 
-### ch.hsr.ifs.sconsolidator.feature
+#### ch.hsr.ifs.sconsolidator.feature
 Eclipse feature project for SConsolidator's core plug-in
 
-### ch.hsr.ifs.sconsolidator.depviz
+#### ch.hsr.ifs.sconsolidator.depviz
 SConsolidators dependency visualization plug-in that shows the dependencies between
 C++ build entities like source, object and library files; based on the Eclipse's
 Visualization Toolkit Zest
 
-### ch.hsr.ifs.sconsolidator.depviz.feature
+#### ch.hsr.ifs.sconsolidator.depviz.feature
 Eclipse feature project for SConsolidator's dependency visualization plug-in
 
-### ch.hsr.ifs.sconsolidator.help
+#### ch.hsr.ifs.sconsolidator.help
 Eclipse project for SConsolidator's Eclipse help system (Getting started guide,
 welcome page, etc.)
 
-### ch.hsr.ifs.sconsolidator.swtbottests
+#### ch.hsr.ifs.sconsolidator.swtbottests
 Some UI tests based on SWTBot
 
-### ch.hsr.ifs.sconsolidator.updates
+#### ch.hsr.ifs.sconsolidator.updates
 Eclipse Update site project
