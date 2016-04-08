@@ -13,7 +13,7 @@ public:
 	virtual double seeds() const =0;
 	virtual std::string name() const =0;
 
-	static const double seedRatio = 0.1;
+	static constexpr double seedRatio = 0.1;
 	static const double PI;
 };
 
