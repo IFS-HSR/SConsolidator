@@ -147,10 +147,13 @@ def collect_macros_from_cc_flags(environ):
             if flag is not None and isinstance(flag, str) and flag.startswith('-D'))
 
 
+def get_compiler_flags(lang, environ):
+    return (environ['CXXFLAGS'] if lang == 'c++' else environ['CCFLAGS'])
+
+
 def collect_sys_macros(lang, environ):
-    process = SCons.Action._subproc(environ, 
-            [get_compiler(environ), '-E', '-dM', get_gcc_lang_param(lang), '-'],
-            stdin='devnull', stderr=subprocess.PIPE, stdout=subprocess.PIPE)
+    command = [get_compiler(environ), '-E', '-dM', get_gcc_lang_param(lang)] + get_compiler_flags(lang, environ) + ['-']
+    process = SCons.Action._subproc(environ, command, stdin='devnull', stderr=subprocess.PIPE, stdout=subprocess.PIPE)
     (pout, _) = process.communicate()
     sysmacros = set()
 
