@@ -73,7 +73,7 @@ def collect_sys_includes(lang, environ):
             with temp_file(out_path):
                 write_cpp_main(in_file, lang)
                 process = SCons.Action._subproc(environ,
-                    [ get_compiler(environ), '-v', get_gcc_lang_param(lang), in_path, '-o', out_path ],
+                    [get_compiler(environ), '-v', get_gcc_lang_param(lang)] + get_compiler_flags(lang, environ) + [in_path, '-o', out_path],
                     stdin='devnull', stderr=subprocess.PIPE, stdout=subprocess.PIPE)
                 (_, perr) = process.communicate()
                 return perr
