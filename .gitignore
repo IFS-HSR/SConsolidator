@@ -14,3 +14,4 @@ junit-workspace/
 ch.hsr.ifs.sconsolidator.swtbottests/screenshots/
 gartenbau_tests
 *.pydevproject
+.DS_Store
