@@ -11,9 +11,8 @@
 	</prerequisites>
 	<properties>
 		<encoding>UTF-8</encoding>
-		<tycho-version>0.20.0</tycho-version>
+		<tycho-version>0.25.0</tycho-version>
 		<compiler-version>1.6</compiler-version>
-		<target-file>ch.hsr.ifs.sconsolidator.core.target</target-file>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -72,11 +71,19 @@
                             <arch>x86_64</arch>
                         </environment>
                     </environments>
+					<target>
+						<artifact>
+							<groupId>ch.hsr.ifs.sconsolidator</groupId>
+							<artifactId>ch.hsr.ifs.sconsolidator-neon</artifactId>
+							<version>1.0.0-SNAPSHOT</version>
+						</artifact>
+					</target>
 				</configuration>
 			</plugin>
 		</plugins>
 	</build>
 	<modules>
+		<module>ch.hsr.ifs.sconsolidator.target</module>
 		<module>ch.hsr.ifs.sconsolidator.feature</module>
 		<module>ch.hsr.ifs.sconsolidator.updates</module>
 		<module>ch.hsr.ifs.sconsolidator.help</module>
@@ -85,7 +92,7 @@
 		<module>ch.hsr.ifs.sconsolidator.depviz</module>
 		<module>ch.hsr.ifs.sconsolidator.depviz.feature</module>
 	</modules>
-	<repositories>
+<!--	<repositories>
 		<repository>
 			<id>eclipse-mars</id>
 			<url>http://download.eclipse.org/releases/mars</url>
@@ -101,5 +108,5 @@
 			<url>http://download.eclipse.org/technology/swtbot/releases/latest</url>
 			<layout>p2</layout>
 		</repository>
-	</repositories>
+	</repositories>-->
 </project>
