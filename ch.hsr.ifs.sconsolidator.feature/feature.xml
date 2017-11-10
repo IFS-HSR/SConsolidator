@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
       id="ch.hsr.ifs.sconsolidator.feature"
-      label="%featureName"
+      label="SConsolidator"
       version="1.0.0.qualifier"
-      provider-name="%providerName"
+      provider-name="IFS Institute for Software"
       plugin="ch.hsr.ifs.sconsolidator.core">
 
    <description url="http://sconsolidator.com">
