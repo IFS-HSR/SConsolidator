@@ -9,13 +9,16 @@ Usage:
 scons_project/ $ scons -s -u -f SConstruct -f BuildInfoCollector.py
 """
 
+from __future__ import print_function
+
 import SCons
 import os
+import platform
 import re
 import subprocess
 import sys
-from contextlib import contextmanager
 
+from contextlib import contextmanager
 
 def collect_user_includes(environ):
     # '#/a/b/c' and '#a/b/c' both need to be 'a/b/c'
@@ -109,8 +112,8 @@ def get_compiler(environ):
                 if is_exe(exe_file):
                     return exe_file
         return None
-   
-    if environ['PLATFORM'] == 'win32' and environ['CXX'] == 'g++':
+
+    if environ['PLATFORM'] == 'win32' and environ['CXX'] == 'g++' and platform.system().casefold().startswith('cygwin'):
         # because gcc and g++ are symlinks in cygwin that are only usable from the cygwin
         # console, we need to take the 'real' executables here
         return which('g++-4') or which('g++-3')
@@ -182,12 +185,12 @@ def write_build_infos(includes, macros, environ):
                 strings.append("'%s'" % obj)
         return ','.join([environ.subst(string) for string in strings])
 
-    print 'USER_INCLUDES = [%s]' % to_string(includes, environ)
-    print 'SYS_C_INCLUDES = [%s]' % to_string(collect_sys_includes('cc', environ), environ)
-    print 'SYS_CPP_INCLUDES = [%s]' % to_string(collect_sys_includes('c++', environ), environ)
-    print 'MACROS = [%s]' % to_string(macros, environ)
-    print 'SYS_C_MACROS = [%s]' % to_string(collect_sys_macros('cc', environ), environ)
-    print 'SYS_CPP_MACROS = [%s]' % to_string(collect_sys_macros('c++', environ), environ)
+    print('USER_INCLUDES = [%s]' % to_string(includes, environ))
+    print('SYS_C_INCLUDES = [%s]' % to_string(collect_sys_includes('cc', environ), environ))
+    print('SYS_CPP_INCLUDES = [%s]' % to_string(collect_sys_includes('c++', environ), environ))
+    print('MACROS = [%s]' % to_string(macros, environ))
+    print('SYS_C_MACROS = [%s]' % to_string(collect_sys_macros('cc', environ), environ))
+    print('SYS_CPP_MACROS = [%s]' % to_string(collect_sys_macros('c++', environ), environ))
 
 
 def collect_build_infos(super_nodes):
