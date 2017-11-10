@@ -116,7 +116,8 @@ def get_compiler(environ):
     if environ['PLATFORM'] == 'win32' and environ['CXX'] == 'g++' and platform.system().casefold().startswith('cygwin'):
         # because gcc and g++ are symlinks in cygwin that are only usable from the cygwin
         # console, we need to take the 'real' executables here
-        return which('g++-4') or which('g++-3')
+        # but in case it is MinGW we must return compiler from environment
+        return (which('g++-4') or which('g++-3')) or environ['CXX']
     else:
         return environ['CXX'] 
 
