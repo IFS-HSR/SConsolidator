@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: %CoreBundleName
+Bundle-Name: SConsolidator Core
 Bundle-SymbolicName: ch.hsr.ifs.sconsolidator.core;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
@@ -30,6 +30,6 @@ Export-Package: ch.hsr.ifs.sconsolidator.core,
  ch.hsr.ifs.sconsolidator.core.depanalysis
 Bundle-ActivationPolicy: lazy
 Bundle-Activator: ch.hsr.ifs.sconsolidator.core.SConsPlugin
-Bundle-Vendor: %CoreBundleVendor
+Bundle-Vendor: IFS Institute for Software
 Bundle-ClassPath: .,
  lib/commons-exec-1.1.jar
