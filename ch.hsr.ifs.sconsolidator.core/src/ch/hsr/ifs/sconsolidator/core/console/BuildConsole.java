@@ -10,15 +10,10 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.preference.PreferenceConverter;
-import org.eclipse.jface.preference.PreferenceDialog;
 import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.jface.text.BadLocationException;
-import org.eclipse.osgi.util.NLS;
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
@@ -27,11 +22,9 @@ import org.eclipse.ui.console.IConsole;
 import org.eclipse.ui.console.IConsoleConstants;
 import org.eclipse.ui.console.IConsoleManager;
 import org.eclipse.ui.console.IConsoleView;
-import org.eclipse.ui.console.IHyperlink;
 import org.eclipse.ui.console.IOConsoleOutputStream;
 import org.eclipse.ui.console.MessageConsole;
 import org.eclipse.ui.console.MessageConsoleStream;
-import org.eclipse.ui.dialogs.PreferencesUtil;
 
 import ch.hsr.ifs.sconsolidator.core.SConsI18N;
 import ch.hsr.ifs.sconsolidator.core.SConsImages;
@@ -39,8 +32,6 @@ import ch.hsr.ifs.sconsolidator.core.SConsPlugin;
 import ch.hsr.ifs.sconsolidator.core.base.utils.UIUtil;
 import ch.hsr.ifs.sconsolidator.core.commands.SConsConsole;
 import ch.hsr.ifs.sconsolidator.core.preferences.PreferenceConstants;
-
-
 
 public class BuildConsole implements SConsConsole {
   private static final String DEFAULT_NAME = SConsI18N.Console_Title;
@@ -93,6 +84,7 @@ public class BuildConsole implements SConsConsole {
     return output;
   }
 
+  @SuppressWarnings("restriction")
   @Override
   public void print(String line) throws IOException {
     MessageConsoleStream output = console.newMessageStream();
@@ -101,6 +93,7 @@ public class BuildConsole implements SConsConsole {
     output.close();
   }
 
+  @SuppressWarnings("restriction")
   @Override
   public void println(String line) throws IOException {
     MessageConsoleStream output = console.newMessageStream();
@@ -160,32 +153,6 @@ public class BuildConsole implements SConsConsole {
   
   @Override
   public void addBuildConsoleColorLink() {
-    try {
-      String consoleColorInfo = NLS.bind(SConsI18N.AbstractSConsCommand_ConsoleColorInfo, 
-                                         SConsI18N.AbstractSConsCommand_ConsoleColorInfoLinkText);
-      int startPos = consoleColorInfo.indexOf(SConsI18N.AbstractSConsCommand_ConsoleColorInfoLinkText);
-      int endPos = SConsI18N.AbstractSConsCommand_ConsoleColorInfoLinkText.length();
-      console.addHyperlink(new PreferencesHyperlink(), startPos, endPos);
-    } catch (BadLocationException e) {
-      SConsPlugin.log(new CoreException(new Status(IStatus.ERROR, SConsPlugin.PLUGIN_ID, e.getMessage())));
-    }
-  }
-  
-  private static class PreferencesHyperlink implements IHyperlink {
-
-    @Override
-    public void linkEntered() {}
-
-    @Override
-    public void linkExited() {}
-
-    @Override
-    public void linkActivated() {
-      Shell activeShell = Display.getCurrent().getActiveShell();
-      PreferenceDialog consolePreferencesPage = PreferencesUtil.createPreferenceDialogOn(activeShell,
-          "org.eclipse.cdt.ui.preferences.CBuildConsolePreferences", null, null); //$NON-NLS-1$
-      consolePreferencesPage.open();
-    }
-    
+      console.addPatternMatchListener(new ConsoleLogPatternMatcher(SConsI18N.AbstractSConsCommand_ConsoleColorInfoLinkText));
   }
 }
