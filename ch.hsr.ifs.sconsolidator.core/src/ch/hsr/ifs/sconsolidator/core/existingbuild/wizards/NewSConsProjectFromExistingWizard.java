@@ -14,7 +14,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.SubProgressMonitor;
+import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
@@ -108,13 +108,13 @@ public class NewSConsProjectFromExistingWizard extends Wizard implements IImport
   private void configureProject(IProject project, String additionalSConsOptions, IProgressMonitor pm)
       throws CoreException {
     SConsExistingProjectHandler projectHandler =
-        new SConsExistingProjectHandler(project, new SubProgressMonitor(pm, 4));
+        new SConsExistingProjectHandler(project, SubMonitor.convert(pm, 4));
     projectHandler.configureProject(additionalSConsOptions);
   }
 
   private void createCDTProject(IProject project, IProjectDescription description, boolean isCPP,
       IProgressMonitor pm) throws CoreException {
-    SubProgressMonitor subMonitor = new SubProgressMonitor(pm, 1);
+    SubMonitor subMonitor = SubMonitor.convert(pm, 1);
     CCorePlugin.getDefault().createCDTProject(description, project, subMonitor);
 
     if (isCPP) {

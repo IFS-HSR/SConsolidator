@@ -6,7 +6,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.QualifiedName;
-import org.eclipse.core.runtime.SubProgressMonitor;
+import org.eclipse.core.runtime.SubMonitor;
 
 import ch.hsr.ifs.sconsolidator.core.SConsPlugin;
 import ch.hsr.ifs.sconsolidator.core.base.utils.UIUtil;
@@ -18,7 +18,7 @@ public final class TargetBuilder {
   private TargetBuilder() {}
 
   public static void buildTarget(SConsBuildTarget target, IProgressMonitor pm) throws CoreException {
-    target.build(new SubProgressMonitor(pm, 1));
+    target.build(SubMonitor.convert(pm, 1));
     rememberLastTarget(target, false);
   }
 

@@ -34,6 +34,7 @@ public final class CollectionUtil {
     return new HashSet<T>(asList(elements));
   }
 
+  @SafeVarargs
   public static <T> Set<T> orderPreservingSet(T... elements) {
     return new LinkedHashSet<T>(asList(elements));
   }

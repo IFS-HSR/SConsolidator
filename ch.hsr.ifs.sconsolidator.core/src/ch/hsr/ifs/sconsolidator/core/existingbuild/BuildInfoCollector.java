@@ -18,7 +18,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.SubProgressMonitor;
+import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.ui.actions.WorkspaceModifyOperation;
 
 import ch.hsr.ifs.sconsolidator.core.EmptySConsPathException;
@@ -75,7 +75,7 @@ public class BuildInfoCollector extends WorkspaceModifyOperation {
     BuildConsole console = new BuildConsole(project);
     BuildConsole.showConsole(console);
     BuildInfoCollectorCommand command = new BuildInfoCollectorCommand(console, project);
-    return command.run(project.getLocation().toFile(), new SubProgressMonitor(pm, 1));
+    return command.run(project.getLocation().toFile(), SubMonitor.convert(pm, 1));
   }
 
   private void copyProjectInfoScript() throws CoreException {

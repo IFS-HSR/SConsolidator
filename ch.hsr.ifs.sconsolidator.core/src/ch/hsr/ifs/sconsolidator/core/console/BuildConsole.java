@@ -33,6 +33,7 @@ import ch.hsr.ifs.sconsolidator.core.base.utils.UIUtil;
 import ch.hsr.ifs.sconsolidator.core.commands.SConsConsole;
 import ch.hsr.ifs.sconsolidator.core.preferences.PreferenceConstants;
 
+@SuppressWarnings("restriction")
 public class BuildConsole implements SConsConsole {
   private static final String DEFAULT_NAME = SConsI18N.Console_Title;
   private final MessageConsole console;
@@ -84,7 +85,6 @@ public class BuildConsole implements SConsConsole {
     return output;
   }
 
-  @SuppressWarnings("restriction")
   @Override
   public void print(String line) throws IOException {
     MessageConsoleStream output = console.newMessageStream();
@@ -93,7 +93,6 @@ public class BuildConsole implements SConsConsole {
     output.close();
   }
 
-  @SuppressWarnings("restriction")
   @Override
   public void println(String line) throws IOException {
     MessageConsoleStream output = console.newMessageStream();

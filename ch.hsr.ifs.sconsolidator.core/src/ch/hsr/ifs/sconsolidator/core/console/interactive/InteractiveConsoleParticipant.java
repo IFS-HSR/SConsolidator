@@ -37,8 +37,7 @@ public class InteractiveConsoleParticipant implements IConsolePageParticipant {
   public void deactivated() {}
 
   @Override
-  @SuppressWarnings({"rawtypes"})
-  public Object getAdapter(Class adapter) {
+  public <T> T getAdapter(Class<T> adapter) {
     return null;
   }
 }

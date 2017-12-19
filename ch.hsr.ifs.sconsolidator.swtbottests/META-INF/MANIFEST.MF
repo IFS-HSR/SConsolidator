@@ -15,5 +15,5 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.ui;bundle-version="3.7.0",
  ch.hsr.ifs.sconsolidator.core;bundle-version="1.0.0",
  org.eclipse.swtbot.eclipse.finder;bundle-version="2.2.1"
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy

@@ -4,11 +4,9 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 import org.eclipse.cdt.internal.ui.preferences.BuildConsolePreferencePage;
-import org.eclipse.cdt.ui.CUIPlugin;
-import org.eclipse.jface.text.BadLocationException;
-import org.eclipse.swt.SWT;
 import org.eclipse.ui.PartInitException;
 
+@SuppressWarnings("restriction")
 public interface SConsConsole {
   OutputStream getConsoleOutputStream(ConsoleOutput kind);
 

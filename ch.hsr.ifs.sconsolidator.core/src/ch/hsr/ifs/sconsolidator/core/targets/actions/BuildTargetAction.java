@@ -9,7 +9,7 @@ import org.eclipse.core.resources.IncrementalProjectBuilder;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.SubProgressMonitor;
+import org.eclipse.core.runtime.SubMonitor;
 
 import ch.hsr.ifs.sconsolidator.core.SConsI18N;
 import ch.hsr.ifs.sconsolidator.core.SConsImages;
@@ -36,7 +36,7 @@ public class BuildTargetAction extends AbstractBuildTargetAction {
     IWorkspaceRunnable runnable = new IWorkspaceRunnable() {
       @Override
       public void run(IProgressMonitor pm) throws CoreException {
-        project.build(IncrementalProjectBuilder.FULL_BUILD, new SubProgressMonitor(pm, 1));
+        project.build(IncrementalProjectBuilder.FULL_BUILD, SubMonitor.convert(pm, 1));
       }
     };
     ResourcesPlugin.getWorkspace().run(runnable, null, IResource.NONE, pm);

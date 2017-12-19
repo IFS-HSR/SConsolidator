@@ -1,10 +1,10 @@
 package ch.hsr.ifs.sconsolidator.core.commands;
 
 import static org.hamcrest.CoreMatchers.anyOf;
+import static org.hamcrest.CoreMatchers.containsString;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
-import static org.junit.matchers.JUnitMatchers.containsString;
 
 import java.io.File;
 
@@ -51,7 +51,6 @@ public class DependencyTreeCommandTest {
     assertArrayEquals(expectedArgs, actualArguments);
   }
 
-  @SuppressWarnings("unchecked")
   @Test
   public void testRun() throws Exception {
     File projectPath = testProject.getProject().getLocation().toFile();

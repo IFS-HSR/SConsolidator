@@ -108,13 +108,13 @@ public class SConsBuildTarget extends PlatformObject {
     return isDefault;
   }
 
-  @SuppressWarnings("rawtypes")
+  @SuppressWarnings("unchecked")
   @Override
-  public Object getAdapter(Class adapter) {
+  public <T> T getAdapter(Class<T> adapter) {
     if (adapter.equals(IProject.class))
-      return getProject();
+      return (T) getProject();
     else if (adapter.equals(IResource.class))
-      return container;
+      return (T) container;
     return super.getAdapter(adapter);
   }
 }

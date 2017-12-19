@@ -10,7 +10,6 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.preference.PreferenceConverter;
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.Display;
@@ -24,6 +23,7 @@ import ch.hsr.ifs.sconsolidator.core.base.utils.TeeOutputStream;
 import ch.hsr.ifs.sconsolidator.core.base.utils.UIUtil;
 import ch.hsr.ifs.sconsolidator.core.console.interactive.InteractiveConsole;
 
+@SuppressWarnings("restriction")
 public class StreamCommunicationHandler {
   private static final int MAX_WAIT_TIME_FOR_BUMPERS_IN_MS = 1000;
   private final Process process;

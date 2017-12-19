@@ -15,7 +15,7 @@ import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TreeViewer;
-import org.eclipse.jface.viewers.ViewerSorter;
+import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Menu;
@@ -91,7 +91,7 @@ public class SConsTargetView extends ViewPart {
   }
 
   private void initSorter() {
-    treeViewer.setSorter(new ViewerSorter() {
+    treeViewer.setComparator(new ViewerComparator() {
       @Override
       public int category(Object element) {
         if (element instanceof IResource)
