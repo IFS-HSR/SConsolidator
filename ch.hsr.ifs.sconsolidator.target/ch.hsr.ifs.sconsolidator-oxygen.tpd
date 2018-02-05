@@ -2,11 +2,11 @@ target "SConsolidator Oxygen Target"
 
 with source requirements
 
-location "https://cevelop.com/cdt-testing/9.3.0" {
-	ch.hsr.ifs.cdttesting.feature.feature.group [9.3.0,9.4.0)
+location "https://cevelop.com/cdt-testing/9.4.0" {
+	ch.hsr.ifs.cdttesting.feature.feature.group [9.4.0,9.5.0)
 }
 
-location "http://download.eclipse.org/tools/cdt/builds/9.4/rc4/" {
+location "http://download.eclipse.org/tools/cdt/releases/9.4/" {
 	org.eclipse.cdt.sdk.feature.group [9.4.0,9.5.0)	
 }
 
