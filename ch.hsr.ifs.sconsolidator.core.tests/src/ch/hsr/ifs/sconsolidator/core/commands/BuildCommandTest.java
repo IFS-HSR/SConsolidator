@@ -28,6 +28,8 @@ public class BuildCommandTest {
 
   @BeforeClass
   public static void beforeClass() throws Exception {
+    String sconsPath = PlatformSpecifics.findSConsExecOnSystemPath().getAbsolutePath();
+    SConsPlugin.getConfigPreferenceStore().setValue(PreferenceConstants.EXECUTABLE_PATH, sconsPath);
     testProject = new CppManagedTestProject(true);
     initNumberOfJobs();
   }
