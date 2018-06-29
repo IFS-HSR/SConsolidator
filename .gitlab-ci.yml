@@ -25,7 +25,7 @@ cache:
 #=============================================================================#
 
 .buildCommon: &BUILD_COMMON
-  image: gitlab.dev.ifs.hsr.ch:45023/cevelop/docker-tycho-build:latest
+  image: gitlab.dev.ifs.hsr.ch:45023/cevelop/docker-tycho-build-with-scons:latest
   stage: build
   script:
     - 'env SWT_GTK3=0 xvfb-run ./tools/build clean verify'
