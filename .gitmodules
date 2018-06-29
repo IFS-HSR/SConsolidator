@@ -1,3 +1,3 @@
 [submodule "tools"]
 	path = tools
-	url = https://gitlab.dev.ifs.hsr.ch/SLOTH/tools.git
+	url = ../../SLOTH/tools.git
