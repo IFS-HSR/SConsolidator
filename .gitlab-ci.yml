@@ -1,0 +1,82 @@
+#=============================================================================#
+# General configuration                                                       #
+#=============================================================================#
+
+stages:
+  - build
+  - test
+  - deploy
+
+variables:
+  MAVEN_OPTS: "-Dmaven.repo.local=.m2/repository"
+  GIT_SUBMODULE_STRATEGY: normal
+  P2_DESTINATION: 'sconsolidator'
+  P2_SOURCE: releng/ch.hsr.ifs.sconsolidator.update/target/repository
+  P2_HOST: cute-test.com
+
+cache:
+  paths:
+    - .m2/repository
+  policy: pull-push
+  key: "maven-$CI_PROJECT_ID"
+
+#=============================================================================#
+# Build jobs                                                                  #
+#=============================================================================#
+
+.buildCommon: &BUILD_COMMON
+  image: gitlab.dev.ifs.hsr.ch:45023/cevelop/docker-tycho-build:latest
+  stage: build
+  script:
+    - 'env SWT_GTK3=0 xvfb-run ./tools/build clean verify'
+
+build unstable:
+  <<: *BUILD_COMMON
+  except:
+    - master
+    - develop
+  script:
+    - 'env SWT_GTK3=0 xvfb-run ./tools/build clean verify --verbose'
+  artifacts:
+    when: on_failure
+    paths:
+      - '**/.log'
+
+build signed:
+  <<: *BUILD_COMMON
+  image: gitlab.dev.ifs.hsr.ch:45023/cevelop/docker-tycho-release:latest
+  artifacts:
+    paths:
+    - './*/*/*/target/repository/**'
+  only:
+    - develop
+    - master
+
+#=============================================================================#
+# Deployment jobs                                                             #
+#=============================================================================#
+
+.deployCommon: &DEPLOY_COMMON
+  image: gitlab.dev.ifs.hsr.ch:45023/ifs/docker-alpine-ssh:latest
+  cache: {}
+  stage: deploy
+  script:
+    - ./tools/ci/deploy
+
+deploy development:
+  <<: *DEPLOY_COMMON
+  dependencies:
+    - build signed
+  variables:
+    P2_ROOT: /var/www/sconsolidator-unstable
+  only:
+    - develop
+
+deploy release:
+  <<: *DEPLOY_COMMON
+  dependencies:
+    - build signed
+  variables:
+    P2_ROOT: /var/www/sconsolidator
+  only:
+    - master

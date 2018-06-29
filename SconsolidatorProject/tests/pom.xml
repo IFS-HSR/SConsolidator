@@ -1,0 +1,101 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>ch.hsr.ifs.sconsolidator.tests</artifactId>
+    <packaging>pom</packaging>
+    <parent>
+        <groupId>ch.hsr.ifs.sconsolidator</groupId>
+        <artifactId>ch.hsr.ifs.sconsolidator.root</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+    </parent>
+    <modules>
+        <module>ch.hsr.ifs.sconsolidator.core.tests</module>
+        <module>ch.hsr.ifs.sconsolidator.swtbottests</module>
+    </modules>
+    
+	<properties>
+		<osx-jvm-flags />
+	</properties>
+
+	<profiles>
+		<profile>
+			<id>macosx</id>
+			<activation>
+				<os>
+					<family>mac</family>
+				</os>
+			</activation>
+			<properties>
+				<osx-jvm-flags>-XstartOnFirstThread</osx-jvm-flags>
+			</properties>
+		</profile>
+	</profiles>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>${maven.surefire.version}</version>
+				<configuration>
+					<includes>
+						<include>**/UnitTestSuiteAll.java</include>
+					</includes>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>tycho-surefire-plugin</artifactId>
+				<version>${tycho-version}</version>
+				<configuration>
+					<useUIHarness>true</useUIHarness>
+					<failIfNoTests>false</failIfNoTests>
+				</configuration>
+				<executions>
+					<execution>
+						<id>default-test</id>
+						<configuration>
+							<includes>
+								<include>**/PluginTestSuiteAll.java</include>
+							</includes>
+						</configuration>
+					</execution>
+
+					<execution>
+						<id>plugin-ui-test</id>
+						<phase>integration-test</phase>
+						<goals>
+							<goal>test</goal>
+						</goals>
+						<configuration>
+							<useUIThread>false</useUIThread>
+							<argLine>${osx-jvm-flags}</argLine>
+							<includes>
+								<include>**/PluginUITestSuiteAll.java</include>
+							</includes>
+						</configuration>
+					</execution>
+
+					<execution>
+						<id>plugin-swtbot-test</id>
+						<phase>integration-test</phase>
+						<goals>
+							<goal>test</goal>
+						</goals>
+						<configuration>
+							<useUIHarness>true</useUIHarness>
+							<useUIThread>false</useUIThread>
+							<argLine>${osx-jvm-flags}</argLine>
+							<appArgLine>-Dorg.eclipse.swtbot.keyboard.layout=EN_US -Dorg.eclipse.swtbot.playback.delay=60</appArgLine>
+							<includes>
+								<include>**/SWTBotTestSuiteAll.java</include>
+							</includes>
+						</configuration>
+					</execution>
+				</executions>
+
+			</plugin>
+		</plugins>
+	</build>
+	
+</project>
