@@ -46,7 +46,7 @@ build unstable:
 
 build signed:
   <<: *BUILD_COMMON
-  image: gitlab.dev.ifs.hsr.ch:45023/cevelop/docker-tycho-release:latest
+  image: gitlab.dev.ifs.hsr.ch:45023/cevelop/docker-tycho-release-with-scons:latest
   artifacts:
     paths:
     - './*/*/*/target/repository/**'
