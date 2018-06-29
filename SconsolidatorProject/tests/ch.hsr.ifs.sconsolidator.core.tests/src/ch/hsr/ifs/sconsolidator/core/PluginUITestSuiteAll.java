@@ -66,5 +66,5 @@ import ch.hsr.ifs.sconsolidator.core.targets.SConsBuildTargetTest;
   SConsBuilderTest.class
 })
 //@formatter:on
-public class AllTests {
+public class PluginUITestSuiteAll {
 }

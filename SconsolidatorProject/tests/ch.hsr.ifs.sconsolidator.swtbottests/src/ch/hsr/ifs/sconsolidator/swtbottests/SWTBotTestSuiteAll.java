@@ -11,5 +11,5 @@ import org.junit.runners.Suite.SuiteClasses;
   ImportExistingCodeWizardTest.class
 // @formatter:on
 })
-public class AllTests {
+public class SWTBotTestSuiteAll {
 }
