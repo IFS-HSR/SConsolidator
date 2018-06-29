@@ -11,7 +11,7 @@ variables:
   MAVEN_OPTS: "-Dmaven.repo.local=.m2/repository"
   GIT_SUBMODULE_STRATEGY: normal
   P2_DESTINATION: 'sconsolidator'
-  P2_SOURCE: releng/ch.hsr.ifs.sconsolidator.update/target/repository
+  P2_SOURCE: SconsolidatorProject/releng/ch.hsr.ifs.sconsolidator.update/target/repository
   P2_HOST: cute-test.com
 
 cache:
