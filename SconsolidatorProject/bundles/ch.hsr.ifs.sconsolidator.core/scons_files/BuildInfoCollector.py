@@ -20,6 +20,11 @@ import sys
 
 from contextlib import contextmanager
 
+
+def get_from_scons_environ(environ, key, dflt):
+    return environ.get(key, dflt)
+
+
 def collect_user_includes(environ):
     # '#/a/b/c' and '#a/b/c' both need to be 'a/b/c'
     re_sconstruct_dir = re.compile(r'(#[%s]?)?(.*)' % re.escape(os.path.sep))
@@ -40,7 +45,7 @@ def collect_user_includes(environ):
                 add(includes, new_path)
 
     user_includes = set()
-    for path in environ['CPPPATH']:
+    for path in get_from_scons_environ(environ, 'CPPPATH', []):
         add(user_includes, path)
     return user_includes
 
@@ -52,7 +57,7 @@ def get_gcc_lang_param(lang):
 def collect_sys_includes(lang, environ):
 
     def write_cpp_main(f, lang):
-        f.write('#include <%s>\n#ifdef __cplusplus\nextern "C"\n#endif\nvoid _exit(int status) { while(1); }\nint main(){}' % 
+        f.write('#include <%s>\n#ifdef __cplusplus\nextern "C"\n#endif\nvoid _exit(int status) { while(1); }\nint main(){}' %
             (('cstdlib' if lang == 'c++' else 'stdlib.h')))
         f.flush()
 
@@ -113,23 +118,23 @@ def get_compiler(environ):
                     return exe_file
         return None
 
-    if environ['PLATFORM'] == 'win32' and environ['CXX'] == 'g++' and platform.system().casefold().startswith('cygwin'):
+    if get_from_scons_environ(environ, 'PLATFORM', '') == 'win32' and get_from_scons_environ(environ, 'CXX', '') == 'g++' and platform.system().casefold().startswith('cygwin'):
         # because gcc and g++ are symlinks in cygwin that are only usable from the cygwin
         # console, we need to take the 'real' executables here
         return which('g++-4') or which('g++-3')
     else:
-        return environ['CXX'] 
+        return get_from_scons_environ(environ, 'CXX', 'gcc')
 
 
 def collect_macros_from_cpp_defines(environ):
-    
+
     def macro_binding(macro, value):
         return '{macro}={value}'.format(**locals())
 
     def handle_dict(d):
         return set(macro_binding(k, v) for (k, v) in d.iteritems())
-    
-    cpp_defines = environ['CPPDEFINES']
+
+    cpp_defines = get_from_scons_environ(environ, 'CPPDEFINES', [])
 
     if isinstance(cpp_defines, (list, tuple)):
         macros = set()
@@ -146,12 +151,19 @@ def collect_macros_from_cpp_defines(environ):
 
 
 def collect_macros_from_cc_flags(environ):
-    return set(flag[2:] for flag in environ['CCFLAGS'] 
+    return set(flag[2:] for flag in get_from_scons_environ(environ, 'CCFLAGS', [])
             if flag is not None and isinstance(flag, str) and flag.startswith('-D'))
 
 
 def get_compiler_flags(lang, environ):
-    return (environ['CXXFLAGS'] if lang == 'c++' else environ['CCFLAGS'])
+    from SCons.Util import is_List
+    compiler_flags = (get_from_scons_environ(environ, 'CXXFLAGS', []) if lang == 'c++' else get_from_scons_environ(environ, 'CCFLAGS',[]))
+    # print('CXXFLAGS = [%s]' % get_from_scons_environ(environ, 'CXXFLAGS', []))
+    # print('CCFLAGS = [%s]' % get_from_scons_environ(environ, 'CCFLAGS', []))
+    # print('FLAGS = [%s] %s' % (compiler_flags,is_List(compiler_flags)))
+    if not is_List(compiler_flags):
+        compiler_flags = [compiler_flags]
+    return compiler_flags
 
 
 def collect_sys_macros(lang, environ):
