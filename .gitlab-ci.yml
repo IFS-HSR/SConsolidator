@@ -4,79 +4,73 @@
 
 stages:
   - build
-  - test
   - deploy
 
 variables:
-  MAVEN_OPTS: "-Dmaven.repo.local=.m2/repository"
-  GIT_SUBMODULE_STRATEGY: normal
-  P2_DESTINATION: 'sconsolidator'
-  P2_SOURCE: SconsolidatorProject/releng/ch.hsr.ifs.sconsolidator.update/target/repository
-  P2_HOST: cute-test.com
-
-cache:
-  paths:
-    - .m2/repository
-  policy: pull-push
-  key: "maven-$CI_PROJECT_ID"
+  MAVEN_OPTS: '-Dmaven.repo.local=.m2/repository'
+  GIT_SUBMODULE_STRATEGY: 'normal'
+  SWT_GTK3: '0'
+  P2_ENABLE_COMPOSITE: '1'
+  P2_COMPOSITE_NAME: 'SConsolidator'
+  P2_ROOT_BASE: '/var/www/sconsolidator'
+  P2_DESTINATION: 'P2_USE_REL_TAG'
+  P2_SOURCE: './SconsolidatorProject/releng/ch.hsr.ifs.sconsolidator.update/target/repository'
 
 #=============================================================================#
 # Build jobs                                                                  #
 #=============================================================================#
 
 .buildCommon: &BUILD_COMMON
-  image: gitlab.dev.ifs.hsr.ch:45023/cevelop/docker-tycho-build-with-scons:latest
   stage: build
   script:
-    - 'env SWT_GTK3=0 xvfb-run ./tools/build clean verify'
-
-build unstable:
-  <<: *BUILD_COMMON
-  except:
-    - master
-    - develop
-  script:
-    - 'env SWT_GTK3=0 xvfb-run ./tools/build clean verify --verbose'
-  artifacts:
-    when: on_failure
+    - 'xvfb-run ./tools/build clean verify ${BUILD_FLAGS}'
+  cache:
+    key: 'maven-$CI_PROJECT_ID'
     paths:
-      - '**/.log'
+      - '.m2/repository'
+    policy: pull-push
 
-build signed:
+
+Build Signed:
   <<: *BUILD_COMMON
   image: gitlab.dev.ifs.hsr.ch:45023/cevelop/docker-tycho-release-with-scons:latest
+  only:
+    - master
+    - develop
+    - /^release\/.*$/
+  except:
+    - tags
+  variables:
+    BUILD_FLAGS: '--sign'
   artifacts:
     paths:
     - './*/*/*/target/repository/**'
-  only:
-    - develop
+
+Build Unsigned:
+  <<: *BUILD_COMMON
+  image: gitlab.dev.ifs.hsr.ch:45023/cevelop/docker-tycho-build-with-scons:latest
+  except:
+    - tags
     - master
+    - develop
+    - /^release\/.*$/
+  variables:
+    BUILD_FLAGS: '--verbose'
 
 #=============================================================================#
 # Deployment jobs                                                             #
 #=============================================================================#
 
-.deployCommon: &DEPLOY_COMMON
+Deploy:
+  stage: deploy
   image: gitlab.dev.ifs.hsr.ch:45023/ifs/docker-alpine-ssh:latest
   cache: {}
-  stage: deploy
-  script:
-    - ./tools/ci/deploy
-
-deploy development:
-  <<: *DEPLOY_COMMON
-  dependencies:
-    - build signed
-  variables:
-    P2_ROOT: /var/www/sconsolidator-unstable
   only:
     - develop
-
-deploy release:
-  <<: *DEPLOY_COMMON
-  dependencies:
-    - build signed
-  variables:
-    P2_ROOT: /var/www/sconsolidator
-  only:
     - master
+  dependencies:
+    - Build Signed
+  script:
+    - "export P2_ROOT=${P2_ROOT_BASE}$( (echo ${CI_COMMIT_REF_NAME} | grep develop &>/dev/null) && echo '-unstable')"
+    - "export P2_COMPOSITE_VERSION=$(sed -n 's/[ \\t]*<version>\\([0-9]\\.[0-9]\\.[0-9]\\)-SNAPSHOT<\\/version>/\\1/p' *Project/**/*.update/pom.xml | head -1)"
+    - "./tools/ci/deploy"
