@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="ch.hsr.ifs.sconsolidator.feature"
+      label="SConsolidator"
+      version="1.0.1.qualifier"
+      provider-name="IFS Institute for Software"
+      plugin="ch.hsr.ifs.sconsolidator.core">
+
+   <description url="http://sconsolidator.com">
+      %description
+   </description>
+
+   <copyright>
+      %copyright
+   </copyright>
+
+   <license>
+      %license
+   </license>
+
+   <url>
+      <update label="%updateSiteName" url="http://sconsolidator.com/update"/>
+   </url>
+
+   <plugin
+         id="ch.hsr.ifs.sconsolidator.core"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="ch.hsr.ifs.sconsolidator.help"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"/>
+
+</feature>

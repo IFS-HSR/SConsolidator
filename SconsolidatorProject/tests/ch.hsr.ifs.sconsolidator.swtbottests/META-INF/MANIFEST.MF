@@ -1,0 +1,19 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: SConsolidator SWTBotTest
+Bundle-SymbolicName: ch.hsr.ifs.sconsolidator.swtbottests
+Bundle-Version: 1.0.1.qualifier
+Bundle-Activator: ch.hsr.ifs.sconsolidator.swtbottests.SWTTestPlugin
+Bundle-Vendor: IFS Institute for Software
+Require-Bundle: org.eclipse.core.runtime,
+ org.junit;bundle-version="4.8.1",
+ org.eclipse.swtbot.swt.finder;bundle-version="2.0.4",
+ org.eclipse.core.resources;bundle-version="3.7.100",
+ org.eclipse.cdt.core;bundle-version="5.3.0",
+ org.eclipse.swtbot.junit4_x;bundle-version="2.0.4",
+ org.apache.log4j;bundle-version="1.2.13",
+ org.eclipse.ui;bundle-version="3.7.0",
+ ch.hsr.ifs.sconsolidator.core;bundle-version="1.0.0",
+ org.eclipse.swtbot.eclipse.finder;bundle-version="2.2.1"
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-ActivationPolicy: lazy

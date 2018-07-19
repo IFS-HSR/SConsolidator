@@ -1,0 +1,6 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: SConsolidator Help
+Bundle-SymbolicName: ch.hsr.ifs.sconsolidator.help; singleton:=true
+Bundle-Version: 1.0.1.qualifier
+Bundle-Vendor: IFS Institute for Software

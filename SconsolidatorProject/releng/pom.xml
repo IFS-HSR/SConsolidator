@@ -1,0 +1,56 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>ch.hsr.ifs.sconsolidator.releng</artifactId>
+    <packaging>pom</packaging>
+    <parent>
+        <groupId>ch.hsr.ifs.sconsolidator</groupId>
+        <artifactId>ch.hsr.ifs.sconsolidator.root</artifactId>
+        <version>1.0.1-SNAPSHOT</version>
+    </parent>
+
+    <modules>
+        <module>ch.hsr.ifs.sconsolidator.update</module>
+    </modules>
+
+    <profiles>
+        <profile>
+            <id>master</id>
+            <activation>
+                <property>
+                    <name>gitflow.branch</name>
+                    <value>master</value>
+                </property>
+            </activation>
+            <modules>
+                <module>ch.hsr.ifs.sconsolidator.target.master</module>
+            </modules>
+        </profile>
+
+        <profile>
+            <id>develop</id>
+            <activation>
+                <property>
+                    <name>gitflow.branch</name>
+                    <value>develop</value>
+                </property>
+            </activation>
+            <modules>
+                <module>ch.hsr.ifs.sconsolidator.target.develop</module>
+            </modules>
+        </profile>
+
+        <profile>
+            <id>illegal</id>
+            <activation>
+                <property>
+                    <name>!gitflow.branch</name>
+                </property>
+            </activation>
+            <modules>
+                <module>ch.hsr.ifs.sconsolidator.target.develop</module>
+            </modules>
+        </profile>
+    </profiles>
+
+</project>
