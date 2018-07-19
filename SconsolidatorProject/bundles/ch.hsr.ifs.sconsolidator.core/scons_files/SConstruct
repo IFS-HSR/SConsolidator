@@ -8,7 +8,6 @@ import re
 from subprocess import Popen
 from SConfig import *
 
-
 # Minimum SCons and Python version for plugin
 # SCons >= 2.0.0 drops Python pre-2.4 support!
 EnsureSConsVersion(2, 0)
@@ -30,10 +29,13 @@ def filter_includes(flags):
 
 # Important to find compilers in system path to be in
 # line with Eclipse CDT
-env = Environment(ENV={'PATH': os.environ['PATH'], 'TEMP' : os.environ['TEMP']}) if 'TEMP' in os.environ else Environment(ENV={'PATH': os.environ['PATH']})
+env = Environment(ENV={
+    'PATH': os.environ['PATH'],
+    'TEMP': os.environ['TEMP']
+}) if 'TEMP' in os.environ else Environment(ENV={'PATH': os.environ['PATH']})
 
 if TOOLCHAIN_NAME.startswith('mingw') or TOOLCHAIN_NAME.startswith('cygwin'):
-    Tool('mingw')(env) # Prefer MinGW over other compilers like cl.exe
+    Tool('mingw')(env)  # Prefer MinGW over other compilers like cl.exe
 else:
     env.Replace(CC=COMPILER_NAME, CXX=COMPILER_NAME)
 
@@ -43,10 +45,9 @@ if not COMP_INCLUDES_INTO_CCFLAGS:
     CXX_FLAGS = filter_includes(CXX_FLAGS)
 
 env.Append(CFLAGS=C_FLAGS, CXXFLAGS=CXX_FLAGS)
-env.Replace(CCFLAGS='') # otherwise we have /nolink in Windows there
+env.Replace(CCFLAGS='')  # otherwise we have /nolink in Windows there
 env.Decider(DECIDER)
-env['SHOBJSUFFIX'] = '.o' # SCons otherwise uses .os suffix for Cygwin and MacOS X
-
+env['SHOBJSUFFIX'] = '.o'  # SCons otherwise uses .os suffix for Cygwin and MacOS X
 
 # Initialize variables
 ARTIFACT_NAME = os.path.join(BUILD_CONFIGURATION, BUILD_ARTIFACT_NAME)
@@ -80,7 +81,6 @@ def execute_post_build_action(target=None, source=None, env=None):
 
 post = Action(execute_post_build_action, POST_BUILD_DESC)
 
-
 # Search source directories for files
 main_source_dir = os.path.abspath('.')
 for subdir, excludes in SOURCE_PATHS.items():
@@ -93,18 +93,24 @@ for subdir, excludes in SOURCE_PATHS.items():
         source_dir = os.path.join(main_source_dir, subdir)
         out_dir = os.path.join(BUILD_CONFIGURATION, subdir)
 
-    o = SConscript(sconscript_path, exports=['env', 'source_dir', 'excludes', 'pic'],
-                   variant_dir=out_dir, duplicate=0)
+    o = SConscript(
+        sconscript_path, exports=['env', 'source_dir', 'excludes', 'pic'], variant_dir=out_dir, duplicate=0)
     if o:
         objs.extend(o)
 
 # Create artifact based on project type
-params = {'target': ARTIFACT_NAME, 'source': objs, 'LIBS': LIBRARIES, 'LIBPATH': LIBRARY_PATHS, 'LINKFLAGS': LINKER_FLAGS}
-if PROJECT_TYPE == "exe": # Executable
+params = {
+    'target': ARTIFACT_NAME,
+    'source': objs,
+    'LIBS': LIBRARIES,
+    'LIBPATH': LIBRARY_PATHS,
+    'LINKFLAGS': LINKER_FLAGS
+}
+if PROJECT_TYPE == "exe":  # Executable
     artifact = env.Program(**params)
-elif PROJECT_TYPE == "so": # Shared library
+elif PROJECT_TYPE == "so":  # Shared library
     artifact = env.SharedLibrary(**params)
-elif PROJECT_TYPE == "a": # Static library
+elif PROJECT_TYPE == "a":  # Static library
     artifact = env.StaticLibrary(**params)
 else:
     print("Unknown project type!")
