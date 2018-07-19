@@ -1,5 +1,5 @@
 env = Environment()
-env.Append(CPPDEFINES={'Foo': 42,  'Bar': 'YES'})
+env.Append(CPPDEFINES={'Foo': 42, 'Bar': 'YES'})
 env.Append(CPPPATH=['cute/', 'src/shapes', '/usr/include/xorg'])
 env.Append(CCFLAGS='-O3')
 env.Append(CXXFLAGS='-O3 -std=c++11')
