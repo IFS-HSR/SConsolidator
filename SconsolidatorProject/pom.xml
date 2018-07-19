@@ -16,4 +16,5 @@
         <module>tests</module>
         <module>helps</module>
     </modules>
+<version>1.0.1-SNAPSHOT</version>
 </project>

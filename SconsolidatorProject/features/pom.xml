@@ -6,7 +6,7 @@
     <parent>
         <groupId>ch.hsr.ifs.sconsolidator</groupId>
         <artifactId>ch.hsr.ifs.sconsolidator.root</artifactId>
-        <version>1.0.0-SNAPSHOT</version>
+        <version>1.0.1-SNAPSHOT</version>
     </parent>
     <modules>
         <module>ch.hsr.ifs.sconsolidator.feature</module>
