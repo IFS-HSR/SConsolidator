@@ -1,0 +1,13 @@
+target "SConsolidator Latest Target"
+
+with source requirements
+
+location "http://download.eclipse.org/releases/2019-03" {
+	org.eclipse.zest.sdk.feature.group lazy
+	org.eclipse.platform.sdk lazy
+	org.eclipse.swtbot.eclipse.feature.group lazy
+}
+
+location "http://download.eclipse.org/tools/cdt/releases/9.7/" {
+	org.eclipse.cdt.sdk.feature.group lazy	
+}
