@@ -9,3 +9,4 @@ Bundle-Vendor: IFS Institute for Software
 Require-Bundle: org.junit;bundle-version="4.8.1"
 Bundle-ClassPath: lib/jdepend-2.9.1.jar,
  .
+Automatic-Module-Name: ch.hsr.ifs.sconsolidator.core.tests
