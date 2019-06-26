@@ -58,17 +58,23 @@ public class ImportExistingCodeWizardTest {
 	}
 
 	private void fillValuesInImportDialog(SWTBotShell shell) throws IOException {
-		shell.pressShortcut(SWT.ALT, 'p');
-		bot.text(1).setText(PROJECT_NAME);
 		shell.pressShortcut(SWT.ALT, 'e');
 		URL location = getTestProjectUrl();
 		bot.text(1).setText(FileLocator.toFileURL(location).getPath());
+		shell.pressShortcut(SWT.ALT, 'p');
+		bot.text(0).setText(PROJECT_NAME);
 		bot.button("Finish").click();
-		bot.button("No").click();
-		bot.button("No").click();
+		clickNoOnPopup();
+		clickNoOnPopup(); 
 		bot.waitUntil(Conditions.shellCloses(shell), 10000);
 	}
 
+	private void clickNoOnPopup() {
+		try {
+			bot.button("No").click();
+		} catch (Throwable t) {}
+	}
+	
 	private void selectNewSConsProject() {
 		bot.tree().expandNode("C/C++")
 				.select("New SCons project from existing source");
@@ -93,6 +99,7 @@ public class ImportExistingCodeWizardTest {
 
 	private IProject getNewProject() {
 		IWorkspace workspace = ResourcesPlugin.getWorkspace();
+		System.out.println("Getting project: " + PROJECT_NAME);
 		return workspace.getRoot().getProject(PROJECT_NAME);
 	}
 }

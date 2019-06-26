@@ -18,6 +18,7 @@ import org.eclipse.swtbot.swt.finder.waits.Conditions;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotText;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTree;
+import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
 import org.junit.After;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -123,7 +124,8 @@ public class NewManagedProjectWizardTest {
 		bot.checkBox(
 				"Show project types and toolchains only if they are supported on the platform")
 				.click();
-		swtTree.select(projectType);
+		SWTBotTreeItem expandedSConsGroup = swtTree.expandNode("SCons");
+		expandedSConsGroup.select(projectType);
 		bot.button("Finish").click();
 		bot.waitUntil(Conditions.shellCloses(shell), 10000);
 	}
