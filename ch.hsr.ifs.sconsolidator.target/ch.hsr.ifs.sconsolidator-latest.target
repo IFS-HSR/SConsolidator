@@ -1,17 +1,14 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<?pde?>
-<!-- generated with https://github.com/eclipse-cbi/targetplatform-dsl -->
-<target name="SConsolidator Latest Target" sequenceNumber="1556702054">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><?pde?><!-- generated with https://github.com/mbarbero/fr.obeo.releng.targetplatform --><target name="SConsolidator Latest Target" sequenceNumber="1561549663">
   <locations>
-    <location includeMode="planner" includeAllPlatforms="false" includeSource="true" includeConfigurePhase="false" type="InstallableUnit">
+    <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
       <unit id="org.eclipse.zest.sdk.feature.group" version="0.0.0"/>
       <unit id="org.eclipse.platform.sdk" version="0.0.0"/>
       <unit id="org.eclipse.swtbot.eclipse.feature.group" version="0.0.0"/>
-      <repository location="http://download.eclipse.org/releases/2019-03"/>
+      <repository location="http://download.eclipse.org/releases/2019-06"/>
     </location>
-    <location includeMode="planner" includeAllPlatforms="false" includeSource="true" includeConfigurePhase="false" type="InstallableUnit">
+    <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
       <unit id="org.eclipse.cdt.sdk.feature.group" version="0.0.0"/>
-      <repository location="http://download.eclipse.org/tools/cdt/releases/9.7/"/>
+      <repository location="http://download.eclipse.org/tools/cdt/releases/9.8/"/>
     </location>
   </locations>
 </target>
