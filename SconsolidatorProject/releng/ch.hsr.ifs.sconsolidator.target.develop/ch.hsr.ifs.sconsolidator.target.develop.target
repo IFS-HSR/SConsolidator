@@ -1,16 +1,19 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <?pde?>
-<!-- generated with https://github.com/mbarbero/fr.obeo.releng.targetplatform -->
-<target name="SConsolidator Target" sequenceNumber="1530261398">
+<!-- generated with https://github.com/eclipse-cbi/targetplatform-dsl -->
+<target name="SConsolidator Target" sequenceNumber="1562589772">
   <locations>
     <location includeMode="planner" includeAllPlatforms="false" includeSource="true" includeConfigurePhase="false" type="InstallableUnit">
-      <unit id="org.eclipse.swtbot.eclipse.feature.group" version="2.7.0.201806111355"/>
-      <unit id="org.eclipse.cdt.sdk.feature.group" version="0.0.0"/>
+      <unit id="org.eclipse.swtbot.eclipse.feature.group" version="0.0.0"/>
+      <unit id="org.eclipse.platform.sdk" version="0.0.0"/>
+      <unit id="org.eclipse.sdk.ide" version="0.0.0"/>
+      <unit id="org.eclipse.zest.feature.group" version="0.0.0"/>
       <unit id="org.apache.log4j" version="0.0.0"/>
-      <unit id="org.eclipse.platform.sdk" version="4.8.0.I20180611-0500"/>
-      <unit id="org.eclipse.sdk.ide" version="4.8.0.I20180611-0500"/>
-      <unit id="org.eclipse.zest.feature.group" version="1.7.0.201606061308"/>
-      <repository location="http://download.eclipse.org/releases/photon"/>
+      <repository location="http://download.eclipse.org/releases/2019-06"/>
+    </location>
+    <location includeMode="planner" includeAllPlatforms="false" includeSource="true" includeConfigurePhase="false" type="InstallableUnit">
+      <unit id="org.eclipse.cdt.sdk.feature.group" version="0.0.0"/>
+      <repository location="http://download.eclipse.org/tools/cdt/releases/9.8"/>
     </location>
     <location includeMode="planner" includeAllPlatforms="false" includeSource="true" includeConfigurePhase="false" type="InstallableUnit">
       <unit id="ch.hsr.ifs.iltis.testing.highlevel.feature.feature.group" version="0.0.0"/>
