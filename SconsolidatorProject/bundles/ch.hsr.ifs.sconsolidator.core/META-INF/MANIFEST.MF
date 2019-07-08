@@ -33,3 +33,4 @@ Bundle-Activator: ch.hsr.ifs.sconsolidator.core.SConsPlugin
 Bundle-Vendor: IFS Institute for Software
 Bundle-ClassPath: .,
  lib/commons-exec-1.1.jar
+Automatic-Module-Name: ch.hsr.ifs.sconsolidator.core
