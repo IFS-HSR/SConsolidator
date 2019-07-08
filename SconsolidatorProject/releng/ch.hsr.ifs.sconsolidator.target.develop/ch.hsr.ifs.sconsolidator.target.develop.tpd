@@ -1,10 +1,14 @@
 target "SConsolidator Target" with source requirements
 
 location "http://download.eclipse.org/releases/2019-06" {
-	org.eclipse.swtbot.eclipse.feature.group lazy
-	org.eclipse.platform.sdk lazy
-	org.eclipse.sdk.ide lazy
 	org.eclipse.zest.feature.group lazy
+	org.eclipse.sdk.ide lazy
+	org.eclipse.platform.sdk lazy
+	org.eclipse.equinox.app lazy
+	org.eclipse.swt lazy
+	org.eclipse.swtbot.eclipse.feature.group lazy
+
+	javax.xml.stream lazy
 	org.apache.log4j lazy
 }
 
@@ -14,4 +18,7 @@ location "http://download.eclipse.org/tools/cdt/releases/9.8" {
 
 location "https://www.cevelop.com/iltis-unstable/" {
 	ch.hsr.ifs.iltis.testing.highlevel.feature.feature.group lazy
+
+	/* Add pASTa here, so it will be available in instances started from the plug-in development IDE */
+	ch.hsr.ifs.iltis.testing.tools.pasta.feature.feature.group lazy
 }

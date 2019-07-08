@@ -1,13 +1,16 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <?pde?>
 <!-- generated with https://github.com/eclipse-cbi/targetplatform-dsl -->
-<target name="SConsolidator Target" sequenceNumber="1562589772">
+<target name="SConsolidator Target" sequenceNumber="1562594898">
   <locations>
     <location includeMode="planner" includeAllPlatforms="false" includeSource="true" includeConfigurePhase="false" type="InstallableUnit">
-      <unit id="org.eclipse.swtbot.eclipse.feature.group" version="0.0.0"/>
-      <unit id="org.eclipse.platform.sdk" version="0.0.0"/>
-      <unit id="org.eclipse.sdk.ide" version="0.0.0"/>
       <unit id="org.eclipse.zest.feature.group" version="0.0.0"/>
+      <unit id="org.eclipse.sdk.ide" version="0.0.0"/>
+      <unit id="org.eclipse.platform.sdk" version="0.0.0"/>
+      <unit id="org.eclipse.equinox.app" version="0.0.0"/>
+      <unit id="org.eclipse.swt" version="0.0.0"/>
+      <unit id="org.eclipse.swtbot.eclipse.feature.group" version="0.0.0"/>
+      <unit id="javax.xml.stream" version="0.0.0"/>
       <unit id="org.apache.log4j" version="0.0.0"/>
       <repository location="http://download.eclipse.org/releases/2019-06"/>
     </location>
@@ -17,6 +20,7 @@
     </location>
     <location includeMode="planner" includeAllPlatforms="false" includeSource="true" includeConfigurePhase="false" type="InstallableUnit">
       <unit id="ch.hsr.ifs.iltis.testing.highlevel.feature.feature.group" version="0.0.0"/>
+      <unit id="ch.hsr.ifs.iltis.testing.tools.pasta.feature.feature.group" version="0.0.0"/>
       <repository location="https://www.cevelop.com/iltis-unstable/"/>
     </location>
   </locations>
