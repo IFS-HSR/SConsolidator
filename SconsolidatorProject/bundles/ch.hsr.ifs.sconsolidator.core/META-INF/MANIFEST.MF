@@ -4,22 +4,6 @@ Bundle-Name: SConsolidator Core
 Bundle-SymbolicName: ch.hsr.ifs.sconsolidator.core;singleton:=true
 Bundle-Version: 1.0.1.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
-Require-Bundle: org.eclipse.cdt.core;bundle-version="5.0.0",
- org.eclipse.cdt.ui;bundle-version="6.5.1",
- org.eclipse.cdt.managedbuilder.core;bundle-version="7.0.0",
- org.eclipse.cdt.managedbuilder.ui;bundle-version="7.0.0",
- org.eclipse.cdt.managedbuilder.gnu.ui;bundle-version="7.0.0",
- org.eclipse.core.runtime;bundle-version="3.5.0",
- org.eclipse.core.resources;bundle-version="3.5.0",
- org.eclipse.core.runtime;bundle-version="3.5.0",
- org.eclipse.jface.text;bundle-version="3.5.0",
- org.eclipse.ui;bundle-version="3.113.0",
- org.eclipse.ui.navigator;bundle-version="3.8.0",
- org.eclipse.ui.ide;bundle-version="3.15.200",
- org.eclipse.ui.navigator.resources;bundle-version="3.6.500",
- org.eclipse.ui.console;bundle-version="3.8.500",
- org.eclipse.ui.editors;bundle-version="3.11.500",
- org.eclipse.debug.ui;bundle-version="3.5.0"
 Export-Package: ch.hsr.ifs.sconsolidator.core,
  ch.hsr.ifs.sconsolidator.core.base.functional,
  ch.hsr.ifs.sconsolidator.core.base.tuple,
@@ -33,3 +17,14 @@ Bundle-Vendor: IFS Institute for Software
 Bundle-ClassPath: .,
  lib/commons-exec-1.1.jar
 Automatic-Module-Name: ch.hsr.ifs.sconsolidator.core
+Require-Bundle: org.eclipse.core.runtime;bundle-version="3.15.300",
+ org.eclipse.ui;bundle-version="3.113.0",
+ org.eclipse.ui.ide;bundle-version="3.15.200",
+ org.eclipse.ui.editors;bundle-version="3.11.500",
+ org.eclipse.ui.console;bundle-version="3.8.500",
+ org.eclipse.debug.ui;bundle-version="3.14.100",
+ org.eclipse.jface.text;bundle-version="3.15.200",
+ org.eclipse.cdt.core;bundle-version="6.8.1",
+ org.eclipse.cdt.ui;bundle-version="6.5.1",
+ org.eclipse.cdt.managedbuilder.core;bundle-version="8.7.0",
+ org.eclipse.cdt.managedbuilder.ui;bundle-version="9.1.200"
