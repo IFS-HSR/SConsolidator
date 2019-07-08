@@ -57,11 +57,11 @@ public class ImportExistingCodeWizardTest {
 	}
 
 	private void fillValuesInImportDialog(SWTBotShell shell) throws IOException {
-	    shell.pressShortcut(SWT.ALT, 'p');
-	    bot.text(1).setText(PROJECT_NAME);
 		shell.pressShortcut(SWT.ALT, 'e');
 		URL location = getTestProjectUrl();
 		bot.text(1).setText(FileLocator.toFileURL(location).getPath());
+		shell.pressShortcut(SWT.ALT, 'p');
+		bot.text(0).setText(PROJECT_NAME);
 		bot.button("Finish").click();
 		clickNoOnPopup();
 		clickNoOnPopup();
