@@ -8,10 +8,10 @@
 	<packaging>pom</packaging>
 
 	<properties>
-		<tycho-version>1.2.0</tycho-version>
-		<tycho-extras-version>1.2.0</tycho-extras-version>
+		<tycho-version>1.4.0</tycho-version>
+		<tycho-extras-version>1.4.0</tycho-extras-version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<maven.surefire.version>2.22.0</maven.surefire.version>
+		<maven.surefire.version>2.22.1</maven.surefire.version>
 	</properties>
 
 	<profiles>
