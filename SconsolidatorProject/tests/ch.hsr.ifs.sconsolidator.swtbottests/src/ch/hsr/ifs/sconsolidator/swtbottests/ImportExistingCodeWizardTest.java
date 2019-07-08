@@ -41,7 +41,6 @@ public class ImportExistingCodeWizardTest {
 		activateCppPerspective();
 	}
 
-	@SuppressWarnings("nls")
 	@Test
 	public void testImportOfExistingCode() throws CoreException, IOException {
 		importExistingSConsProject();
@@ -58,15 +57,23 @@ public class ImportExistingCodeWizardTest {
 	}
 
 	private void fillValuesInImportDialog(SWTBotShell shell) throws IOException {
-		shell.pressShortcut(SWT.ALT, 'p');
-		bot.text(1).setText(PROJECT_NAME);
+	    shell.pressShortcut(SWT.ALT, 'p');
+	    bot.text(1).setText(PROJECT_NAME);
 		shell.pressShortcut(SWT.ALT, 'e');
 		URL location = getTestProjectUrl();
 		bot.text(1).setText(FileLocator.toFileURL(location).getPath());
 		bot.button("Finish").click();
-		bot.button("No").click();
-		bot.button("No").click();
+		clickNoOnPopup();
+		clickNoOnPopup();
 		bot.waitUntil(Conditions.shellCloses(shell), 10000);
+	}
+
+	private void clickNoOnPopup() {
+	    try {
+	        bot.button("No").click();
+	    } catch (Throwable t) {
+	        // ignore
+	    }
 	}
 
 	private void selectNewSConsProject() {
