@@ -79,25 +79,21 @@ public class NewManagedProjectWizardTest {
 		});
 	}
 
-	@SuppressWarnings("nls")
 	@Test
 	public void testNewSConsExecutableProject() throws CoreException {
 		verifyNewlyCreatedProject("SCons executable project");
 	}
 
-	@SuppressWarnings("nls")
 	@Test
 	public void testNewSConsStaticLibProject() throws CoreException {
 		verifyNewlyCreatedProject("SCons static library project");
 	}
 
-	@SuppressWarnings("nls")
 	@Test
 	public void testNewSConsSharedLibProject() throws CoreException {
 		verifyNewlyCreatedProject("SCons shared library project");
 	}
 
-	@SuppressWarnings("nls")
 	private void verifyNewlyCreatedProject(String projectType)
 			throws CoreException {
 		executeProjectWizard(projectType);
