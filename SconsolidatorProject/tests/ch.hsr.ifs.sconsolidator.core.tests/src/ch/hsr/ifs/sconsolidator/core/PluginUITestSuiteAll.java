@@ -30,41 +30,39 @@ import ch.hsr.ifs.sconsolidator.core.targets.SConsBuildTargetEventTest;
 import ch.hsr.ifs.sconsolidator.core.targets.SConsBuildTargetManagerTest;
 import ch.hsr.ifs.sconsolidator.core.targets.SConsBuildTargetTest;
 
+
 @RunWith(Suite.class)
-//@formatter:off
-@Suite.SuiteClasses({
-  SConsPluginTest.class, 
-  SConsVersionTest.class, 
-  PythonUtilTest.class,
-  StringUtilTest.class,
-  IOUtilTest.class,
-  TupleTest.class,
-  SConsHelperTest.class,
-  NatureUtilTest.class,
-  TeeInputStreamTest.class,
-  NullOutputStreamTest.class,
-  TeeOutputStreamTest.class,
-  CppManagedTestProjectTest.class,
-  ProjectSettingsWriterTest.class,
-  ProjectSettingsReaderTest.class,
-  DependencyTreeAnalyzerTest.class,
-  BuildCommandTest.class,
-  CleanCommandTest.class,
-  DependencyTreeCommandTest.class,
-  BuildInfoCollectorCommandTest.class,
-  VersionCommandTest.class,
-  PersistentTargetsHandlerTest.class,
-  SConsBuildTargetEventTest.class,
-  SConsBuildTargetManagerTest.class,
-  SConsBuildTargetTest.class,
-  SConsTwoStepBuildTest.class,
-  CollectionUtilTest.class,
-  FunctionalHelperTest.class,
-  SConsOptionHandlerTest.class,
-  SConsManagedNatureTest.class,
-  SConsExistingCodeNatureTest.class,
-  SConsBuilderTest.class
+@Suite.SuiteClasses({ //
+                      SConsPluginTest.class, // 
+                      SConsVersionTest.class, //
+                      PythonUtilTest.class, //
+                      StringUtilTest.class, //
+                      IOUtilTest.class, //
+                      TupleTest.class, //
+                      SConsHelperTest.class, //
+                      NatureUtilTest.class, //
+                      TeeInputStreamTest.class, //
+                      NullOutputStreamTest.class, //
+                      TeeOutputStreamTest.class, //
+                      CppManagedTestProjectTest.class, //
+                      ProjectSettingsWriterTest.class, //
+                      ProjectSettingsReaderTest.class, //
+                      DependencyTreeAnalyzerTest.class, //
+                      BuildCommandTest.class, //
+                      CleanCommandTest.class, //
+                      DependencyTreeCommandTest.class, //
+                      BuildInfoCollectorCommandTest.class, //
+                      VersionCommandTest.class, //
+                      PersistentTargetsHandlerTest.class, //
+                      SConsBuildTargetEventTest.class, //
+                      SConsBuildTargetManagerTest.class, //
+                      SConsBuildTargetTest.class, //
+                      SConsTwoStepBuildTest.class, //
+                      CollectionUtilTest.class, //
+                      FunctionalHelperTest.class, //
+                      SConsOptionHandlerTest.class, //
+                      SConsManagedNatureTest.class, //
+                      SConsExistingCodeNatureTest.class, //
+                      SConsBuilderTest.class //
 })
-//@formatter:on
-public class PluginUITestSuiteAll {
-}
+public class PluginUITestSuiteAll {}

@@ -32,197 +32,195 @@ import ch.hsr.ifs.sconsolidator.core.SConsI18N;
 import ch.hsr.ifs.sconsolidator.core.SConsPlugin;
 import ch.hsr.ifs.sconsolidator.core.preferences.PreferenceConstants;
 
-public abstract class FieldEditorOverlayPage extends FieldEditorPreferencePage implements
-    IWorkbenchPropertyPage {
-  private final boolean isWorkspacePreferenceAvailable;
-  private final Map<FieldEditor, Composite> editors;
-  private IAdaptable element;
-  private Button useWorkspaceSettingsButton;
-  private Button useProjectSettingsButton;
-  private Button configureButton;
-  private IPreferenceStore overlayStore;
-  private String pageId;
 
-  public FieldEditorOverlayPage(int style, boolean isWorkspacePreferenceAvailable) {
-    super(style);
-    this.isWorkspacePreferenceAvailable = isWorkspacePreferenceAvailable;
-    this.editors = new HashMap<FieldEditor, Composite>();
-  }
+public abstract class FieldEditorOverlayPage extends FieldEditorPreferencePage implements IWorkbenchPropertyPage {
 
-  protected abstract String getPageId();
+    private final boolean                     isWorkspacePreferenceAvailable;
+    private final Map<FieldEditor, Composite> editors;
+    private IAdaptable                        element;
+    private Button                            useWorkspaceSettingsButton;
+    private Button                            useProjectSettingsButton;
+    private Button                            configureButton;
+    private IPreferenceStore                  overlayStore;
+    private String                            pageId;
 
-  @Override
-  public void setElement(IAdaptable element) {
-    this.element = element;
-  }
-
-  @Override
-  public IAdaptable getElement() {
-    return element;
-  }
-
-  public IProject getProject() {
-    return (IProject) element.getAdapter(IProject.class);
-  }
-
-  public boolean isPropertyPage() {
-    return getElement() != null;
-  }
-
-  protected void addField(FieldEditor editor, Composite parent) {
-    editors.put(editor, parent);
-    super.addField(editor);
-  }
-
-  @Override
-  protected void addField(FieldEditor editor) {
-    addField(editor, getFieldEditorParent());
-  }
-
-  @Override
-  public void createControl(Composite parent) {
-    if (isPropertyPage()) {
-      pageId = getPageId();
-      overlayStore = SConsPlugin.getProjectPreferenceStore(getProject());
+    public FieldEditorOverlayPage(int style, boolean isWorkspacePreferenceAvailable) {
+        super(style);
+        this.isWorkspacePreferenceAvailable = isWorkspacePreferenceAvailable;
+        this.editors = new HashMap<FieldEditor, Composite>();
     }
 
-    super.createControl(parent);
+    protected abstract String getPageId();
 
-    if (isPropertyPage() && isWorkspacePreferenceAvailable) {
-      updateFieldEditors();
-    }
-  }
-
-  @Override
-  protected Control createContents(Composite parent) {
-    if (isPropertyPage() && isWorkspacePreferenceAvailable) {
-      createSelectionGroup(parent);
-    }
-    return super.createContents(parent);
-  }
-
-  private void createSelectionGroup(Composite parent) {
-    Composite comp = new Composite(parent, SWT.NONE);
-    GridLayout layout = new GridLayout(2, false);
-    layout.marginHeight = 0;
-    layout.marginWidth = 0;
-    comp.setLayout(layout);
-    comp.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-    Composite radioGroup = new Composite(comp, SWT.NONE);
-    radioGroup.setLayout(new GridLayout());
-    radioGroup.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-    useWorkspaceSettingsButton =
-        createRadioButton(radioGroup, SConsI18N.OverlayPage_UseWorkspaceSettings);
-    useProjectSettingsButton =
-        createRadioButton(radioGroup, SConsI18N.OverlayPage_UseProjectSettings);
-    configureButton = new Button(comp, SWT.PUSH);
-    configureButton.setText(SConsI18N.OverlayPage_ConfigureWorkspaceSettings);
-    configureButton.addSelectionListener(new SelectionAdapter() {
-      @Override
-      public void widgetSelected(SelectionEvent e) {
-        configureWorkspaceSettings();
-      }
-    });
-
-    try {
-      if (useWorkspace()) {
-        useWorkspaceSettingsButton.setSelection(true);
-      } else {
-        useProjectSettingsButton.setSelection(true);
-        configureButton.setEnabled(false);
-      }
-    } catch (Exception e) {
-      useWorkspaceSettingsButton.setSelection(true);
-    }
-  }
-
-  private Boolean useWorkspace() {
-    return getPreferenceStore().getBoolean(getPageId() + PreferenceConstants.USE_PARENT_SUFFIX);
-  }
-
-  private Button createRadioButton(Composite parent, String label) {
-    final Button button = new Button(parent, SWT.RADIO);
-    button.setText(label);
-    button.addSelectionListener(new SelectionAdapter() {
-      @Override
-      public void widgetSelected(SelectionEvent e) {
-        configureButton.setEnabled(button.equals(useWorkspaceSettingsButton));
-        updateFieldEditors();
-      }
-    });
-    return button;
-  }
-
-  @Override
-  public IPreferenceStore getPreferenceStore() {
-    if (isPropertyPage())
-      return overlayStore;
-    return super.getPreferenceStore();
-  }
-
-  private void updateFieldEditors() {
-    boolean enabled = useProjectSettingsButton.getSelection();
-
-    for (Map.Entry<FieldEditor, Composite> entry : editors.entrySet()) {
-      if (entry.getKey() instanceof MultiLineTextFieldEditor) {
-        ((MultiLineTextFieldEditor) entry.getKey()).getTextControl(entry.getValue()).setEnabled(
-            enabled);
-      } else {
-        entry.getKey().setEnabled(enabled, entry.getValue());
-      }
-    }
-  }
-
-  @Override
-  public boolean performOk() {
-    boolean result = super.performOk();
-
-    if (result && isPropertyPage() && isWorkspacePreferenceAvailable) {
-      getPreferenceStore().setValue(getPageId() + PreferenceConstants.USE_PARENT_SUFFIX,
-          !useProjectSettingsButton.getSelection());
+    @Override
+    public void setElement(IAdaptable element) {
+        this.element = element;
     }
 
-    return result;
-  }
-
-  @Override
-  protected void performDefaults() {
-    if (isPropertyPage() && isWorkspacePreferenceAvailable) {
-      useWorkspaceSettingsButton.setSelection(true);
-      useProjectSettingsButton.setSelection(false);
-      configureButton.setEnabled(true);
-      updateFieldEditors();
+    @Override
+    public IAdaptable getElement() {
+        return element;
     }
-    super.performDefaults();
-  }
 
-  private void configureWorkspaceSettings() {
-    try {
-      IPreferencePage page = this.getClass().newInstance();
-      page.setTitle(getTitle());
-      showPreferencePage(pageId, page);
-    } catch (Exception e) {
-      SConsPlugin.log(e);
+    public IProject getProject() {
+        return (IProject) element.getAdapter(IProject.class);
     }
-  }
 
-  private void showPreferencePage(String id, IPreferencePage page) {
-    final IPreferenceNode targetNode = new PreferenceNode(id, page);
-    final PreferenceDialog dialog =
-        new PreferenceDialog(getControl().getShell(), getManager(targetNode));
-    BusyIndicator.showWhile(getControl().getDisplay(), new Runnable() {
-      @Override
-      public void run() {
-        dialog.create();
-        dialog.setMessage(targetNode.getLabelText());
-        dialog.open();
-      }
-    });
-  }
+    public boolean isPropertyPage() {
+        return getElement() != null;
+    }
 
-  private PreferenceManager getManager(IPreferenceNode targetNode) {
-    PreferenceManager manager = new PreferenceManager();
-    manager.addToRoot(targetNode);
-    return manager;
-  }
+    protected void addField(FieldEditor editor, Composite parent) {
+        editors.put(editor, parent);
+        super.addField(editor);
+    }
+
+    @Override
+    protected void addField(FieldEditor editor) {
+        addField(editor, getFieldEditorParent());
+    }
+
+    @Override
+    public void createControl(Composite parent) {
+        if (isPropertyPage()) {
+            pageId = getPageId();
+            overlayStore = SConsPlugin.getProjectPreferenceStore(getProject());
+        }
+
+        super.createControl(parent);
+
+        if (isPropertyPage() && isWorkspacePreferenceAvailable) {
+            updateFieldEditors();
+        }
+    }
+
+    @Override
+    protected Control createContents(Composite parent) {
+        if (isPropertyPage() && isWorkspacePreferenceAvailable) {
+            createSelectionGroup(parent);
+        }
+        return super.createContents(parent);
+    }
+
+    private void createSelectionGroup(Composite parent) {
+        Composite comp = new Composite(parent, SWT.NONE);
+        GridLayout layout = new GridLayout(2, false);
+        layout.marginHeight = 0;
+        layout.marginWidth = 0;
+        comp.setLayout(layout);
+        comp.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+        Composite radioGroup = new Composite(comp, SWT.NONE);
+        radioGroup.setLayout(new GridLayout());
+        radioGroup.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+        useWorkspaceSettingsButton = createRadioButton(radioGroup, SConsI18N.OverlayPage_UseWorkspaceSettings);
+        useProjectSettingsButton = createRadioButton(radioGroup, SConsI18N.OverlayPage_UseProjectSettings);
+        configureButton = new Button(comp, SWT.PUSH);
+        configureButton.setText(SConsI18N.OverlayPage_ConfigureWorkspaceSettings);
+        configureButton.addSelectionListener(new SelectionAdapter() {
+
+            @Override
+            public void widgetSelected(SelectionEvent e) {
+                configureWorkspaceSettings();
+            }
+        });
+
+        try {
+            if (useWorkspace()) {
+                useWorkspaceSettingsButton.setSelection(true);
+            } else {
+                useProjectSettingsButton.setSelection(true);
+                configureButton.setEnabled(false);
+            }
+        } catch (Exception e) {
+            useWorkspaceSettingsButton.setSelection(true);
+        }
+    }
+
+    private Boolean useWorkspace() {
+        return getPreferenceStore().getBoolean(getPageId() + PreferenceConstants.USE_PARENT_SUFFIX);
+    }
+
+    private Button createRadioButton(Composite parent, String label) {
+        final Button button = new Button(parent, SWT.RADIO);
+        button.setText(label);
+        button.addSelectionListener(new SelectionAdapter() {
+
+            @Override
+            public void widgetSelected(SelectionEvent e) {
+                configureButton.setEnabled(button.equals(useWorkspaceSettingsButton));
+                updateFieldEditors();
+            }
+        });
+        return button;
+    }
+
+    @Override
+    public IPreferenceStore getPreferenceStore() {
+        if (isPropertyPage()) return overlayStore;
+        return super.getPreferenceStore();
+    }
+
+    private void updateFieldEditors() {
+        boolean enabled = useProjectSettingsButton.getSelection();
+
+        for (Map.Entry<FieldEditor, Composite> entry : editors.entrySet()) {
+            if (entry.getKey() instanceof MultiLineTextFieldEditor) {
+                ((MultiLineTextFieldEditor) entry.getKey()).getTextControl(entry.getValue()).setEnabled(enabled);
+            } else {
+                entry.getKey().setEnabled(enabled, entry.getValue());
+            }
+        }
+    }
+
+    @Override
+    public boolean performOk() {
+        boolean result = super.performOk();
+
+        if (result && isPropertyPage() && isWorkspacePreferenceAvailable) {
+            getPreferenceStore().setValue(getPageId() + PreferenceConstants.USE_PARENT_SUFFIX, !useProjectSettingsButton.getSelection());
+        }
+
+        return result;
+    }
+
+    @Override
+    protected void performDefaults() {
+        if (isPropertyPage() && isWorkspacePreferenceAvailable) {
+            useWorkspaceSettingsButton.setSelection(true);
+            useProjectSettingsButton.setSelection(false);
+            configureButton.setEnabled(true);
+            updateFieldEditors();
+        }
+        super.performDefaults();
+    }
+
+    private void configureWorkspaceSettings() {
+        try {
+            IPreferencePage page = this.getClass().newInstance();
+            page.setTitle(getTitle());
+            showPreferencePage(pageId, page);
+        } catch (Exception e) {
+            SConsPlugin.log(e);
+        }
+    }
+
+    private void showPreferencePage(String id, IPreferencePage page) {
+        final IPreferenceNode targetNode = new PreferenceNode(id, page);
+        final PreferenceDialog dialog = new PreferenceDialog(getControl().getShell(), getManager(targetNode));
+        BusyIndicator.showWhile(getControl().getDisplay(), new Runnable() {
+
+            @Override
+            public void run() {
+                dialog.create();
+                dialog.setMessage(targetNode.getLabelText());
+                dialog.open();
+            }
+        });
+    }
+
+    private PreferenceManager getManager(IPreferenceNode targetNode) {
+        PreferenceManager manager = new PreferenceManager();
+        manager.addToRoot(targetNode);
+        return manager;
+    }
 }

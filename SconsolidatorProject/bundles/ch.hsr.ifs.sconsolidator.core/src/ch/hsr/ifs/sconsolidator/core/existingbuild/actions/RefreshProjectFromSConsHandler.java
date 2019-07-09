@@ -25,78 +25,71 @@ import org.eclipse.ui.PlatformUI;
 import ch.hsr.ifs.sconsolidator.core.SConsNatureTypes;
 import ch.hsr.ifs.sconsolidator.core.existingbuild.RefreshFromSConsJob;
 
+
 public class RefreshProjectFromSConsHandler extends AbstractHandler {
 
-  @Override
-  public Object execute(ExecutionEvent event) throws ExecutionException {
-    Collection<IProject> projects = collectActiveSConsProjects();
-    new RefreshFromSConsJob(projects).schedule();
-    return null;
-  }
-
-  private static Collection<IProject> collectActiveSConsProjects() {
-    ISelection selection = getSelection();
-
-    if ((selection instanceof IStructuredSelection))
-      return getSelectedSconsProjects((IStructuredSelection) selection);
-
-    IProject project = getActiveProject();
-
-    if (isOpenSConsProject(project))
-      return Arrays.asList(project);
-
-    return Collections.emptyList();
-  }
-
-  private static ISelection getSelection() {
-    IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
-    return window.getActivePage().getSelection();
-  }
-
-  private static Collection<IProject> getSelectedSconsProjects(IStructuredSelection selection) {
-    Set<IProject> sconsProjects = new HashSet<IProject>();
-
-    for (Iterator<?> it = selection.toList().iterator(); it.hasNext();) {
-      IProject project = getProject(it.next());
-
-      if (isOpenSConsProject(project)) {
-        sconsProjects.add(project);
-      }
+    @Override
+    public Object execute(ExecutionEvent event) throws ExecutionException {
+        Collection<IProject> projects = collectActiveSConsProjects();
+        new RefreshFromSConsJob(projects).schedule();
+        return null;
     }
 
-    return sconsProjects;
-  }
+    private static Collection<IProject> collectActiveSConsProjects() {
+        ISelection selection = getSelection();
 
-  private static IProject getActiveProject() {
-    IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
-    if (window == null)
-      return null;
-    IWorkbenchPage page = window.getActivePage();
-    if (page == null)
-      return null;
-    IEditorPart editor = page.getActiveEditor();
-    if (editor == null)
-      return null;
-    IEditorInput input = editor.getEditorInput();
-    if ((input instanceof IFileEditorInput))
-      return ((IFileEditorInput) input).getFile().getProject();
-    return null;
-  }
+        if ((selection instanceof IStructuredSelection)) return getSelectedSconsProjects((IStructuredSelection) selection);
 
-  private static IProject getProject(Object obj) {
-    if (!(obj instanceof IAdaptable))
-      return null;
+        IProject project = getActiveProject();
 
-    IAdaptable adaptable = (IAdaptable) obj;
-    Object adapter = adaptable.getAdapter(IResource.class);
+        if (isOpenSConsProject(project)) return Arrays.asList(project);
 
-    if (adapter == null)
-      return null;
+        return Collections.emptyList();
+    }
 
-    return ((IResource) adapter).getProject();
-  }
+    private static ISelection getSelection() {
+        IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
+        return window.getActivePage().getSelection();
+    }
 
-  private static boolean isOpenSConsProject(IProject project) {
-    return project != null && project.isOpen() && SConsNatureTypes.isOpenSConsProject(project);
-  }
+    private static Collection<IProject> getSelectedSconsProjects(IStructuredSelection selection) {
+        Set<IProject> sconsProjects = new HashSet<IProject>();
+
+        for (Iterator<?> it = selection.toList().iterator(); it.hasNext();) {
+            IProject project = getProject(it.next());
+
+            if (isOpenSConsProject(project)) {
+                sconsProjects.add(project);
+            }
+        }
+
+        return sconsProjects;
+    }
+
+    private static IProject getActiveProject() {
+        IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
+        if (window == null) return null;
+        IWorkbenchPage page = window.getActivePage();
+        if (page == null) return null;
+        IEditorPart editor = page.getActiveEditor();
+        if (editor == null) return null;
+        IEditorInput input = editor.getEditorInput();
+        if ((input instanceof IFileEditorInput)) return ((IFileEditorInput) input).getFile().getProject();
+        return null;
+    }
+
+    private static IProject getProject(Object obj) {
+        if (!(obj instanceof IAdaptable)) return null;
+
+        IAdaptable adaptable = (IAdaptable) obj;
+        Object adapter = adaptable.getAdapter(IResource.class);
+
+        if (adapter == null) return null;
+
+        return ((IResource) adapter).getProject();
+    }
+
+    private static boolean isOpenSConsProject(IProject project) {
+        return project != null && project.isOpen() && SConsNatureTypes.isOpenSConsProject(project);
+    }
 }

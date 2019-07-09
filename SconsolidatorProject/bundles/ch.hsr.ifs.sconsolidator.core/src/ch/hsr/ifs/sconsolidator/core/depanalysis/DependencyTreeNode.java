@@ -3,34 +3,36 @@ package ch.hsr.ifs.sconsolidator.core.depanalysis;
 import java.util.ArrayList;
 import java.util.List;
 
+
 public class DependencyTreeNode {
-  private final String value;
-  private final List<DependencyTreeNode> children;
-  private DependencyTreeNode parent;
 
-  public DependencyTreeNode(String value) {
-    this.value = value;
-    this.children = new ArrayList<DependencyTreeNode>();
-  }
+    private final String                   value;
+    private final List<DependencyTreeNode> children;
+    private DependencyTreeNode             parent;
 
-  public String getValue() {
-    return value;
-  }
+    public DependencyTreeNode(String value) {
+        this.value = value;
+        this.children = new ArrayList<DependencyTreeNode>();
+    }
 
-  public DependencyTreeNode getParent() {
-    return parent;
-  }
+    public String getValue() {
+        return value;
+    }
 
-  public List<DependencyTreeNode> getChildren() {
-    return children;
-  }
+    public DependencyTreeNode getParent() {
+        return parent;
+    }
 
-  public void setParent(DependencyTreeNode parent) {
-    this.parent = parent;
-  }
+    public List<DependencyTreeNode> getChildren() {
+        return children;
+    }
 
-  @Override
-  public String toString() {
-    return value;
-  }
+    public void setParent(DependencyTreeNode parent) {
+        this.parent = parent;
+    }
+
+    @Override
+    public String toString() {
+        return value;
+    }
 }

@@ -19,71 +19,71 @@ import org.junit.Test;
 import ch.hsr.ifs.sconsolidator.core.preferences.PreferenceConstants;
 import ch.hsr.ifs.sconsolidator.core.targets.model.SConsBuildTargetManager;
 
+
 public class SConsPluginTest {
-  private static IProject project;
 
-  @Before
-  public void setUp() throws IOException, CoreException {
-    IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
-    project = root.getProject("Test");
-    project.create(null);
-    project.open(null);
-  }
+    private static IProject project;
 
-  @After
-  public void tearDown() throws CoreException {
-    project.delete(true, null);
-  }
+    @Before
+    public void setUp() throws IOException, CoreException {
+        IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
+        project = root.getProject("Test");
+        project.create(null);
+        project.open(null);
+    }
 
-  @Test
-  public void testGetDefault() {
-    SConsPlugin activator = SConsPlugin.getDefault();
-    assertNotNull(activator);
-  }
+    @After
+    public void tearDown() throws CoreException {
+        project.delete(true, null);
+    }
 
-  @Test
-  public void testGetPluginId() throws Exception {
-    String pluginId = SConsPlugin.getPluginId();
-    assertEquals("ch.hsr.ifs.sconsolidator.core", pluginId);
-  }
+    @Test
+    public void testGetDefault() {
+        SConsPlugin activator = SConsPlugin.getDefault();
+        assertNotNull(activator);
+    }
 
-  @Test
-  public void testGetActivePreferences() {
-    IPreferenceStore p =
-        SConsPlugin.getActivePreferences(project, PreferenceConstants.BUILD_SETTINGS_PAGE_ID);
-    p.setValue(PreferenceConstants.BUILD_SETTINGS_PAGE_ID + PreferenceConstants.USE_PARENT_SUFFIX,
-        false);
-    p.setValue(PreferenceConstants.NUMBER_OF_JOBS, 2);
-    p = SConsPlugin.getActivePreferences(project, PreferenceConstants.BUILD_SETTINGS_PAGE_ID);
-    assertEquals(2, Integer.parseInt((p.getString(PreferenceConstants.NUMBER_OF_JOBS))));
-  }
+    @Test
+    public void testGetPluginId() throws Exception {
+        String pluginId = SConsPlugin.getPluginId();
+        assertEquals("ch.hsr.ifs.sconsolidator.core", pluginId);
+    }
 
-  @Test
-  public void testGetProjectPreferenceStore() {
-    IPreferenceStore preferences = SConsPlugin.getProjectPreferenceStore(project);
-    assertNotNull(preferences);
-    assertTrue(preferences.getBoolean(PreferenceConstants.CLEAR_CONSOLE_BEFORE_BUILD));
-  }
+    @Test
+    public void testGetActivePreferences() {
+        IPreferenceStore p = SConsPlugin.getActivePreferences(project, PreferenceConstants.BUILD_SETTINGS_PAGE_ID);
+        p.setValue(PreferenceConstants.BUILD_SETTINGS_PAGE_ID + PreferenceConstants.USE_PARENT_SUFFIX, false);
+        p.setValue(PreferenceConstants.NUMBER_OF_JOBS, 2);
+        p = SConsPlugin.getActivePreferences(project, PreferenceConstants.BUILD_SETTINGS_PAGE_ID);
+        assertEquals(2, Integer.parseInt((p.getString(PreferenceConstants.NUMBER_OF_JOBS))));
+    }
 
-  @Test
-  public void testGetWorkspacePreferenceStore() {
-    IPreferenceStore preferences = SConsPlugin.getWorkspacePreferenceStore();
-    assertNotNull(preferences);
-    assertTrue(preferences.getBoolean(PreferenceConstants.CLEAR_CONSOLE_BEFORE_BUILD));
-  }
+    @Test
+    public void testGetProjectPreferenceStore() {
+        IPreferenceStore preferences = SConsPlugin.getProjectPreferenceStore(project);
+        assertNotNull(preferences);
+        assertTrue(preferences.getBoolean(PreferenceConstants.CLEAR_CONSOLE_BEFORE_BUILD));
+    }
 
-  @Test
-  public void testGetConfigurationPreferenceStore() {
-    IPreferenceStore preferences = SConsPlugin.getConfigPreferenceStore();
-    assertNotNull(preferences);
-    assertTrue(preferences.getBoolean(PreferenceConstants.CLEAR_CONSOLE_BEFORE_BUILD));
-  }
+    @Test
+    public void testGetWorkspacePreferenceStore() {
+        IPreferenceStore preferences = SConsPlugin.getWorkspacePreferenceStore();
+        assertNotNull(preferences);
+        assertTrue(preferences.getBoolean(PreferenceConstants.CLEAR_CONSOLE_BEFORE_BUILD));
+    }
 
-  @Test
-  public void testGetSConsTargetManager() {
-    SConsPlugin activator = SConsPlugin.getDefault();
-    SConsBuildTargetManager targetManager = activator.getSConsTargetManager();
-    assertNotNull(targetManager);
-    assertSame(targetManager, activator.getSConsTargetManager());
-  }
+    @Test
+    public void testGetConfigurationPreferenceStore() {
+        IPreferenceStore preferences = SConsPlugin.getConfigPreferenceStore();
+        assertNotNull(preferences);
+        assertTrue(preferences.getBoolean(PreferenceConstants.CLEAR_CONSOLE_BEFORE_BUILD));
+    }
+
+    @Test
+    public void testGetSConsTargetManager() {
+        SConsPlugin activator = SConsPlugin.getDefault();
+        SConsBuildTargetManager targetManager = activator.getSConsTargetManager();
+        assertNotNull(targetManager);
+        assertSame(targetManager, activator.getSConsTargetManager());
+    }
 }

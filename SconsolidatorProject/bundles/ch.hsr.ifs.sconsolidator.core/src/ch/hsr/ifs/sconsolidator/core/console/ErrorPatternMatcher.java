@@ -12,58 +12,58 @@ import org.eclipse.ui.console.TextConsole;
 
 import ch.hsr.ifs.sconsolidator.core.SConsHelper;
 
+
 public abstract class ErrorPatternMatcher implements IPatternMatchListener {
 
-	protected final IProject project;
-	protected final String startPath;
+    protected final IProject project;
+    protected final String   startPath;
 
-	public ErrorPatternMatcher(IProject project) {
-		super();
-		this.project = project;
-		this.startPath = SConsHelper.determineStartingDirectory(project);
-	}
+    public ErrorPatternMatcher(IProject project) {
+        super();
+        this.project = project;
+        this.startPath = SConsHelper.determineStartingDirectory(project);
+    }
 
-	@Override
-	public int getCompilerFlags() {
-	    return 0;
-	  }
+    @Override
+    public int getCompilerFlags() {
+        return 0;
+    }
 
-	@Override
-	public String getLineQualifier() {
-	    return null;
-	  }
+    @Override
+    public String getLineQualifier() {
+        return null;
+    }
 
-	@Override
-	public void connect(TextConsole console) {}
+    @Override
+    public void connect(TextConsole console) {}
 
-	@Override
-	public void disconnect() {}
+    @Override
+    public void disconnect() {}
 
-	protected IFile findFile(String fileName) {
-	    IResource foundMember = project.findMember(fileName);
-	
-	    if (foundMember == null) {
-	      foundMember = findRelativeToSConsProject(fileName);
-	
-	      if (foundMember == null) {
-	        foundMember = findInWorkspace(fileName);
-	      }
-	    }
-	    return (IFile) foundMember;
-	  }
+    protected IFile findFile(String fileName) {
+        IResource foundMember = project.findMember(fileName);
 
-	private IResource findInWorkspace(String fileName) {
-	    IWorkspaceRoot workspaceRoot = ResourcesPlugin.getWorkspace().getRoot();
-	    return workspaceRoot.getFileForLocation(new Path(startPath).append(fileName));
-	  }
+        if (foundMember == null) {
+            foundMember = findRelativeToSConsProject(fileName);
 
-	private IResource findRelativeToSConsProject(String fileName) {
-	    IPath projLoc = project.getLocation();
-	    if (projLoc == null)
-	      return null;
-	    IPath path = projLoc.makeRelativeTo(new Path(startPath));
-	    String newPath = new Path(fileName).makeRelativeTo(path).toOSString();
-	    return project.findMember(newPath);
-	  }
-	
+            if (foundMember == null) {
+                foundMember = findInWorkspace(fileName);
+            }
+        }
+        return (IFile) foundMember;
+    }
+
+    private IResource findInWorkspace(String fileName) {
+        IWorkspaceRoot workspaceRoot = ResourcesPlugin.getWorkspace().getRoot();
+        return workspaceRoot.getFileForLocation(new Path(startPath).append(fileName));
+    }
+
+    private IResource findRelativeToSConsProject(String fileName) {
+        IPath projLoc = project.getLocation();
+        if (projLoc == null) return null;
+        IPath path = projLoc.makeRelativeTo(new Path(startPath));
+        String newPath = new Path(fileName).makeRelativeTo(path).toOSString();
+        return project.findMember(newPath);
+    }
+
 }

@@ -23,151 +23,138 @@ import ch.hsr.ifs.sconsolidator.core.base.utils.UIUtil;
 import ch.hsr.ifs.sconsolidator.core.existingbuild.RefreshFromSConsJob;
 import ch.hsr.ifs.sconsolidator.core.preferences.PreferenceConstants;
 
-public class BuildSettingsPreferencePage extends FieldEditorOverlayPage implements
-    IWorkbenchPreferencePage {
-  private Composite parent;
-  private MultiLineTextFieldEditor additionalCommandlineEditor;
-  private MultiLineTextFieldEditor environmentOptionsEditor;
 
-  public BuildSettingsPreferencePage() {
-    super(GRID, true);
-    setPreferenceStore(SConsPlugin.getWorkspacePreferenceStore());
-    setDescription(SConsI18N.SettingsPreferencePage_Description);
-  }
+public class BuildSettingsPreferencePage extends FieldEditorOverlayPage implements IWorkbenchPreferencePage {
 
-  @Override
-  public void init(IWorkbench workbench) {}
+    private Composite                parent;
+    private MultiLineTextFieldEditor additionalCommandlineEditor;
+    private MultiLineTextFieldEditor environmentOptionsEditor;
 
-  @Override
-  protected String getPageId() {
-    return PreferenceConstants.BUILD_SETTINGS_PAGE_ID;
-  }
-
-  @Override
-  protected void createFieldEditors() {
-    parent = getFieldEditorParent();
-    createBuildOptions();
-  }
-
-  private void createBuildOptions() {
-    addSuppressReadingField();
-    addSilentField();
-    addKeepGoingField();
-    addIgnoreErrorsField();
-    addRandomField();
-    addNumberOfJobsField();
-    addSConstructField();
-    addExecutablePathField();
-    addAdditionalCommandLineField();
-    addEnvironmentOptionsField();
-  }
-
-  private void addEnvironmentOptionsField() {
-    environmentOptionsEditor =
-        new MultiLineTextFieldEditor(PreferenceConstants.ENVIRONMENT_VARIABLES,
-            SConsI18N.BuildSettingsPreferencePage_EnvironmentVariables, parent);
-    environmentOptionsEditor.setEmptyStringAllowed(true);
-    addField(environmentOptionsEditor);
-  }
-
-  private void addAdditionalCommandLineField() {
-    additionalCommandlineEditor =
-        new MultiLineTextFieldEditor(PreferenceConstants.ADDITIONAL_COMMANDLINE_OPTIONS,
-            SConsI18N.BuildSettingsPreferencePage_AdditionalCommandlineArgs, parent);
-    additionalCommandlineEditor.setEmptyStringAllowed(true);
-    addField(additionalCommandlineEditor);
-  }
-
-  private void addExecutablePathField() {
-    DirectoryFieldEditor executablePath =
-        new DirectoryFieldEditor(PreferenceConstants.STARTING_DIRECTORY,
-            SConsI18N.BuildSettingsPreferencePage_StartingDirectory, parent);
-    executablePath.setEmptyStringAllowed(true);
-    addField(executablePath);
-  }
-
-  private void addSConstructField() {
-    StringFieldEditor sconstructName =
-        new StringFieldEditor(PreferenceConstants.SCONSTRUCT_NAME,
-            SConsI18N.BuildSettingsPreferencePage_NameOfSConstructFile, parent);
-    sconstructName.setEmptyStringAllowed(false);
-    addField(sconstructName);
-  }
-
-  private void addNumberOfJobsField() {
-    IntegerFieldEditor numberOfJobs =
-        new IntegerFieldEditor(PreferenceConstants.NUMBER_OF_JOBS,
-            SConsI18N.SettingsPreferencePage_NumberOfJobs, parent);
-    numberOfJobs.setValidRange(0, Integer.MAX_VALUE);
-    addField(numberOfJobs);
-  }
-
-  private void addRandomField() {
-    BooleanFieldEditor random =
-        new BooleanFieldEditor(PreferenceConstants.RANDOM,
-            SConsI18N.SettingsPreferencePage_RandomOrderOptionName, parent);
-    addField(random);
-  }
-
-  private void addIgnoreErrorsField() {
-    BooleanFieldEditor ignoreErrors =
-        new BooleanFieldEditor(PreferenceConstants.IGNORE_ERROS,
-            SConsI18N.BuildSettingsPreferencePage_IGNORE_ERRORS, parent);
-    addField(ignoreErrors);
-  }
-
-  private void addKeepGoingField() {
-    BooleanFieldEditor keepGoing =
-        new BooleanFieldEditor(PreferenceConstants.KEEP_GOING,
-            SConsI18N.SettingsPreferencePage_KeepGoingOptionName, parent);
-    addField(keepGoing);
-  }
-
-  private void addSilentField() {
-    BooleanFieldEditor silent =
-        new BooleanFieldEditor(PreferenceConstants.SILENT,
-            SConsI18N.SettingsPreferencePage_SilentOptionName, parent);
-    addField(silent);
-  }
-
-  private void addSuppressReadingField() {
-    BooleanFieldEditor suppressReadingBuilding =
-        new BooleanFieldEditor(PreferenceConstants.SUPPRESS_READING_BUILDING_MSG,
-            SConsI18N.SettingsPreferencePage_SuppressMessageOptionName, parent);
-    addField(suppressReadingBuilding);
-  }
-
-  @Override
-  public boolean performOk() {
-    boolean result = super.performOk();
-
-    if (needsSConsRefresh() && userAgrees()) {
-      executeSConsRefresh();
+    public BuildSettingsPreferencePage() {
+        super(GRID, true);
+        setPreferenceStore(SConsPlugin.getWorkspacePreferenceStore());
+        setDescription(SConsI18N.SettingsPreferencePage_Description);
     }
 
-    return result;
-  }
+    @Override
+    public void init(IWorkbench workbench) {}
 
-  private boolean userAgrees() {
-    Shell shell = UIUtil.getWindowShell();
-    return MessageDialog.openQuestion(shell,
-        SConsI18N.BuildSettingsPreferencePage_PerformRefreshTitle,
-        SConsI18N.BuildSettingsPreferencePage_PerformRefreshMessage);
-  }
+    @Override
+    protected String getPageId() {
+        return PreferenceConstants.BUILD_SETTINGS_PAGE_ID;
+    }
 
-  private void executeSConsRefresh() {
-    RefreshFromSConsJob job = new RefreshFromSConsJob(getAffectedProjects());
-    job.schedule();
-  }
+    @Override
+    protected void createFieldEditors() {
+        parent = getFieldEditorParent();
+        createBuildOptions();
+    }
 
-  private Collection<IProject> getAffectedProjects() {
-    return isPropertyPage() ? Collections.singletonList(getProject()) : Arrays
-        .asList(ResourcesPlugin.getWorkspace().getRoot().getProjects());
-  }
+    private void createBuildOptions() {
+        addSuppressReadingField();
+        addSilentField();
+        addKeepGoingField();
+        addIgnoreErrorsField();
+        addRandomField();
+        addNumberOfJobsField();
+        addSConstructField();
+        addExecutablePathField();
+        addAdditionalCommandLineField();
+        addEnvironmentOptionsField();
+    }
 
-  private boolean needsSConsRefresh() {
-    String oldValue =
-        getPreferenceStore().getString(PreferenceConstants.ADDITIONAL_COMMANDLINE_OPTIONS);
-    return !additionalCommandlineEditor.getStringValue().equals(oldValue);
-  }
+    private void addEnvironmentOptionsField() {
+        environmentOptionsEditor = new MultiLineTextFieldEditor(PreferenceConstants.ENVIRONMENT_VARIABLES,
+                SConsI18N.BuildSettingsPreferencePage_EnvironmentVariables, parent);
+        environmentOptionsEditor.setEmptyStringAllowed(true);
+        addField(environmentOptionsEditor);
+    }
+
+    private void addAdditionalCommandLineField() {
+        additionalCommandlineEditor = new MultiLineTextFieldEditor(PreferenceConstants.ADDITIONAL_COMMANDLINE_OPTIONS,
+                SConsI18N.BuildSettingsPreferencePage_AdditionalCommandlineArgs, parent);
+        additionalCommandlineEditor.setEmptyStringAllowed(true);
+        addField(additionalCommandlineEditor);
+    }
+
+    private void addExecutablePathField() {
+        DirectoryFieldEditor executablePath = new DirectoryFieldEditor(PreferenceConstants.STARTING_DIRECTORY,
+                SConsI18N.BuildSettingsPreferencePage_StartingDirectory, parent);
+        executablePath.setEmptyStringAllowed(true);
+        addField(executablePath);
+    }
+
+    private void addSConstructField() {
+        StringFieldEditor sconstructName = new StringFieldEditor(PreferenceConstants.SCONSTRUCT_NAME,
+                SConsI18N.BuildSettingsPreferencePage_NameOfSConstructFile, parent);
+        sconstructName.setEmptyStringAllowed(false);
+        addField(sconstructName);
+    }
+
+    private void addNumberOfJobsField() {
+        IntegerFieldEditor numberOfJobs = new IntegerFieldEditor(PreferenceConstants.NUMBER_OF_JOBS, SConsI18N.SettingsPreferencePage_NumberOfJobs,
+                parent);
+        numberOfJobs.setValidRange(0, Integer.MAX_VALUE);
+        addField(numberOfJobs);
+    }
+
+    private void addRandomField() {
+        BooleanFieldEditor random = new BooleanFieldEditor(PreferenceConstants.RANDOM, SConsI18N.SettingsPreferencePage_RandomOrderOptionName,
+                parent);
+        addField(random);
+    }
+
+    private void addIgnoreErrorsField() {
+        BooleanFieldEditor ignoreErrors = new BooleanFieldEditor(PreferenceConstants.IGNORE_ERROS,
+                SConsI18N.BuildSettingsPreferencePage_IGNORE_ERRORS, parent);
+        addField(ignoreErrors);
+    }
+
+    private void addKeepGoingField() {
+        BooleanFieldEditor keepGoing = new BooleanFieldEditor(PreferenceConstants.KEEP_GOING, SConsI18N.SettingsPreferencePage_KeepGoingOptionName,
+                parent);
+        addField(keepGoing);
+    }
+
+    private void addSilentField() {
+        BooleanFieldEditor silent = new BooleanFieldEditor(PreferenceConstants.SILENT, SConsI18N.SettingsPreferencePage_SilentOptionName, parent);
+        addField(silent);
+    }
+
+    private void addSuppressReadingField() {
+        BooleanFieldEditor suppressReadingBuilding = new BooleanFieldEditor(PreferenceConstants.SUPPRESS_READING_BUILDING_MSG,
+                SConsI18N.SettingsPreferencePage_SuppressMessageOptionName, parent);
+        addField(suppressReadingBuilding);
+    }
+
+    @Override
+    public boolean performOk() {
+        boolean result = super.performOk();
+
+        if (needsSConsRefresh() && userAgrees()) {
+            executeSConsRefresh();
+        }
+
+        return result;
+    }
+
+    private boolean userAgrees() {
+        Shell shell = UIUtil.getWindowShell();
+        return MessageDialog.openQuestion(shell, SConsI18N.BuildSettingsPreferencePage_PerformRefreshTitle,
+                SConsI18N.BuildSettingsPreferencePage_PerformRefreshMessage);
+    }
+
+    private void executeSConsRefresh() {
+        RefreshFromSConsJob job = new RefreshFromSConsJob(getAffectedProjects());
+        job.schedule();
+    }
+
+    private Collection<IProject> getAffectedProjects() {
+        return isPropertyPage() ? Collections.singletonList(getProject()) : Arrays.asList(ResourcesPlugin.getWorkspace().getRoot().getProjects());
+    }
+
+    private boolean needsSConsRefresh() {
+        String oldValue = getPreferenceStore().getString(PreferenceConstants.ADDITIONAL_COMMANDLINE_OPTIONS);
+        return !additionalCommandlineEditor.getStringValue().equals(oldValue);
+    }
 }

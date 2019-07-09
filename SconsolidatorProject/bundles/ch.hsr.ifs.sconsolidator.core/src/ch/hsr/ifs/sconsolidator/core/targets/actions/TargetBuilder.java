@@ -14,52 +14,52 @@ import ch.hsr.ifs.sconsolidator.core.console.interactive.InteractiveConsole;
 import ch.hsr.ifs.sconsolidator.core.targets.TargetCommand;
 import ch.hsr.ifs.sconsolidator.core.targets.model.SConsBuildTarget;
 
+
 public final class TargetBuilder {
-  private TargetBuilder() {}
 
-  public static void buildTarget(SConsBuildTarget target, IProgressMonitor pm) throws CoreException {
-    target.build(SubMonitor.convert(pm, 1));
-    rememberLastTarget(target, false);
-  }
+    private TargetBuilder() {}
 
-  public static void buildTargetInteractive(SConsBuildTarget target, IProgressMonitor pm)
-      throws CoreException {
-    InteractiveConsole console = getConsole(target.getProject());
-    console.startInteractiveMode();
-    TargetCommand command = createDefaultTargetCommand(target);
-    console.sendCommand(command);
-    rememberLastTarget(target, true);
-    pm.worked(1);
-  }
+    public static void buildTarget(SConsBuildTarget target, IProgressMonitor pm) throws CoreException {
+        target.build(SubMonitor.convert(pm, 1));
+        rememberLastTarget(target, false);
+    }
 
-  private static TargetCommand createDefaultTargetCommand(SConsBuildTarget target) {
-    return new TargetCommand(TargetCommand.CommandType.BuildDefaultTarget, null,
-        target.getProject(), target.getAdditionalCmdLineArgs());
-  }
+    public static void buildTargetInteractive(SConsBuildTarget target, IProgressMonitor pm) throws CoreException {
+        InteractiveConsole console = getConsole(target.getProject());
+        console.startInteractiveMode();
+        TargetCommand command = createDefaultTargetCommand(target);
+        console.sendCommand(command);
+        rememberLastTarget(target, true);
+        pm.worked(1);
+    }
 
-  static InteractiveConsole getConsole(IProject project) {
-    final InteractiveConsole console = InteractiveConsole.getInstance(project);
-    UIUtil.runInDisplayThread(new Runnable() {
-      @Override
-      public void run() {
-        console.show();
-      }
-    });
-    return console;
-  }
+    private static TargetCommand createDefaultTargetCommand(SConsBuildTarget target) {
+        return new TargetCommand(TargetCommand.CommandType.BuildDefaultTarget, null, target.getProject(), target.getAdditionalCmdLineArgs());
+    }
 
-  private static void rememberLastTarget(SConsBuildTarget target, boolean interactive)
-      throws CoreException {
-    IContainer container = target.getContainer();
-    IPath path = getTargetPath(target, container);
-    String pluginId = SConsPlugin.getPluginId();
-    container.setSessionProperty(new QualifiedName(pluginId, "lastTarget"), path.toString());
-    container.setSessionProperty(new QualifiedName(pluginId, "lastTargetInteractive"), interactive);
-  }
+    static InteractiveConsole getConsole(IProject project) {
+        final InteractiveConsole console = InteractiveConsole.getInstance(project);
+        UIUtil.runInDisplayThread(new Runnable() {
 
-  private static IPath getTargetPath(SConsBuildTarget target, IContainer c) {
-    IPath relPath = c.getProjectRelativePath();
-    IPath path = relPath.removeFirstSegments(relPath.segmentCount());
-    return path.append(target.getTargetName());
-  }
+            @Override
+            public void run() {
+                console.show();
+            }
+        });
+        return console;
+    }
+
+    private static void rememberLastTarget(SConsBuildTarget target, boolean interactive) throws CoreException {
+        IContainer container = target.getContainer();
+        IPath path = getTargetPath(target, container);
+        String pluginId = SConsPlugin.getPluginId();
+        container.setSessionProperty(new QualifiedName(pluginId, "lastTarget"), path.toString());
+        container.setSessionProperty(new QualifiedName(pluginId, "lastTargetInteractive"), interactive);
+    }
+
+    private static IPath getTargetPath(SConsBuildTarget target, IContainer c) {
+        IPath relPath = c.getProjectRelativePath();
+        IPath path = relPath.removeFirstSegments(relPath.segmentCount());
+        return path.append(target.getTargetName());
+    }
 }

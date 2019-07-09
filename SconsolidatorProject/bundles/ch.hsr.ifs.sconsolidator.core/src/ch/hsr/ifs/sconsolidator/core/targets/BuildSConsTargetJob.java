@@ -10,33 +10,34 @@ import ch.hsr.ifs.sconsolidator.core.SConsI18N;
 import ch.hsr.ifs.sconsolidator.core.SConsPlugin;
 import ch.hsr.ifs.sconsolidator.core.console.interactive.InteractiveConsole;
 
+
 public class BuildSConsTargetJob extends Job {
-  private final TargetCommand targetCommand;
 
-  public BuildSConsTargetJob(TargetCommand targetCommand) {
-    super(SConsI18N.AbstractCurrentTargetAction_BuildCurrentTargetOperationMessage);
-    this.targetCommand = targetCommand;
-  }
+    private final TargetCommand targetCommand;
 
-  @Override
-  protected IStatus run(IProgressMonitor pm) {
-    pm.beginTask(SConsI18N.AbstractCurrentTargetAction_BuildCurrentTargetOperationMessage, 1);
-
-    try {
-      InteractiveConsole console = startInteractiveConsole();
-      console.sendCommand(targetCommand);
-    } catch (CoreException e) {
-      return new Status(IStatus.ERROR, SConsPlugin.PLUGIN_ID, e.getMessage());
-    } finally {
-      pm.done();
+    public BuildSConsTargetJob(TargetCommand targetCommand) {
+        super(SConsI18N.AbstractCurrentTargetAction_BuildCurrentTargetOperationMessage);
+        this.targetCommand = targetCommand;
     }
-    return Status.OK_STATUS;
-  }
 
-  private InteractiveConsole startInteractiveConsole() throws CoreException {
-    InteractiveConsole console =
-        InteractiveConsole.getInstance(targetCommand.getAssociatedProject());
-    console.startInteractiveMode();
-    return console;
-  }
+    @Override
+    protected IStatus run(IProgressMonitor pm) {
+        pm.beginTask(SConsI18N.AbstractCurrentTargetAction_BuildCurrentTargetOperationMessage, 1);
+
+        try {
+            InteractiveConsole console = startInteractiveConsole();
+            console.sendCommand(targetCommand);
+        } catch (CoreException e) {
+            return new Status(IStatus.ERROR, SConsPlugin.PLUGIN_ID, e.getMessage());
+        } finally {
+            pm.done();
+        }
+        return Status.OK_STATUS;
+    }
+
+    private InteractiveConsole startInteractiveConsole() throws CoreException {
+        InteractiveConsole console = InteractiveConsole.getInstance(targetCommand.getAssociatedProject());
+        console.startInteractiveMode();
+        return console;
+    }
 }

@@ -16,49 +16,50 @@ import ch.hsr.ifs.sconsolidator.core.existingbuild.SConsExistingProjectHandler;
 import ch.hsr.ifs.sconsolidator.core.managed.SConsManagedProjectHandler;
 import ch.hsr.ifs.sconsolidator.core.noncpp.SConsNonCppNature;
 
+
 public class RemoveSConsNatureAction extends WithSelectedProjectsAction {
 
-  @Override
-  public void run(IAction action) {
-    withProjects(new VoidFunction<Collection<IProject>>() {
-      @Override
-      public void apply(Collection<IProject> projects) {
-        for (IProject p : projects) {
-          performRemoval(p);
-        }
-      }
-    });
-  }
+    @Override
+    public void run(IAction action) {
+        withProjects(new VoidFunction<Collection<IProject>>() {
 
-  private void performRemoval(IProject project) {
-    try {
-      if (hasNature(project, EXISTING_CODE_PROJECT_NATURE)) {
-        removeExistingNature(project);
-      } else if (hasNature(project, MANAGED_PROJECT_NATURE)) {
-        removeManagedNature(project);
-      } else if (hasNature(project, NON_CPP_PROJECT_NATURE)) {
-        removeNonCppNature(project);
-      }
-    } catch (CoreException e) {
-      SConsPlugin.showExceptionInDisplayThread(
-          SConsI18N.RemoveSConsNature_NatureRemovalFailedTitle,
-          SConsI18N.RemoveSConsNature_NatureRemovalFailedMsg, e);
+            @Override
+            public void apply(Collection<IProject> projects) {
+                for (IProject p : projects) {
+                    performRemoval(p);
+                }
+            }
+        });
     }
-  }
 
-  private boolean hasNature(IProject project, SConsNatureTypes sconsNature) throws CoreException {
-    return project.hasNature(sconsNature.getId());
-  }
+    private void performRemoval(IProject project) {
+        try {
+            if (hasNature(project, EXISTING_CODE_PROJECT_NATURE)) {
+                removeExistingNature(project);
+            } else if (hasNature(project, MANAGED_PROJECT_NATURE)) {
+                removeManagedNature(project);
+            } else if (hasNature(project, NON_CPP_PROJECT_NATURE)) {
+                removeNonCppNature(project);
+            }
+        } catch (CoreException e) {
+            SConsPlugin.showExceptionInDisplayThread(SConsI18N.RemoveSConsNature_NatureRemovalFailedTitle,
+                    SConsI18N.RemoveSConsNature_NatureRemovalFailedMsg, e);
+        }
+    }
 
-  private void removeNonCppNature(IProject project) throws CoreException {
-    new SConsNonCppNature().removeSConsNature(project, new NullProgressMonitor());
-  }
+    private boolean hasNature(IProject project, SConsNatureTypes sconsNature) throws CoreException {
+        return project.hasNature(sconsNature.getId());
+    }
 
-  private void removeManagedNature(IProject project) throws CoreException {
-    new SConsManagedProjectHandler(project, new NullProgressMonitor()).deconfigureProject();
-  }
+    private void removeNonCppNature(IProject project) throws CoreException {
+        new SConsNonCppNature().removeSConsNature(project, new NullProgressMonitor());
+    }
 
-  private void removeExistingNature(IProject project) throws CoreException {
-    new SConsExistingProjectHandler(project, new NullProgressMonitor()).deconfigureProject();
-  }
+    private void removeManagedNature(IProject project) throws CoreException {
+        new SConsManagedProjectHandler(project, new NullProgressMonitor()).deconfigureProject();
+    }
+
+    private void removeExistingNature(IProject project) throws CoreException {
+        new SConsExistingProjectHandler(project, new NullProgressMonitor()).deconfigureProject();
+    }
 }

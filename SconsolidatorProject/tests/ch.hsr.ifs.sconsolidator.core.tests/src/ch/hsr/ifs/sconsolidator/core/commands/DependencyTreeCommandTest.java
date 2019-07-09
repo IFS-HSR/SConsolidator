@@ -19,52 +19,50 @@ import ch.hsr.ifs.sconsolidator.core.PlatformSpecifics;
 import ch.hsr.ifs.sconsolidator.core.console.NullConsole;
 import ch.hsr.ifs.sconsolidator.core.helper.CppManagedTestProject;
 
+
 public class DependencyTreeCommandTest {
-  private static CppManagedTestProject testProject;
-  
-  @BeforeClass
-  public static void beforeClass() throws Exception {
-	  testProject = new CppManagedTestProject(true);
-  }
 
-  @AfterClass
-  public static void afterClass() throws Exception {
-    assertNotNull("TestProject is null", testProject);
-    testProject.dispose();
-  }
+    private static CppManagedTestProject testProject;
 
-  private DependencyTreeCommand dependencyTreeCommand;
+    @BeforeClass
+    public static void beforeClass() throws Exception {
+        testProject = new CppManagedTestProject(true);
+    }
 
-  @Before
-  public void setUp() throws Exception {
-    dependencyTreeCommand =
-        new DependencyTreeCommand(getSConsPath(), new NullConsole(), testProject.getProject(),
-            "hello");
-  }
+    @AfterClass
+    public static void afterClass() throws Exception {
+        assertNotNull("TestProject is null", testProject);
+        testProject.dispose();
+    }
 
-  private String getSConsPath() {
-    return PlatformSpecifics.findSConsExecOnSystemPath().getAbsolutePath();
-  }
+    private DependencyTreeCommand dependencyTreeCommand;
 
-  @Test
-  public void testCreate() throws Exception {
-    String[] expectedArgs = new String[] {"hello"};
-    String[] actualArguments = dependencyTreeCommand.getArguments().toArray(new String[0]);
-    assertArrayEquals(expectedArgs, actualArguments);
-  }
+    @Before
+    public void setUp() throws Exception {
+        dependencyTreeCommand = new DependencyTreeCommand(getSConsPath(), new NullConsole(), testProject.getProject(), "hello");
+    }
 
-  @Test
-  public void testRun() throws Exception {
-    File projectPath = testProject.getProject().getLocation().toFile();
-    dependencyTreeCommand.run(projectPath, new NullProgressMonitor());
-    String output = dependencyTreeCommand.getOutput();
-    String commonDeps = "+-hello\n  +-src/main.o\n  | +-src/main.cpp\n ";
-    // FIXME better use a regex here
-    assertThat(
-        output,
-        anyOf(containsString(commonDeps + " | +-/usr/bin/g++\n  +-/usr/bin/g++\n"),
-            containsString(commonDeps + " | +-/usr/local/bin/g++\n  +-/usr/local/bin/g++\n"),
-            containsString(commonDeps + " | +-/bin/g++\n  +-/bin/g++\n")));
-    assertTrue(dependencyTreeCommand.getError().isEmpty());
-  }
+    private String getSConsPath() {
+        return PlatformSpecifics.findSConsExecOnSystemPath().getAbsolutePath();
+    }
+
+    @Test
+    public void testCreate() throws Exception {
+        String[] expectedArgs = new String[] { "hello" };
+        String[] actualArguments = dependencyTreeCommand.getArguments().toArray(new String[0]);
+        assertArrayEquals(expectedArgs, actualArguments);
+    }
+
+    @Test
+    public void testRun() throws Exception {
+        File projectPath = testProject.getProject().getLocation().toFile();
+        dependencyTreeCommand.run(projectPath, new NullProgressMonitor());
+        String output = dependencyTreeCommand.getOutput();
+        String commonDeps = "+-hello\n  +-src/main.o\n  | +-src/main.cpp\n ";
+        // FIXME better use a regex here
+        assertThat(output, anyOf(containsString(commonDeps + " | +-/usr/bin/g++\n  +-/usr/bin/g++\n"), containsString(commonDeps +
+                                                                                                                      " | +-/usr/local/bin/g++\n  +-/usr/local/bin/g++\n"),
+                containsString(commonDeps + " | +-/bin/g++\n  +-/bin/g++\n")));
+        assertTrue(dependencyTreeCommand.getError().isEmpty());
+    }
 }

@@ -1,8 +1,8 @@
 package ch.hsr.ifs.sconsolidator.core.base.tuple;
 
 public enum Sentinel implements StringAppender {
-  instance;
+    instance;
 
-  @Override
-  public void appendString(StringBuilder buffer, String separator) {}
+    @Override
+    public void appendString(StringBuilder buffer, String separator) {}
 }

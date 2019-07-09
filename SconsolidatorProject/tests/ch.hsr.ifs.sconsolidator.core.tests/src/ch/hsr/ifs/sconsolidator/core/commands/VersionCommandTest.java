@@ -10,27 +10,29 @@ import org.junit.Test;
 import ch.hsr.ifs.sconsolidator.core.PlatformSpecifics;
 import ch.hsr.ifs.sconsolidator.core.console.NullConsole;
 
+
 public class VersionCommandTest {
-  private SConsVersionCommand versionCommand;
 
-  @Before
-  public void setUp() throws Exception {
-    versionCommand = new SConsVersionCommand(getSConsPath(), new NullConsole());
-  }
+    private SConsVersionCommand versionCommand;
 
-  private String getSConsPath() {
-    return PlatformSpecifics.findSConsExecOnSystemPath().getAbsolutePath();
-  }
+    @Before
+    public void setUp() throws Exception {
+        versionCommand = new SConsVersionCommand(getSConsPath(), new NullConsole());
+    }
 
-  @Test
-  public void testCreate() throws Exception {
-    assertTrue(versionCommand.getArguments().isEmpty());
-  }
+    private String getSConsPath() {
+        return PlatformSpecifics.findSConsExecOnSystemPath().getAbsolutePath();
+    }
 
-  @Test
-  public void testRun() throws Exception {
-    SConsVersion version = versionCommand.run(new NullProgressMonitor());
-    assertNotNull(version);
-    assertTrue(version.toString().matches("\\d+\\.\\d+\\.\\d+"));
-  }
+    @Test
+    public void testCreate() throws Exception {
+        assertTrue(versionCommand.getArguments().isEmpty());
+    }
+
+    @Test
+    public void testRun() throws Exception {
+        SConsVersion version = versionCommand.run(new NullProgressMonitor());
+        assertNotNull(version);
+        assertTrue(version.toString().matches("\\d+\\.\\d+\\.\\d+"));
+    }
 }

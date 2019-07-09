@@ -10,33 +10,35 @@ import org.junit.Test;
 
 import ch.hsr.ifs.sconsolidator.core.helper.CppManagedTestProject;
 
+
 public class ProjectSettingsWriterTest {
-  private CppManagedTestProject testProject;
 
-  @Before
-  public void setUp() throws Exception {
-    testProject = new CppManagedTestProject(false);
-  }
+    private CppManagedTestProject testProject;
 
-  @After
-  public void tearDown() throws CoreException {
-	assertNotNull("TestProject is null", testProject);
-    testProject.dispose();
-  }
+    @Before
+    public void setUp() throws Exception {
+        testProject = new CppManagedTestProject(false);
+    }
 
-  @Test
-  public void testSetIncludePaths() throws Exception {
-    String[] newIncludes = new String[] {"/usr/include/boost", "/usr/include/alsa"};
-    ProjectSettingsWriter writer = new ProjectSettingsWriter(testProject.getProject());
-    writer.setIncludePaths(newIncludes, null);
-    assertArrayEquals(newIncludes, testProject.getIncludePaths());
-  }
+    @After
+    public void tearDown() throws CoreException {
+        assertNotNull("TestProject is null", testProject);
+        testProject.dispose();
+    }
 
-  @Test
-  public void testSetMacros() throws Exception {
-    String[] newMacros = new String[] {"-Dwindows", "-Dgaga"};
-    ProjectSettingsWriter writer = new ProjectSettingsWriter(testProject.getProject());
-    writer.setMacros(newMacros, null);
-    assertArrayEquals(newMacros, testProject.getMacros());
-  }
+    @Test
+    public void testSetIncludePaths() throws Exception {
+        String[] newIncludes = new String[] { "/usr/include/boost", "/usr/include/alsa" };
+        ProjectSettingsWriter writer = new ProjectSettingsWriter(testProject.getProject());
+        writer.setIncludePaths(newIncludes, null);
+        assertArrayEquals(newIncludes, testProject.getIncludePaths());
+    }
+
+    @Test
+    public void testSetMacros() throws Exception {
+        String[] newMacros = new String[] { "-Dwindows", "-Dgaga" };
+        ProjectSettingsWriter writer = new ProjectSettingsWriter(testProject.getProject());
+        writer.setMacros(newMacros, null);
+        assertArrayEquals(newMacros, testProject.getMacros());
+    }
 }

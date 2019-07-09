@@ -19,48 +19,47 @@ import org.junit.Test;
 
 import ch.hsr.ifs.sconsolidator.core.base.utils.IOUtil;
 
+
 public class SConsHelperTest {
-  private static IProject project;
-  private static IFolder folder;
 
-  @BeforeClass
-  public static void setUp() throws IOException, CoreException {
-    IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
-    project = root.getProject("Test");
-    project.create(null);
-    project.open(null);
-    folder = project.getFolder("src");
-    folder.create(true, true, new NullProgressMonitor());
-    IFile file = project.getFile("SConstruct");
-    file.create(IOUtil.stringToStream(""), false, new NullProgressMonitor());
-  }
+    private static IProject project;
+    private static IFolder  folder;
 
-  @AfterClass
-  public static void tearDown() throws CoreException {
-    project.delete(true, null);
-  }
+    @BeforeClass
+    public static void setUp() throws IOException, CoreException {
+        IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
+        project = root.getProject("Test");
+        project.create(null);
+        project.open(null);
+        folder = project.getFolder("src");
+        folder.create(true, true, new NullProgressMonitor());
+        IFile file = project.getFile("SConstruct");
+        file.create(IOUtil.stringToStream(""), false, new NullProgressMonitor());
+    }
 
-  @Test
-  public void testFindSConstructAbovePath() throws IOException {
-    String foundDir =
-        SConsHelper.findFileAbovePath(folder.getLocation().toFile(), SConsHelper.SCONSTRUCT);
-    String projectDir = project.getLocation().toFile().getAbsolutePath();
-    assertEquals(projectDir, foundDir);
+    @AfterClass
+    public static void tearDown() throws CoreException {
+        project.delete(true, null);
+    }
 
-    foundDir =
-        SConsHelper.findFileAbovePath(project.getLocation().toFile(), SConsHelper.SCONSTRUCT);
-    assertEquals(projectDir, foundDir);
-  }
+    @Test
+    public void testFindSConstructAbovePath() throws IOException {
+        String foundDir = SConsHelper.findFileAbovePath(folder.getLocation().toFile(), SConsHelper.SCONSTRUCT);
+        String projectDir = project.getLocation().toFile().getAbsolutePath();
+        assertEquals(projectDir, foundDir);
 
-  @Test
-  public void testIsSConsFile() {
-    assertTrue(SConsHelper.isSConsFile(project.getFile(SConsHelper.SCONSTRUCT)));
-    assertFalse(SConsHelper.isSConsFile(project.getFile("test.txt")));
-  }
+        foundDir = SConsHelper.findFileAbovePath(project.getLocation().toFile(), SConsHelper.SCONSTRUCT);
+        assertEquals(projectDir, foundDir);
+    }
 
-  @Test
-  public void testDetermineStartingDirectory() {
-    assertEquals(project.getLocation().toFile().getAbsolutePath(),
-        SConsHelper.determineStartingDirectory(project));
-  }
+    @Test
+    public void testIsSConsFile() {
+        assertTrue(SConsHelper.isSConsFile(project.getFile(SConsHelper.SCONSTRUCT)));
+        assertFalse(SConsHelper.isSConsFile(project.getFile("test.txt")));
+    }
+
+    @Test
+    public void testDetermineStartingDirectory() {
+        assertEquals(project.getLocation().toFile().getAbsolutePath(), SConsHelper.determineStartingDirectory(project));
+    }
 }

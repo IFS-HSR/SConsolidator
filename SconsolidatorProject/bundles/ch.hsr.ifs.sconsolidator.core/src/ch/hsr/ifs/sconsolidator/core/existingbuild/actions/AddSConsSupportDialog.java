@@ -18,97 +18,98 @@ import ch.hsr.ifs.sconsolidator.core.base.utils.UIUtil;
 import ch.hsr.ifs.sconsolidator.core.existingbuild.AddExistingSConsSupportJob;
 import ch.hsr.ifs.sconsolidator.core.preferences.SConsOptionHandler;
 
+
 public class AddSConsSupportDialog extends Dialog {
-  private Text additionalCmdLineArgs;
-  private final Collection<IProject> projects;
 
-  public AddSConsSupportDialog(Collection<IProject> projects) {
-    super(UIUtil.getWindowShell());
-    this.projects = projects;
-    setShellStyle(getShellStyle() | SWT.RESIZE);
-  }
+    private Text                       additionalCmdLineArgs;
+    private final Collection<IProject> projects;
 
-  @Override
-  protected void configureShell(Shell newShell) {
-    newShell.setText(getTitle());
-    super.configureShell(newShell);
-  }
+    public AddSConsSupportDialog(Collection<IProject> projects) {
+        super(UIUtil.getWindowShell());
+        this.projects = projects;
+        setShellStyle(getShellStyle() | SWT.RESIZE);
+    }
 
-  private String getTitle() {
-    return SConsI18N.SConsExtractInformationDialog_SettingsDialogTitle;
-  }
+    @Override
+    protected void configureShell(Shell newShell) {
+        newShell.setText(getTitle());
+        super.configureShell(newShell);
+    }
 
-  @Override
-  protected Control createDialogArea(Composite parent) {
-    Composite composite = (Composite) super.createDialogArea(parent);
-    initializeDialogUnits(composite);
-    createControls(composite);
-    initializeDefaultValues();
-    return composite;
-  }
+    private String getTitle() {
+        return SConsI18N.SConsExtractInformationDialog_SettingsDialogTitle;
+    }
 
-  private void initializeDefaultValues() {
-    String workspaceAdditionalCmdLineOpts = SConsOptionHandler.getNormalizedCommandLineOpts();
-    additionalCmdLineArgs.setText(workspaceAdditionalCmdLineOpts);
-  }
+    @Override
+    protected Control createDialogArea(Composite parent) {
+        Composite composite = (Composite) super.createDialogArea(parent);
+        initializeDialogUnits(composite);
+        createControls(composite);
+        initializeDefaultValues();
+        return composite;
+    }
 
-  private void createControls(Composite parent) {
-    Composite composite = createComposite(parent, 2);
-    ((GridLayout) composite.getLayout()).makeColumnsEqualWidth = false;
-    GridData gd = new GridData(GridData.FILL_HORIZONTAL);
-    gd.widthHint = convertWidthInCharsToPixels(50);
-    composite.setLayoutData(gd);
-    createLabel(composite, SConsI18N.NewSConsProjectFromExistingPage_AdditionalSConsOptions);
-    additionalCmdLineArgs =
-        createTextField(composite, SWT.MULTI | SWT.V_SCROLL | SWT.BORDER | SWT.WRAP);
-  }
+    private void initializeDefaultValues() {
+        String workspaceAdditionalCmdLineOpts = SConsOptionHandler.getNormalizedCommandLineOpts();
+        additionalCmdLineArgs.setText(workspaceAdditionalCmdLineOpts);
+    }
 
-  private Text createTextField(Composite parent, int style) {
-    Text text = new Text(parent, style);
-    GridData data = new GridData();
-    data.horizontalAlignment = GridData.FILL;
-    data.grabExcessHorizontalSpace = true;
-    data.verticalAlignment = GridData.CENTER;
-    data.grabExcessVerticalSpace = false;
-    text.setLayoutData(data);
-    ((GridData) (text.getLayoutData())).horizontalAlignment = GridData.FILL;
-    ((GridData) (text.getLayoutData())).grabExcessHorizontalSpace = true;
-    return text;
-  }
+    private void createControls(Composite parent) {
+        Composite composite = createComposite(parent, 2);
+        ((GridLayout) composite.getLayout()).makeColumnsEqualWidth = false;
+        GridData gd = new GridData(GridData.FILL_HORIZONTAL);
+        gd.widthHint = convertWidthInCharsToPixels(50);
+        composite.setLayoutData(gd);
+        createLabel(composite, SConsI18N.NewSConsProjectFromExistingPage_AdditionalSConsOptions);
+        additionalCmdLineArgs = createTextField(composite, SWT.MULTI | SWT.V_SCROLL | SWT.BORDER | SWT.WRAP);
+    }
 
-  private Composite createComposite(Composite parent, int numColumns) {
-    Composite composite = new Composite(parent, SWT.NULL);
-    composite.setFont(parent.getFont());
-    composite.setLayout(new GridLayout(numColumns, true));
-    composite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-    return composite;
-  }
+    private Text createTextField(Composite parent, int style) {
+        Text text = new Text(parent, style);
+        GridData data = new GridData();
+        data.horizontalAlignment = GridData.FILL;
+        data.grabExcessHorizontalSpace = true;
+        data.verticalAlignment = GridData.CENTER;
+        data.grabExcessVerticalSpace = false;
+        text.setLayoutData(data);
+        ((GridData) (text.getLayoutData())).horizontalAlignment = GridData.FILL;
+        ((GridData) (text.getLayoutData())).grabExcessHorizontalSpace = true;
+        return text;
+    }
 
-  private Label createLabel(Composite parent, String text) {
-    Label label = new Label(parent, SWT.LEFT);
-    label.setFont(parent.getFont());
-    label.setText(text);
-    GridData gd = new GridData(GridData.FILL_HORIZONTAL);
-    gd.horizontalSpan = 1;
-    gd.widthHint = SWT.DEFAULT;
-    gd.heightHint = SWT.DEFAULT;
-    label.setLayoutData(gd);
-    ((GridData) (label.getLayoutData())).horizontalAlignment = GridData.BEGINNING;
-    ((GridData) (label.getLayoutData())).grabExcessHorizontalSpace = false;
-    return label;
-  }
+    private Composite createComposite(Composite parent, int numColumns) {
+        Composite composite = new Composite(parent, SWT.NULL);
+        composite.setFont(parent.getFont());
+        composite.setLayout(new GridLayout(numColumns, true));
+        composite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+        return composite;
+    }
 
-  @Override
-  protected void okPressed() {
-    scheduleAddSConsSupportJob();
-    super.okPressed();
-  }
+    private Label createLabel(Composite parent, String text) {
+        Label label = new Label(parent, SWT.LEFT);
+        label.setFont(parent.getFont());
+        label.setText(text);
+        GridData gd = new GridData(GridData.FILL_HORIZONTAL);
+        gd.horizontalSpan = 1;
+        gd.widthHint = SWT.DEFAULT;
+        gd.heightHint = SWT.DEFAULT;
+        label.setLayoutData(gd);
+        ((GridData) (label.getLayoutData())).horizontalAlignment = GridData.BEGINNING;
+        ((GridData) (label.getLayoutData())).grabExcessHorizontalSpace = false;
+        return label;
+    }
 
-  private void scheduleAddSConsSupportJob() {
-    new AddExistingSConsSupportJob(projects, getAdditionalCommandLineArgs()).schedule();
-  }
+    @Override
+    protected void okPressed() {
+        scheduleAddSConsSupportJob();
+        super.okPressed();
+    }
 
-  private String getAdditionalCommandLineArgs() {
-    return additionalCmdLineArgs.getText().trim();
-  }
+    private void scheduleAddSConsSupportJob() {
+        new AddExistingSConsSupportJob(projects, getAdditionalCommandLineArgs()).schedule();
+    }
+
+    private String getAdditionalCommandLineArgs() {
+        return additionalCmdLineArgs.getText().trim();
+    }
 }

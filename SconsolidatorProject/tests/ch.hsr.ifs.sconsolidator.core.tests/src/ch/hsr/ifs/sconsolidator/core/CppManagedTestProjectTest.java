@@ -17,59 +17,60 @@ import ch.hsr.ifs.sconsolidator.core.base.functional.FunctionalHelper;
 import ch.hsr.ifs.sconsolidator.core.base.functional.UnaryFunction;
 import ch.hsr.ifs.sconsolidator.core.helper.CppManagedTestProject;
 
+
 public class CppManagedTestProjectTest {
-  private CppManagedTestProject testProject;
 
-  @Before
-  public void setUp() throws Exception {
-    testProject = new CppManagedTestProject(false);
-  }
+    private CppManagedTestProject testProject;
 
-  @After
-  public void tearDown() throws Exception {
-	assertNotNull("TestProject is null", testProject);
-    testProject.dispose();
-  }
+    @Before
+    public void setUp() throws Exception {
+        testProject = new CppManagedTestProject(false);
+    }
 
-  @Test
-  public void testNatureManaged() {
-    assertTrue(testProject.isManagedBuildActivated());
-  }
+    @After
+    public void tearDown() throws Exception {
+        assertNotNull("TestProject is null", testProject);
+        testProject.dispose();
+    }
 
-  @Test
-  public void testArtefactInfos() {
-    IConfiguration config = testProject.getConfig();
-    assertEquals("org.eclipse.cdt.build.core.buildArtefactType.exe", config.getBuildArtefactType()
-        .getId());
-    assertEquals(testProject.getProjectName(), config.getArtifactName());
-  }
+    @Test
+    public void testNatureManaged() {
+        assertTrue(testProject.isManagedBuildActivated());
+    }
 
-  @Test
-  public void testAddIncludePath() throws Exception {
-    testProject.addIncludePath("/usr/include/boost");
-    assertTrue(contains(testProject.getIncludePaths(), "/usr/include/boost"));
-  }
+    @Test
+    public void testArtefactInfos() {
+        IConfiguration config = testProject.getConfig();
+        assertEquals("org.eclipse.cdt.build.core.buildArtefactType.exe", config.getBuildArtefactType().getId());
+        assertEquals(testProject.getProjectName(), config.getArtifactName());
+    }
 
-  @Test
-  public void testAddLibrary() throws Exception {
-    testProject.addLibrary("boost-thread");
-    assertTrue(contains(testProject.getLibraries(), "boost-thread"));
-  }
+    @Test
+    public void testAddIncludePath() throws Exception {
+        testProject.addIncludePath("/usr/include/boost");
+        assertTrue(contains(testProject.getIncludePaths(), "/usr/include/boost"));
+    }
 
-  @Ignore
-  public void testAddLibraryPath() throws Exception {
-    testProject.addLibraryPath("/usr/lib/boost");
-    assertTrue(contains(testProject.getLibraryPaths(), "/usr/lib/boost"));
-  }
+    @Test
+    public void testAddLibrary() throws Exception {
+        testProject.addLibrary("boost-thread");
+        assertTrue(contains(testProject.getLibraries(), "boost-thread"));
+    }
 
-  private boolean contains(final String[] arr, final String elm) {
-    Collection<String> matched =
-        FunctionalHelper.filter(Arrays.asList(arr), new UnaryFunction<String, Boolean>() {
-          @Override
-          public Boolean apply(String param) {
-            return param.equals(elm);
-          }
+    @Ignore
+    public void testAddLibraryPath() throws Exception {
+        testProject.addLibraryPath("/usr/lib/boost");
+        assertTrue(contains(testProject.getLibraryPaths(), "/usr/lib/boost"));
+    }
+
+    private boolean contains(final String[] arr, final String elm) {
+        Collection<String> matched = FunctionalHelper.filter(Arrays.asList(arr), new UnaryFunction<String, Boolean>() {
+
+            @Override
+            public Boolean apply(String param) {
+                return param.equals(elm);
+            }
         });
-    return !matched.isEmpty();
-  }
+        return !matched.isEmpty();
+    }
 }

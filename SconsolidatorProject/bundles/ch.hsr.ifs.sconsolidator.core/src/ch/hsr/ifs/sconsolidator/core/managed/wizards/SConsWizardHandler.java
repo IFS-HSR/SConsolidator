@@ -19,58 +19,59 @@ import ch.hsr.ifs.sconsolidator.core.SConsI18N;
 import ch.hsr.ifs.sconsolidator.core.SConsPlugin;
 import ch.hsr.ifs.sconsolidator.core.managed.SConsManagedProjectHandler;
 
+
 class SConsWizardHandler extends MBSWizardHandler {
-  private final String buildArtefactType;
 
-  public SConsWizardHandler(SConsBuildPropertyValue prop, Composite composite, IWizard wizard) {
-    super(prop, composite, wizard);
-    this.buildArtefactType = prop.getId();
-  }
+    private final String buildArtefactType;
 
-  @Override
-  protected void doCustom(IProject newProject) {
-    super.doCustom(newProject);
-
-    try {
-      getWizard().getContainer().run(false, true, getProgressRunnable(newProject));
-    } catch (InvocationTargetException e) {
-      SConsPlugin.log(e);
-    } catch (InterruptedException e) {
-      SConsPlugin.log(e);
+    public SConsWizardHandler(SConsBuildPropertyValue prop, Composite composite, IWizard wizard) {
+        super(prop, composite, wizard);
+        this.buildArtefactType = prop.getId();
     }
-  }
 
-  private IRunnableWithProgress getProgressRunnable(final IProject newProject) {
-    return new IRunnableWithProgress() {
-      @Override
-      public void run(IProgressMonitor pm) throws InvocationTargetException, InterruptedException {
-        createSConsProjectSettings(newProject, pm);
-      }
-    };
-  }
+    @Override
+    protected void doCustom(IProject newProject) {
+        super.doCustom(newProject);
 
-  private void createSConsProjectSettings(IProject newProject, IProgressMonitor pm) {
-    try {
-      setBuildArtefactType(newProject);
-      configureProject(newProject, pm);
-    } catch (CoreException e) {
-      SConsPlugin.log(e);
+        try {
+            getWizard().getContainer().run(false, true, getProgressRunnable(newProject));
+        } catch (InvocationTargetException e) {
+            SConsPlugin.log(e);
+        } catch (InterruptedException e) {
+            SConsPlugin.log(e);
+        }
     }
-  }
 
-  private void configureProject(IProject project, IProgressMonitor pm) throws CoreException {
-    new SConsManagedProjectHandler(project, pm).configureProject();
-  }
+    private IRunnableWithProgress getProgressRunnable(final IProject newProject) {
+        return new IRunnableWithProgress() {
 
-  private void setBuildArtefactType(IProject newProject) throws CoreException {
-    try {
-      IManagedBuildInfo info = ManagedBuildManager.getBuildInfo(newProject);
-      info.getDefaultConfiguration().setBuildArtefactType(buildArtefactType);
-    } catch (BuildException e) {
-      IStatus status =
-          new Status(IStatus.ERROR, SConsPlugin.PLUGIN_ID, 0,
-              SConsI18N.SConsWizardHandler_SetOfBuildArtefactTypeFailed, e);
-      throw new CoreException(status);
+            @Override
+            public void run(IProgressMonitor pm) throws InvocationTargetException, InterruptedException {
+                createSConsProjectSettings(newProject, pm);
+            }
+        };
     }
-  }
+
+    private void createSConsProjectSettings(IProject newProject, IProgressMonitor pm) {
+        try {
+            setBuildArtefactType(newProject);
+            configureProject(newProject, pm);
+        } catch (CoreException e) {
+            SConsPlugin.log(e);
+        }
+    }
+
+    private void configureProject(IProject project, IProgressMonitor pm) throws CoreException {
+        new SConsManagedProjectHandler(project, pm).configureProject();
+    }
+
+    private void setBuildArtefactType(IProject newProject) throws CoreException {
+        try {
+            IManagedBuildInfo info = ManagedBuildManager.getBuildInfo(newProject);
+            info.getDefaultConfiguration().setBuildArtefactType(buildArtefactType);
+        } catch (BuildException e) {
+            IStatus status = new Status(IStatus.ERROR, SConsPlugin.PLUGIN_ID, 0, SConsI18N.SConsWizardHandler_SetOfBuildArtefactTypeFailed, e);
+            throw new CoreException(status);
+        }
+    }
 }

@@ -24,86 +24,86 @@ import org.eclipse.core.runtime.Status;
 
 import ch.hsr.ifs.sconsolidator.core.SConsPlugin;
 
+
 @SuppressWarnings("restriction")
 public class ProjectSettingsWriter {
-  public static String GNU_CPP = "GNU C++";
-  public static String GNU_C = "GNU C";
-  private final IProject project;
 
-  public ProjectSettingsWriter(IProject project) {
-    this.project = project;
-  }
+    public static String   GNU_CPP = "GNU C++";
+    public static String   GNU_C   = "GNU C";
+    private final IProject project;
 
-  public void configureCDTProject() throws CoreException {
-    ICProjectDescriptionManager pdMgr = CoreModel.getDefault().getProjectDescriptionManager();
-    ICProjectDescription projDesc = pdMgr.createProjectDescription(project, true);
-    ManagedBuildInfo info = ManagedBuildManager.createBuildInfo(project);
-    ManagedProject mProj = new ManagedProject(projDesc);
-    info.setManagedProject(mProj);
-    Configuration config = getConfigration(mProj);
-    IBuilder builder = config.getEditableBuilder();
-    builder.setManagedBuildOn(false);
-    CConfigurationData data = config.getConfigurationData();
-    projDesc.createConfiguration(ManagedBuildManager.CFG_DATA_PROVIDER_ID, data);
-    pdMgr.setProjectDescription(project, projDesc);
-  }
+    public ProjectSettingsWriter(IProject project) {
+        this.project = project;
+    }
 
-  private Configuration getConfigration(ManagedProject mProj) {
-    String childId = ManagedBuildManager.calculateChildId("0", null);
-    String cfgHolder = new CfgHolder(null, null).getName();
-    return new Configuration(mProj, null, childId, cfgHolder);
-  }
+    public void configureCDTProject() throws CoreException {
+        ICProjectDescriptionManager pdMgr = CoreModel.getDefault().getProjectDescriptionManager();
+        ICProjectDescription projDesc = pdMgr.createProjectDescription(project, true);
+        ManagedBuildInfo info = ManagedBuildManager.createBuildInfo(project);
+        ManagedProject mProj = new ManagedProject(projDesc);
+        info.setManagedProject(mProj);
+        Configuration config = getConfigration(mProj);
+        IBuilder builder = config.getEditableBuilder();
+        builder.setManagedBuildOn(false);
+        CConfigurationData data = config.getConfigurationData();
+        projDesc.createConfiguration(ManagedBuildManager.CFG_DATA_PROVIDER_ID, data);
+        pdMgr.setProjectDescription(project, projDesc);
+    }
 
-  public void setIncludePaths(String[] paths, String toolName) throws CoreException {
-    setOptionInAllConfigs(IOption.INCLUDE_PATH, paths, toolName);
-    ManagedBuildManager.saveBuildInfo(project, true);
-  }
+    private Configuration getConfigration(ManagedProject mProj) {
+        String childId = ManagedBuildManager.calculateChildId("0", null);
+        String cfgHolder = new CfgHolder(null, null).getName();
+        return new Configuration(mProj, null, childId, cfgHolder);
+    }
 
-  public void setMacros(String[] macros, String toolName) throws CoreException {
-    setOptionInAllConfigs(IOption.PREPROCESSOR_SYMBOLS, macros, toolName);
-    ManagedBuildManager.saveBuildInfo(project, true);
-  }
+    public void setIncludePaths(String[] paths, String toolName) throws CoreException {
+        setOptionInAllConfigs(IOption.INCLUDE_PATH, paths, toolName);
+        ManagedBuildManager.saveBuildInfo(project, true);
+    }
 
-  private void setOptionInAllConfigs(int optionType, String[] newValues, String toolName)
-      throws CoreException {
-    // we check if the project is still in a valid state here; otherwise, we
-    // recreate the .cproject file (see ticket #24 for details)
-    checkAndConfigProject();
-    IManagedBuildInfo info = ManagedBuildManager.getBuildInfo(project);
+    public void setMacros(String[] macros, String toolName) throws CoreException {
+        setOptionInAllConfigs(IOption.PREPROCESSOR_SYMBOLS, macros, toolName);
+        ManagedBuildManager.saveBuildInfo(project, true);
+    }
 
-    if (info == null || info.getManagedProject() == null)
-      return;
+    private void setOptionInAllConfigs(int optionType, String[] newValues, String toolName) throws CoreException {
+        // we check if the project is still in a valid state here; otherwise, we
+        // recreate the .cproject file (see ticket #24 for details)
+        checkAndConfigProject();
+        IManagedBuildInfo info = ManagedBuildManager.getBuildInfo(project);
 
-    try {
-      for (IConfiguration conf : info.getManagedProject().getConfigurations()) {
-        IToolChain tc = conf.getToolChain();
-        setOptionInConfig(conf, tc.getOptions(), tc, optionType, newValues);
+        if (info == null || info.getManagedProject() == null) return;
 
-        for (ITool tool : conf.getTools()) {
-          if (toolName == null || tool.getName().equals(toolName)) {
-            setOptionInConfig(conf, tool.getOptions(), tool, optionType, newValues);
-          }
+        try {
+            for (IConfiguration conf : info.getManagedProject().getConfigurations()) {
+                IToolChain tc = conf.getToolChain();
+                setOptionInConfig(conf, tc.getOptions(), tc, optionType, newValues);
+
+                for (ITool tool : conf.getTools()) {
+                    if (toolName == null || tool.getName().equals(toolName)) {
+                        setOptionInConfig(conf, tool.getOptions(), tool, optionType, newValues);
+                    }
+                }
+            }
+        } catch (BuildException e) {
+            IStatus status = new Status(IStatus.ERROR, SConsPlugin.PLUGIN_ID, e.getMessage());
+            throw new CoreException(status);
         }
-      }
-    } catch (BuildException e) {
-      IStatus status = new Status(IStatus.ERROR, SConsPlugin.PLUGIN_ID, e.getMessage());
-      throw new CoreException(status);
     }
-  }
 
-  private void setOptionInConfig(IConfiguration config, IOption[] options,
-      IHoldsOptions optionHolder, int optionType, String[] newValues) throws BuildException {
-    for (IOption option : options) {
-      if (option.getValueType() == optionType) {
-        ManagedBuildManager.setOption(config, optionHolder, option, newValues);
-      }
+    private void setOptionInConfig(IConfiguration config, IOption[] options, IHoldsOptions optionHolder, int optionType, String[] newValues)
+            throws BuildException {
+        for (IOption option : options) {
+            if (option.getValueType() == optionType) {
+                ManagedBuildManager.setOption(config, optionHolder, option, newValues);
+            }
+        }
     }
-  }
 
-  private void checkAndConfigProject() throws CoreException {
-    ICProjectDescription projectDescription = CoreModel.getDefault().getProjectDescription(project);
-    if (projectDescription == null) {
-      configureCDTProject();
+    private void checkAndConfigProject() throws CoreException {
+        ICProjectDescription projectDescription = CoreModel.getDefault().getProjectDescription(project);
+        if (projectDescription == null) {
+            configureCDTProject();
+        }
     }
-  }
 }
