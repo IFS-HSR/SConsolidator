@@ -3,6 +3,7 @@ package ch.hsr.ifs.sconsolidator.core.commands;
 import static org.hamcrest.CoreMatchers.anyOf;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
@@ -20,15 +21,16 @@ import ch.hsr.ifs.sconsolidator.core.helper.CppManagedTestProject;
 
 public class DependencyTreeCommandTest {
   private static CppManagedTestProject testProject;
+  
+  @BeforeClass
+  public static void beforeClass() throws Exception {
+	  testProject = new CppManagedTestProject(true);
+  }
 
   @AfterClass
   public static void afterClass() throws Exception {
+    assertNotNull("TestProject is null", testProject);
     testProject.dispose();
-  }
-
-  @BeforeClass
-  public static void beforeClass() throws Exception {
-    testProject = new CppManagedTestProject(true);
   }
 
   private DependencyTreeCommand dependencyTreeCommand;

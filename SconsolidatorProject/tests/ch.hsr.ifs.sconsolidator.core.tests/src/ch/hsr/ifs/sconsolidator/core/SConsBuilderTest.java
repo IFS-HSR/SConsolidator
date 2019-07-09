@@ -2,6 +2,7 @@ package ch.hsr.ifs.sconsolidator.core;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
@@ -25,16 +26,17 @@ import ch.hsr.ifs.sconsolidator.core.preferences.PreferenceConstants;
 
 public class SConsBuilderTest {
 
+  private CppManagedTestProject testProject;
+
   @BeforeClass
   public static void beforeClass() {
     String sconsPath = PlatformSpecifics.findSConsExecOnSystemPath().getAbsolutePath();
     SConsPlugin.getConfigPreferenceStore().setValue(PreferenceConstants.EXECUTABLE_PATH, sconsPath);
   }
 
-  private CppManagedTestProject testProject;
-
   @After
   public void after() throws Exception {
+	assertNotNull("TestProject is null", testProject);
     testProject.dispose();
   }
 

@@ -2,6 +2,7 @@ package ch.hsr.ifs.sconsolidator.core.targets;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import org.eclipse.core.resources.IProject;
@@ -31,6 +32,7 @@ public class PersistentTargetsHandlerTest {
 
   @After
   public void after() throws Exception {
+	assertNotNull("TestProject is null", testProject);
     testProject.dispose();
   }
 

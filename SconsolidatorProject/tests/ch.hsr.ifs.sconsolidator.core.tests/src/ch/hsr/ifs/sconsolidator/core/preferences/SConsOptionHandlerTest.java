@@ -1,6 +1,7 @@
 package ch.hsr.ifs.sconsolidator.core.preferences;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 import java.io.IOException;
 import java.util.Collection;
@@ -33,6 +34,7 @@ public class SConsOptionHandlerTest {
 
   @AfterClass
   public static void afterClass() throws Exception {
+	assertNotNull("TestProject is null", testProject);
     testProject.dispose();
   }
 

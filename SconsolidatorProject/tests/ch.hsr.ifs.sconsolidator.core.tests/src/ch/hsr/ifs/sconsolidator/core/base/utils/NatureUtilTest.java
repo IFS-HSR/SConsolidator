@@ -1,6 +1,7 @@
 package ch.hsr.ifs.sconsolidator.core.base.utils;
 
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import org.eclipse.cdt.core.CCProjectNature;
@@ -27,6 +28,7 @@ public class NatureUtilTest {
 
   @After
   public void tearDown() throws Exception {
+	assertNotNull("TestProject is null", testProject);
     testProject.dispose();
   }
 
@@ -34,11 +36,10 @@ public class NatureUtilTest {
   public void testAddNature() throws CoreException {
     assertFalse(testProject.getProject().hasNature(
         SConsNatureTypes.EXISTING_CODE_PROJECT_NATURE.getId()));
-    // FIXME find out why these tests are failing on the CI server although
-    // they work locally without any problems
-    // NatureUtil.addNature(testProject.getProject(),
-    // ISConsExistingCodeNature.NATURE_ID, null);
-    // assertTrue(testProject.getProject().hasNature(ISConsExistingCodeNature.NATURE_ID));
+    new NatureUtil(testProject.getProject()).addNature(
+    	SConsNatureTypes.EXISTING_CODE_PROJECT_NATURE.getId(), new NullProgressMonitor());
+    assertTrue(testProject.getProject().hasNature(
+    	SConsNatureTypes.EXISTING_CODE_PROJECT_NATURE.getId()));
   }
 
   @Test

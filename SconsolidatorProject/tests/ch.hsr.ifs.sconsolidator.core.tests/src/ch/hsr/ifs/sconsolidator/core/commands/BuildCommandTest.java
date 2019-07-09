@@ -2,6 +2,7 @@ package ch.hsr.ifs.sconsolidator.core.commands;
 
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
@@ -36,6 +37,7 @@ public class BuildCommandTest {
 
   @AfterClass
   public static void afterClass() throws Exception {
+	assertNotNull("TestProject is null", testProject);
     testProject.dispose();
   }
 

@@ -1,6 +1,7 @@
 package ch.hsr.ifs.sconsolidator.core;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Arrays;
@@ -26,6 +27,7 @@ public class CppManagedTestProjectTest {
 
   @After
   public void tearDown() throws Exception {
+	assertNotNull("TestProject is null", testProject);
     testProject.dispose();
   }
 
@@ -39,7 +41,7 @@ public class CppManagedTestProjectTest {
     IConfiguration config = testProject.getConfig();
     assertEquals("org.eclipse.cdt.build.core.buildArtefactType.exe", config.getBuildArtefactType()
         .getId());
-    assertEquals(CppManagedTestProject.TEST_PROJECT_NAME, config.getArtifactName());
+    assertEquals(testProject.getProjectName(), config.getArtifactName());
   }
 
   @Test

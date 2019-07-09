@@ -41,6 +41,7 @@ public class SConsBuildTargetManagerTest {
 
   @After
   public void tearDown() throws Exception {
+	assertNotNull("TestProject is null", testProject);
     testProject.dispose();
   }
 

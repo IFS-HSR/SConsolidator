@@ -1,10 +1,12 @@
 package ch.hsr.ifs.sconsolidator.core.helper;
 
 import static ch.hsr.ifs.sconsolidator.core.base.utils.CollectionUtil.list;
+import static org.junit.Assert.assertNotNull;
 
 import java.io.File;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
 import org.eclipse.cdt.core.CCProjectNature;
 import org.eclipse.cdt.core.CCorePlugin;
@@ -42,15 +44,19 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.NullProgressMonitor;
 
 import ch.hsr.ifs.sconsolidator.core.SConsNatureTypes;
 import ch.hsr.ifs.sconsolidator.core.base.utils.IOUtil;
 
 @SuppressWarnings("restriction")
 public class CppManagedTestProject {
-  public static String SRC_FOLDER_NAME = "src";
-  public static String TEST_PROJECT_NAME = "TestProject";
-  public static String MAIN_FILE_NAME = "main.cpp";
+  public final static String SRC_FOLDER_NAME = "src";
+  public final static String MAIN_FILE_NAME = "main.cpp";
+
+  private final static IProgressMonitor NULL_MONITOR = new NullProgressMonitor();
+
+  private final String TEST_PROJECT_NAME = "TestProject_" + Math.abs(ThreadLocalRandom.current().nextLong());
   private final boolean withSConsSupport;
   private final boolean withBuildErrors;
   private IProject project;
@@ -75,6 +81,10 @@ public class CppManagedTestProject {
     }
   }
 
+  public String getProjectName() {
+	  return TEST_PROJECT_NAME;
+  }
+  
   private void createSConstruct() throws CoreException {
     createFile(project, "SConstruct", String.format(
         "env = Environment()\nenv.Program(target = \"hello\", source = [\"src/%s\"])",
@@ -84,8 +94,8 @@ public class CppManagedTestProject {
   private void createProject() throws CoreException {
     IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
     project = root.getProject(TEST_PROJECT_NAME);
-    project.create(null);
-    project.open(null);
+    project.create(NULL_MONITOR);
+    project.open(NULL_MONITOR);
   }
 
   private void createMainFile() throws CoreException {
@@ -102,26 +112,28 @@ public class CppManagedTestProject {
 
   private void addNatures() throws CoreException {
     // A CDT C++ project has both C_NATURE and CC_NATURE!
-    addNatureToProject(project, CProjectNature.C_NATURE_ID, null);
+    addNatureToProject(project, CProjectNature.C_NATURE_ID, NULL_MONITOR);
     CCorePlugin.getDefault().mapCProjectOwner(project, TEST_PROJECT_NAME, false);
     addDefaultBinaryParser(project);
     CCorePlugin.getDefault().getCoreModel().create(project);
-    addNatureToProject(project, CCProjectNature.CC_NATURE_ID, null);
+    addNatureToProject(project, CCProjectNature.CC_NATURE_ID, NULL_MONITOR);
 
     if (withSConsSupport) {
-      addNatureToProject(project, SConsNatureTypes.EXISTING_CODE_PROJECT_NATURE.getId(), null);
+      addNatureToProject(project, SConsNatureTypes.EXISTING_CODE_PROJECT_NATURE.getId(), NULL_MONITOR);
     }
   }
 
   private void activateManagedBuild() throws CoreException, BuildException {
     ICProjectDescriptionManager mgr = CoreModel.getDefault().getProjectDescriptionManager();
     ICProjectDescription des = mgr.getProjectDescription(project, true);
-
     IManagedBuildInfo info = ManagedBuildManager.createBuildInfo(project);
+    assertNotNull("ManagedBuildInfo is null", info);
     IProjectType projType =
         ManagedBuildManager.getExtensionProjectType("cdt.managedbuild.target.gnu.exe");
+    assertNotNull("ProjectType is null", projType);
     IToolChain toolChain =
         ManagedBuildManager.getExtensionToolChain("cdt.managedbuild.toolchain.gnu.exe.debug");
+    assertNotNull("ToolChain Info is null", toolChain);
 
     ManagedProject mProj = new ManagedProject(project, projType);
     info.setManagedProject(mProj);
@@ -172,7 +184,7 @@ public class CppManagedTestProject {
 
   private void createSrcFolder() throws CoreException {
     IFolder srcFolder = project.getFolder(SRC_FOLDER_NAME);
-    srcFolder.create(false, true, null);
+    srcFolder.create(false, true, NULL_MONITOR);
 
     ICSourceEntry projectSourceEntry =
         new CSourceEntry(TEST_PROJECT_NAME, new IPath[] {srcFolder.getProjectRelativePath()}, 0);
@@ -187,11 +199,11 @@ public class CppManagedTestProject {
       if (dirPath.segmentCount() > 0) {
         IFolder rc = project.getFolder(dirPath);
         if (!rc.exists()) {
-          rc.create(true, true, null);
+          rc.create(true, true, NULL_MONITOR);
         }
       }
 
-      file.create(IOUtil.stringToStream(contents), false, null);
+      file.create(IOUtil.stringToStream(contents), false, NULL_MONITOR);
     }
     return file;
   }
@@ -210,7 +222,9 @@ public class CppManagedTestProject {
   }
 
   public void dispose() throws CoreException {
-    project.delete(true, true, null);
+    if (project != null && project.exists()) {    	
+    	project.delete(true, true, NULL_MONITOR);
+    }
   }
 
   public IProject getProject() {

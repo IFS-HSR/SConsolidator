@@ -1,6 +1,7 @@
 package ch.hsr.ifs.sconsolidator.core.existingcode;
 
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import org.eclipse.core.resources.IProject;
@@ -24,6 +25,7 @@ public class SConsExistingCodeNatureTest {
 
   @After
   public void tearDown() throws Exception {
+	assertNotNull("TestProject is null", testProject);
     testProject.dispose();
   }
 

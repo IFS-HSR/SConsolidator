@@ -1,6 +1,7 @@
 package ch.hsr.ifs.sconsolidator.core.managed;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
@@ -29,12 +30,13 @@ public class ProjectSettingsReaderTest {
 
   @After
   public void tearDown() throws Exception {
+	assertNotNull("TestProject is null", testProject);
     testProject.dispose();
   }
 
   @Test
   public void testGetArtifactName() {
-    assertEquals(CppManagedTestProject.TEST_PROJECT_NAME, reader.getArtifactName());
+    assertEquals(testProject.getProjectName(), reader.getArtifactName());
   }
 
   @Test
@@ -62,7 +64,7 @@ public class ProjectSettingsReaderTest {
   public void testGetSourceDirsAndExclusionPatterns() throws CoreException {
     Map<String, String> sourceDirsAndExclusionPatterns = reader.getSourceDirsAndExclusionPatterns();
     assertEquals("['src']",
-        sourceDirsAndExclusionPatterns.get(CppManagedTestProject.TEST_PROJECT_NAME));
+        sourceDirsAndExclusionPatterns.get(testProject.getProjectName()));
     assertEquals("[]", sourceDirsAndExclusionPatterns.get(CppManagedTestProject.SRC_FOLDER_NAME));
     testProject.addNewSourceExclusionEntry("src",
         new IPath[] {testProject.getProject().getFolder("test").getProjectRelativePath()});

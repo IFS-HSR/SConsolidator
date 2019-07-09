@@ -1,6 +1,7 @@
 package ch.hsr.ifs.sconsolidator.core.managed;
 
 import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertNotNull;
 
 import org.eclipse.core.runtime.CoreException;
 import org.junit.After;
@@ -19,6 +20,7 @@ public class ProjectSettingsWriterTest {
 
   @After
   public void tearDown() throws CoreException {
+	assertNotNull("TestProject is null", testProject);
     testProject.dispose();
   }
 

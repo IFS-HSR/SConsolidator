@@ -2,6 +2,7 @@ package ch.hsr.ifs.sconsolidator.core.commands;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
@@ -21,14 +22,15 @@ import ch.hsr.ifs.sconsolidator.core.preferences.PreferenceConstants;
 public class CleanCommandTest {
 	private static CppManagedTestProject testProject;
 
-	@AfterClass
-	public static void afterClass() throws Exception {
-		testProject.dispose();
-	}
-
 	@BeforeClass
 	public static void beforeClass() throws Exception {
 		testProject = new CppManagedTestProject(true);
+	}
+
+	@AfterClass
+	public static void afterClass() throws Exception {
+		assertNotNull("TestProject is null", testProject);
+		testProject.dispose();
 	}
 
 	private CleanCommand cleanCommand;
