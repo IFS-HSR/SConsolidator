@@ -3,10 +3,10 @@ Bundle-ManifestVersion: 2
 Bundle-Name: SConsolidator Core Test
 Bundle-SymbolicName: ch.hsr.ifs.sconsolidator.core.tests;singleton:=true
 Bundle-Version: 1.0.1.qualifier
-Fragment-Host: ch.hsr.ifs.sconsolidator.core;bundle-version="1.0.0"
+Fragment-Host: ch.hsr.ifs.sconsolidator.core
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-Vendor: IFS Institute for Software
-Require-Bundle: org.junit;bundle-version="4.8.1"
+Require-Bundle: org.junit;bundle-version="4.12.0"
 Bundle-ClassPath: lib/jdepend-2.9.1.jar,
  .
 Automatic-Module-Name: ch.hsr.ifs.sconsolidator.core.tests
