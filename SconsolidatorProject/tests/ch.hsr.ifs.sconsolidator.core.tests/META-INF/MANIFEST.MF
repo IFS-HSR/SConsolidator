@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: SConsolidator Core Test
 Bundle-SymbolicName: ch.hsr.ifs.sconsolidator.core.tests;singleton:=true
-Bundle-Version: 1.0.1.qualifier
+Bundle-Version: 1.1.0.qualifier
 Fragment-Host: ch.hsr.ifs.sconsolidator.core
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-Vendor: IFS Institute for Software
