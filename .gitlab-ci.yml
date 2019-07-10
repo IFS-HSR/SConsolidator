@@ -20,12 +20,6 @@ variables:
 # Build jobs                                                                  #
 #=============================================================================#
 
-.buildCommon: &BUILD_COMMON
-  stage: build
-  script:
-    - 'xvfb-run ./tools/build clean verify ${BUILD_FLAGS}'
-  cache:
-
 cache:
   key: 'maven-$CI_PROJECT_ID'
   paths:
@@ -64,14 +58,14 @@ Build Unsigned:
 # Test jobs                                                             #
 #=============================================================================#
 Test:
-    image: gitlab.dev.ifs.hsr.ch:45023/cevelop/docker-tycho-build-with-scons:latest 
-    stage: test 
-    script: 
-      - 'xvfb-run ./tools/build verify -T 1C' 
-    dependencies: [] 
-    artifacts: 
-      reports: 
-        junit: './*/tests/*/target/surefire-reports/TEST-*.xml' 
+    image: gitlab.dev.ifs.hsr.ch:45023/cevelop/docker-tycho-build-with-scons:latest
+    stage: test
+    script:
+      - 'xvfb-run ./tools/build verify -T 1C'
+    dependencies: []
+    artifacts:
+      reports:
+        junit: './*/tests/*/target/surefire-reports/TEST-*.xml'
 
 #=============================================================================#
 # Deployment jobs                                                             #
