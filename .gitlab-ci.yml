@@ -8,9 +8,9 @@ stages:
   - deploy
 
 variables:
-#  MAVEN_OPTS: '-Dmaven.repo.local=.m2/repository'
+  MAVEN_OPTS: '-Dmaven.repo.local=.m2/repository'
   GIT_SUBMODULE_STRATEGY: 'normal'
-#  SWT_GTK3: '0'
+  SWT_GTK3: '0'
   P2_ENABLE_COMPOSITE: '1'
   P2_COMPOSITE_NAME: 'SConsolidator'
   P2_ROOT_BASE: '/var/www/sconsolidator'
