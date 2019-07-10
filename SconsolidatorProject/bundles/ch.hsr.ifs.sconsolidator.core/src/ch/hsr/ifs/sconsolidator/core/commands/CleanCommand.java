@@ -11,39 +11,39 @@ import ch.hsr.ifs.sconsolidator.core.base.utils.StringUtil;
 import ch.hsr.ifs.sconsolidator.core.preferences.PreferenceConstants;
 import ch.hsr.ifs.sconsolidator.core.preferences.SConsOptionHandler;
 
+
 public class CleanCommand extends SConsCommand {
-  // -c: Clean up by removing all target files for which a construction command is specified
-  private static final String[] DEFAULT_ARGUMENTS = {"-c", "-u"};
-  private final Collection<String> arguments;
 
-  public CleanCommand(SConsConsole console, IProject project, IPreferenceStore settingsStore)
-      throws EmptySConsPathException {
-    this(null, console, project, settingsStore);
-  }
+    // -c: Clean up by removing all target files for which a construction command is specified
+    private static final String[]    DEFAULT_ARGUMENTS = { "-c", "-u" };
+    private final Collection<String> arguments;
 
-  public CleanCommand(String binaryPath, SConsConsole console, IProject project,
-      IPreferenceStore settingsStore) throws EmptySConsPathException {
-    super(binaryPath, project, console, DEFAULT_ARGUMENTS);
-    arguments = new LinkedList<String>();
-    addProjectOptions(project);
-    addAdditionalSConsOptions(project);
-    addTargets(settingsStore);
-  }
+    public CleanCommand(SConsConsole console, IProject project, IPreferenceStore settingsStore) throws EmptySConsPathException {
+        this(null, console, project, settingsStore);
+    }
 
-  private void addTargets(IPreferenceStore settingsStore) {
-    arguments.addAll(StringUtil.split(settingsStore.getString(PreferenceConstants.DEFAULT_TARGET)));
-  }
+    public CleanCommand(String binaryPath, SConsConsole console, IProject project, IPreferenceStore settingsStore) throws EmptySConsPathException {
+        super(binaryPath, project, console, DEFAULT_ARGUMENTS);
+        arguments = new LinkedList<String>();
+        addProjectOptions(project);
+        addAdditionalSConsOptions(project);
+        addTargets(settingsStore);
+    }
 
-  private void addAdditionalSConsOptions(IProject project) {
-    arguments.addAll(getAdditionalSConsOptions(project));
-  }
+    private void addTargets(IPreferenceStore settingsStore) {
+        arguments.addAll(StringUtil.split(settingsStore.getString(PreferenceConstants.DEFAULT_TARGET)));
+    }
 
-  private void addProjectOptions(IProject project) {
-    arguments.addAll(new SConsOptionHandler(project).getCommandLineOptions());
-  }
+    private void addAdditionalSConsOptions(IProject project) {
+        arguments.addAll(getAdditionalSConsOptions(project));
+    }
 
-  @Override
-  protected Collection<String> getArguments() {
-    return arguments;
-  }
+    private void addProjectOptions(IProject project) {
+        arguments.addAll(new SConsOptionHandler(project).getCommandLineOptions());
+    }
+
+    @Override
+    protected Collection<String> getArguments() {
+        return arguments;
+    }
 }

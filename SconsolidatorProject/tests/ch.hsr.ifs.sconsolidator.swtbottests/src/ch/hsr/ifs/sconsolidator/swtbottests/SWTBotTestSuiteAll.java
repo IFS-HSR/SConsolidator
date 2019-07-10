@@ -4,12 +4,10 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
+
 @RunWith(Suite.class)
-@SuiteClasses({
-// @formatter:off
-  NewManagedProjectWizardTest.class, 
-  ImportExistingCodeWizardTest.class
-// @formatter:on
+@SuiteClasses({ //
+                NewManagedProjectWizardTest.class, //
+                ImportExistingCodeWizardTest.class //
 })
-public class SWTBotTestSuiteAll {
-}
+public class SWTBotTestSuiteAll {}

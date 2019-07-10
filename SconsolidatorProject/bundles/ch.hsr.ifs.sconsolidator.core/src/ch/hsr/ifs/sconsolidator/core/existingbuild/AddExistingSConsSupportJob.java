@@ -13,37 +13,37 @@ import org.eclipse.core.runtime.jobs.Job;
 import ch.hsr.ifs.sconsolidator.core.SConsI18N;
 import ch.hsr.ifs.sconsolidator.core.SConsPlugin;
 
+
 public class AddExistingSConsSupportJob extends Job {
-  private final String additionalCmdArgs;
-  private final Collection<IProject> projects;
 
-  public AddExistingSConsSupportJob(Collection<IProject> projects, String additionalCmdArgs) {
-    super(SConsI18N.SConsExtractInformationDialog_ConvertToSConsProjectMsg);
-    this.projects = projects;
-    this.additionalCmdArgs = additionalCmdArgs;
-  }
+    private final String               additionalCmdArgs;
+    private final Collection<IProject> projects;
 
-  @Override
-  protected IStatus run(IProgressMonitor pm) {
-    pm.beginTask(getName(), projects.size());
-
-    try {
-      for (IProject p : projects) {
-        addSConsSupport(p, pm);
-
-        if (pm.isCanceled())
-          return Status.CANCEL_STATUS;
-      }
-    } catch (CoreException e) {
-      return new Status(IStatus.ERROR, SConsPlugin.PLUGIN_ID, e.getMessage());
-    } finally {
-      pm.done();
+    public AddExistingSConsSupportJob(Collection<IProject> projects, String additionalCmdArgs) {
+        super(SConsI18N.SConsExtractInformationDialog_ConvertToSConsProjectMsg);
+        this.projects = projects;
+        this.additionalCmdArgs = additionalCmdArgs;
     }
-    return Status.OK_STATUS;
-  }
 
-  private void addSConsSupport(IProject project, IProgressMonitor pm) throws CoreException {
-    new SConsExistingProjectHandler(project, SubMonitor.convert(pm))
-        .configureProject(additionalCmdArgs);
-  }
+    @Override
+    protected IStatus run(IProgressMonitor pm) {
+        pm.beginTask(getName(), projects.size());
+
+        try {
+            for (IProject p : projects) {
+                addSConsSupport(p, pm);
+
+                if (pm.isCanceled()) return Status.CANCEL_STATUS;
+            }
+        } catch (CoreException e) {
+            return new Status(IStatus.ERROR, SConsPlugin.PLUGIN_ID, e.getMessage());
+        } finally {
+            pm.done();
+        }
+        return Status.OK_STATUS;
+    }
+
+    private void addSConsSupport(IProject project, IProgressMonitor pm) throws CoreException {
+        new SConsExistingProjectHandler(project, SubMonitor.convert(pm)).configureProject(additionalCmdArgs);
+    }
 }

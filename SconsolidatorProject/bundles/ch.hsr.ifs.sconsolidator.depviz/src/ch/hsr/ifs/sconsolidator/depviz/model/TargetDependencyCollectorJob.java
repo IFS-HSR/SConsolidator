@@ -24,48 +24,47 @@ import ch.hsr.ifs.sconsolidator.core.depanalysis.DependencyTreeAnalyzer;
 import ch.hsr.ifs.sconsolidator.core.depanalysis.DependencyTreeNode;
 import ch.hsr.ifs.sconsolidator.depviz.DependencyVisualization18N;
 
+
 public class TargetDependencyCollectorJob extends Job {
-  private final Triple<String, String, IProject> targetInfos;
-  private final VoidFunction<Collection<DependencyTreeNode>> callback;
 
-  public TargetDependencyCollectorJob(Triple<String, String, IProject> targetInfos,
-      VoidFunction<Collection<DependencyTreeNode>> callback) {
-    super(DependencyVisualization18N.DepTreeVizView_SearchingDependenciesInProgress);
-    this.targetInfos = targetInfos;
-    this.callback = callback;
-  }
+    private final Triple<String, String, IProject>             targetInfos;
+    private final VoidFunction<Collection<DependencyTreeNode>> callback;
 
-  @Override
-  protected IStatus run(IProgressMonitor pm) {
-    pm.beginTask(DependencyVisualization18N.DepTreeVizView_SearchingDependenciesInProgress, 3);
-
-    try {
-      String asciiTree = collectDependencies(targetInfos);
-
-      if (pm.isCanceled())
-        return Status.CANCEL_STATUS;
-
-      pm.worked(1);
-      Collection<DependencyTreeNode> tree = analyze(asciiTree);
-      pm.worked(1);
-      callback.apply(tree);
-    } catch (Exception e) {
-      SConsPlugin.showExceptionInDisplayThread(e);
-    } finally {
-      pm.done();
+    public TargetDependencyCollectorJob(Triple<String, String, IProject> targetInfos, VoidFunction<Collection<DependencyTreeNode>> callback) {
+        super(DependencyVisualization18N.DepTreeVizView_SearchingDependenciesInProgress);
+        this.targetInfos = targetInfos;
+        this.callback = callback;
     }
-    return Status.OK_STATUS;
-  }
 
-  private Collection<DependencyTreeNode> analyze(String asciiTree) {
-    DependencyTreeAnalyzer analyzer = new DependencyTreeAnalyzer(asciiTree);
-    return analyzer.collectDependencyTree();
-  }
+    @Override
+    protected IStatus run(IProgressMonitor pm) {
+        pm.beginTask(DependencyVisualization18N.DepTreeVizView_SearchingDependenciesInProgress, 3);
 
-  private String collectDependencies(Triple<String, String, IProject> targetInfos)
-      throws EmptySConsPathException, IOException, InterruptedException {
-    DependencyTreeCommand command =
-        new DependencyTreeCommand(new NullConsole(), _3(targetInfos), _2(targetInfos));
-    return command.run(new File(_1(targetInfos)));
-  }
+        try {
+            String asciiTree = collectDependencies(targetInfos);
+
+            if (pm.isCanceled()) return Status.CANCEL_STATUS;
+
+            pm.worked(1);
+            Collection<DependencyTreeNode> tree = analyze(asciiTree);
+            pm.worked(1);
+            callback.apply(tree);
+        } catch (Exception e) {
+            SConsPlugin.showExceptionInDisplayThread(e);
+        } finally {
+            pm.done();
+        }
+        return Status.OK_STATUS;
+    }
+
+    private Collection<DependencyTreeNode> analyze(String asciiTree) {
+        DependencyTreeAnalyzer analyzer = new DependencyTreeAnalyzer(asciiTree);
+        return analyzer.collectDependencyTree();
+    }
+
+    private String collectDependencies(Triple<String, String, IProject> targetInfos) throws EmptySConsPathException, IOException,
+            InterruptedException {
+        DependencyTreeCommand command = new DependencyTreeCommand(new NullConsole(), _3(targetInfos), _2(targetInfos));
+        return command.run(new File(_1(targetInfos)));
+    }
 }

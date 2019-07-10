@@ -4,6 +4,7 @@
 
 stages:
   - build
+  - test
   - deploy
 
 variables:
@@ -20,57 +21,68 @@ variables:
 # Build jobs                                                                  #
 #=============================================================================#
 
-.buildCommon: &BUILD_COMMON
-  stage: build
-  script:
-    - 'xvfb-run ./tools/build clean verify ${BUILD_FLAGS}'
-  cache:
-    key: 'maven-$CI_PROJECT_ID'
-    paths:
-      - '.m2/repository'
-    policy: pull-push
-
+cache:
+  key: 'maven-$CI_PROJECT_ID'
+  paths:
+    - '.m2/repository'
+  policy: pull-push
 
 Build Signed:
-  <<: *BUILD_COMMON
   image: gitlab.dev.ifs.hsr.ch:45023/cevelop/docker-tycho-release-with-scons:latest
   only:
-    - master
-    - develop
-    - /^release\/.*$/
-  except:
-    - tags
-  variables:
-    BUILD_FLAGS: '--sign'
+    - master@cevelop/sconsolidator
+    - develop@cevelop/sconsolidator
+  stage: build
+  script:
+    - 'xvfb-run ./tools/build package -s'
   artifacts:
+    expire_in: 1 hour
     paths:
-    - './*/*/*/target/repository/**'
+      - './*/*/*/target/repository/**'
 
 Build Unsigned:
-  <<: *BUILD_COMMON
   image: gitlab.dev.ifs.hsr.ch:45023/cevelop/docker-tycho-build-with-scons:latest
+  only:
+    - branches
   except:
-    - tags
-    - master
-    - develop
-    - /^release\/.*$/
-  variables:
-    BUILD_FLAGS: '--verbose'
+    - master@cevelop/sconsolidator
+    - develop@cevelop/sconsolidator
+  stage: build
+  script:
+    - 'xvfb-run ./tools/build package'
+  artifacts:
+    expire_in: 1 hour
+    paths:
+      - './*/*/*/target/repository/**'
+
+#=============================================================================#
+# Test jobs                                                             #
+#=============================================================================#
+Test:
+    image: gitlab.dev.ifs.hsr.ch:45023/cevelop/docker-tycho-build-with-scons:latest
+    stage: test
+    script:
+      - 'xvfb-run ./tools/build verify -T 1C'
+    dependencies: []
+    artifacts:
+      reports:
+        junit: './*/tests/*/target/surefire-reports/TEST-*.xml'
 
 #=============================================================================#
 # Deployment jobs                                                             #
 #=============================================================================#
 
 Deploy:
-  stage: deploy
   image: gitlab.dev.ifs.hsr.ch:45023/ifs/docker-alpine-ssh:latest
   cache: {}
-  only:
-    - develop
-    - master
+  stage: deploy
   dependencies:
     - Build Signed
+  only:
+    - develop@cevelop/sconsolidator
+    - master@cevelop/sconsolidator
   script:
     - "export P2_ROOT=${P2_ROOT_BASE}$( (echo ${CI_COMMIT_REF_NAME} | grep develop &>/dev/null) && echo '-unstable')"
     - "export P2_COMPOSITE_VERSION=$(sed -n 's/[ \\t]*<version>\\([0-9]\\.[0-9]\\.[0-9]\\)-SNAPSHOT<\\/version>/\\1/p' *Project/**/*.update/pom.xml | head -1)"
     - "./tools/ci/deploy"
+

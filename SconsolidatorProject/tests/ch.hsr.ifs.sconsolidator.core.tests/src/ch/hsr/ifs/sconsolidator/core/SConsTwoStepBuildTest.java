@@ -18,35 +18,34 @@ import org.junit.Test;
 import ch.hsr.ifs.sconsolidator.core.base.utils.IOUtil;
 import ch.hsr.ifs.sconsolidator.core.base.utils.StringUtil;
 
+
 public class SConsTwoStepBuildTest {
-  private static IProject project;
-  private static IFolder folder;
 
-  @BeforeClass
-  public static void setUp() throws IOException, CoreException {
-    IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
-    project = root.getProject("Test");
-    project.create(null);
-    project.open(null);
-    folder = project.getFolder("src");
-    folder.create(true, true, new NullProgressMonitor());
-    IFile file = project.getFile("SConstruct");
-    file.create(IOUtil.stringToStream(""), false, new NullProgressMonitor());
-  }
+    private static IProject project;
+    private static IFolder  folder;
 
-  @AfterClass
-  public static void tearDown() throws CoreException {
-    project.delete(true, null);
-  }
+    @BeforeClass
+    public static void setUp() throws IOException, CoreException {
+        IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
+        project = root.getProject("Test");
+        project.create(null);
+        project.open(null);
+        folder = project.getFolder("src");
+        folder.create(true, true, new NullProgressMonitor());
+        IFile file = project.getFile("SConstruct");
+        file.create(IOUtil.stringToStream(""), false, new NullProgressMonitor());
+    }
 
-  @Test
-  public void testGetCommandLine() throws IOException {
-    SConsTwoStepBuild twoStepBuild =
-        new SConsTwoStepBuild(project, SConsHelper.BUILD_INFO_COLLECTOR);
-    String projectPath = project.getLocation().toFile().getAbsolutePath();
-    String expected =
-        String.format("-f SConstruct -f %s --directory=%s", SConsHelper.BUILD_INFO_COLLECTOR,
-            projectPath);
-    assertEquals(expected, StringUtil.join(twoStepBuild.getCommandLine(), " "));
-  }
+    @AfterClass
+    public static void tearDown() throws CoreException {
+        project.delete(true, null);
+    }
+
+    @Test
+    public void testGetCommandLine() throws IOException {
+        SConsTwoStepBuild twoStepBuild = new SConsTwoStepBuild(project, SConsHelper.BUILD_INFO_COLLECTOR);
+        String projectPath = project.getLocation().toFile().getAbsolutePath();
+        String expected = String.format("-f SConstruct -f %s --directory=%s", SConsHelper.BUILD_INFO_COLLECTOR, projectPath);
+        assertEquals(expected, StringUtil.join(twoStepBuild.getCommandLine(), " "));
+    }
 }

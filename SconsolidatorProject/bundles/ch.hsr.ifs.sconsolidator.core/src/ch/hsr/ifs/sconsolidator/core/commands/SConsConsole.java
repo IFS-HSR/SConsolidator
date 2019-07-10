@@ -6,34 +6,38 @@ import java.io.OutputStream;
 import org.eclipse.cdt.internal.ui.preferences.BuildConsolePreferencePage;
 import org.eclipse.ui.PartInitException;
 
+
 @SuppressWarnings("restriction")
 public interface SConsConsole {
-  OutputStream getConsoleOutputStream(ConsoleOutput kind);
 
-  void print(String line) throws IOException;
+    OutputStream getConsoleOutputStream(ConsoleOutput kind);
 
-  void println(String line) throws IOException;
+    void print(String line) throws IOException;
 
-  void show() throws PartInitException;
+    void println(String line) throws IOException;
 
-  void clear();
-  
-  void addBuildConsoleColorLink();
+    void show() throws PartInitException;
 
-  enum ConsoleOutput {
-    ERROR {
-      @Override
-      public String getColorPreference() {
-        return BuildConsolePreferencePage.PREF_BUILDCONSOLE_ERROR_COLOR;
-      }
-    },
-    NORMAL {
-      @Override
-      public String getColorPreference() {
-        return BuildConsolePreferencePage.PREF_BUILDCONSOLE_OUTPUT_COLOR;
-      }
-    };
+    void clear();
 
-    public abstract String getColorPreference();
-  }
+    void addBuildConsoleColorLink();
+
+    enum ConsoleOutput {
+        ERROR {
+
+        @Override
+        public String getColorPreference() {
+            return BuildConsolePreferencePage.PREF_BUILDCONSOLE_ERROR_COLOR;
+        }
+        },
+        NORMAL {
+
+        @Override
+        public String getColorPreference() {
+            return BuildConsolePreferencePage.PREF_BUILDCONSOLE_OUTPUT_COLOR;
+        }
+        };
+
+        public abstract String getColorPreference();
+    }
 }

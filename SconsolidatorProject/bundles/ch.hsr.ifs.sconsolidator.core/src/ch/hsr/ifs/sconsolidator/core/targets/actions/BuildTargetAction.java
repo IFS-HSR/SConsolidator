@@ -15,38 +15,38 @@ import ch.hsr.ifs.sconsolidator.core.SConsI18N;
 import ch.hsr.ifs.sconsolidator.core.SConsImages;
 import ch.hsr.ifs.sconsolidator.core.targets.model.SConsBuildTarget;
 
+
 public class BuildTargetAction extends AbstractBuildTargetAction {
 
-  public BuildTargetAction() {
-    super(SConsI18N.BuildTargetAction_BuildTargetName);
-    setToolTipText(SConsI18N.BuildTargetAction_BuildTargetTooltip);
-    SConsImages.setImageDescriptors(this, SConsImages.SCONS_TARGET_BUILD);
-    setEnabled(false);
-  }
-
-  @Override
-  protected void buildProjects(Collection<IProject> projects, IProgressMonitor pm)
-      throws CoreException {
-    for (IProject project : projects) {
-      build(project, pm);
+    public BuildTargetAction() {
+        super(SConsI18N.BuildTargetAction_BuildTargetName);
+        setToolTipText(SConsI18N.BuildTargetAction_BuildTargetTooltip);
+        SConsImages.setImageDescriptors(this, SConsImages.SCONS_TARGET_BUILD);
+        setEnabled(false);
     }
-  }
 
-  private void build(final IProject project, IProgressMonitor pm) throws CoreException {
-    IWorkspaceRunnable runnable = new IWorkspaceRunnable() {
-      @Override
-      public void run(IProgressMonitor pm) throws CoreException {
-        project.build(IncrementalProjectBuilder.FULL_BUILD, SubMonitor.convert(pm, 1));
-      }
-    };
-    ResourcesPlugin.getWorkspace().run(runnable, null, IResource.NONE, pm);
-  }
-
-  @Override
-  protected void buildTargets(Collection<SConsBuildTarget> targets, IProgressMonitor pm)
-      throws CoreException {
-    for (SConsBuildTarget target : targets) {
-      TargetBuilder.buildTarget(target, pm);
+    @Override
+    protected void buildProjects(Collection<IProject> projects, IProgressMonitor pm) throws CoreException {
+        for (IProject project : projects) {
+            build(project, pm);
+        }
     }
-  }
+
+    private void build(final IProject project, IProgressMonitor pm) throws CoreException {
+        IWorkspaceRunnable runnable = new IWorkspaceRunnable() {
+
+            @Override
+            public void run(IProgressMonitor pm) throws CoreException {
+                project.build(IncrementalProjectBuilder.FULL_BUILD, SubMonitor.convert(pm, 1));
+            }
+        };
+        ResourcesPlugin.getWorkspace().run(runnable, null, IResource.NONE, pm);
+    }
+
+    @Override
+    protected void buildTargets(Collection<SConsBuildTarget> targets, IProgressMonitor pm) throws CoreException {
+        for (SConsBuildTarget target : targets) {
+            TargetBuilder.buildTarget(target, pm);
+        }
+    }
 }

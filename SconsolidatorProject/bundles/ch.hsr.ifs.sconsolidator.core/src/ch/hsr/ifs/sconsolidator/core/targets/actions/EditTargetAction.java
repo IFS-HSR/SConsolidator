@@ -11,38 +11,39 @@ import ch.hsr.ifs.sconsolidator.core.SConsImages;
 import ch.hsr.ifs.sconsolidator.core.targets.SConsTargetDialog;
 import ch.hsr.ifs.sconsolidator.core.targets.model.SConsBuildTarget;
 
+
 public class EditTargetAction extends SelectionListenerAction {
-  private final Shell shell;
 
-  public EditTargetAction(Shell shell) {
-    super(SConsI18N.EditTargetAction_EditTargetName);
-    this.shell = shell;
-    setToolTipText(SConsI18N.EditTargetAction_EditTargetTooltip);
-    SConsImages.setImageDescriptors(this, SConsImages.SCONS_TARGET_EDIT);
-  }
+    private final Shell shell;
 
-  @Override
-  public void run() {
-    if (canRename()) {
-      SConsTargetDialog dialog = createTargetDialog();
-      dialog.open();
+    public EditTargetAction(Shell shell) {
+        super(SConsI18N.EditTargetAction_EditTargetName);
+        this.shell = shell;
+        setToolTipText(SConsI18N.EditTargetAction_EditTargetTooltip);
+        SConsImages.setImageDescriptors(this, SConsImages.SCONS_TARGET_EDIT);
     }
-  }
 
-  private SConsTargetDialog createTargetDialog() {
-    SConsBuildTarget selected = (SConsBuildTarget) getStructuredSelection().getFirstElement();
-    return SConsTargetDialog.fromExistingTarget(shell, selected);
-  }
+    @Override
+    public void run() {
+        if (canRename()) {
+            SConsTargetDialog dialog = createTargetDialog();
+            dialog.open();
+        }
+    }
 
-  @Override
-  protected boolean updateSelection(IStructuredSelection selection) {
-    return super.updateSelection(selection) && canRename();
-  }
+    private SConsTargetDialog createTargetDialog() {
+        SConsBuildTarget selected = (SConsBuildTarget) getStructuredSelection().getFirstElement();
+        return SConsTargetDialog.fromExistingTarget(shell, selected);
+    }
 
-  private boolean canRename() {
-    List<?> elements = getStructuredSelection().toList();
-    if (elements.size() == 1 && elements.get(0) instanceof SConsBuildTarget)
-      return true;
-    return false;
-  }
+    @Override
+    protected boolean updateSelection(IStructuredSelection selection) {
+        return super.updateSelection(selection) && canRename();
+    }
+
+    private boolean canRename() {
+        List<?> elements = getStructuredSelection().toList();
+        if (elements.size() == 1 && elements.get(0) instanceof SConsBuildTarget) return true;
+        return false;
+    }
 }

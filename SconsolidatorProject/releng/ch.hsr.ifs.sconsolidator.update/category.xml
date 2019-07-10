@@ -3,10 +3,10 @@
    <description name="SConsolidator" url="http://sconsolidator.com/update">
       Eclipse plug-in for SCons
    </description>
-   <feature url="features/ch.hsr.ifs.sconsolidator.feature_1.0.1.qualifier.jar" id="ch.hsr.ifs.sconsolidator.feature" version="1.0.1.qualifier">
+   <feature url="features/ch.hsr.ifs.sconsolidator.feature_1.1.0.qualifier.jar" id="ch.hsr.ifs.sconsolidator.feature" version="1.1.0.qualifier">
       <category name="SConsolidator"/>
    </feature>
-   <feature url="features/ch.hsr.ifs.sconsolidator.depviz.feature_1.0.1.qualifier.jar" id="ch.hsr.ifs.sconsolidator.depviz.feature" version="1.0.1.qualifier">
+   <feature url="features/ch.hsr.ifs.sconsolidator.depviz.feature_1.1.0.qualifier.jar" id="ch.hsr.ifs.sconsolidator.depviz.feature" version="1.1.0.qualifier">
       <category name="SConsolidator"/>
    </feature>
    <category-def name="SConsolidator" label="Eclipse plug-in for SCons">

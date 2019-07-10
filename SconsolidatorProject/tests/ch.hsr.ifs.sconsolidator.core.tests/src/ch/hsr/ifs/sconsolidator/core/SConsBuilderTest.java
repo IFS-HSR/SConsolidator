@@ -2,6 +2,7 @@ package ch.hsr.ifs.sconsolidator.core;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
@@ -23,77 +24,72 @@ import org.junit.Test;
 import ch.hsr.ifs.sconsolidator.core.helper.CppManagedTestProject;
 import ch.hsr.ifs.sconsolidator.core.preferences.PreferenceConstants;
 
+
 public class SConsBuilderTest {
 
-  @BeforeClass
-  public static void beforeClass() {
-    String sconsPath = PlatformSpecifics.findSConsExecOnSystemPath().getAbsolutePath();
-    SConsPlugin.getConfigPreferenceStore().setValue(PreferenceConstants.EXECUTABLE_PATH, sconsPath);
-  }
+    private CppManagedTestProject testProject;
 
-  private CppManagedTestProject testProject;
+    @BeforeClass
+    public static void beforeClass() {
+        String sconsPath = PlatformSpecifics.findSConsExecOnSystemPath().getAbsolutePath();
+        SConsPlugin.getConfigPreferenceStore().setValue(PreferenceConstants.EXECUTABLE_PATH, sconsPath);
+    }
 
-  @After
-  public void after() throws Exception {
-    testProject.dispose();
-  }
+    @After
+    public void after() throws Exception {
+        assertNotNull("TestProject is null", testProject);
+        testProject.dispose();
+    }
 
-  private IWorkspaceRunnable getBuilderFor(final IProject project) {
-    IWorkspaceRunnable builderOperation = new IWorkspaceRunnable() {
-      @Override
-      public void run(final IProgressMonitor monitor) throws CoreException {
-        project.build(IncrementalProjectBuilder.FULL_BUILD, SConsBuilder.BUILDER_ID,
-            new HashMap<String, String>(), monitor);
-      }
-    };
+    private IWorkspaceRunnable getBuilderFor(final IProject project) {
+        IWorkspaceRunnable builderOperation = new IWorkspaceRunnable() {
 
-    return builderOperation;
-  }
+            @Override
+            public void run(final IProgressMonitor monitor) throws CoreException {
+                project.build(IncrementalProjectBuilder.FULL_BUILD, SConsBuilder.BUILDER_ID, new HashMap<String, String>(), monitor);
+            }
+        };
 
-  @Test
-  public void testBuildWithErrors() throws Exception {
-    testProject = new CppManagedTestProject(true, true);
-    ResourcesPlugin.getWorkspace().run(getBuilderFor(testProject.getProject()), null,
-        IResource.NONE, new NullProgressMonitor());
-    assertEquals(org.eclipse.cdt.core.model.ICModelMarker.C_MODEL_PROBLEM_MARKER,
-        findMarkersInProject()[0].getType());
-  }
+        return builderOperation;
+    }
 
-  private IMarker[] findMarkersInProject() throws CoreException {
-    return testProject.getProject().findMarkers(
-        org.eclipse.cdt.core.model.ICModelMarker.C_MODEL_PROBLEM_MARKER, true,
-        IResource.DEPTH_INFINITE);
-  }
+    @Test
+    public void testBuildWithErrors() throws Exception {
+        testProject = new CppManagedTestProject(true, true);
+        ResourcesPlugin.getWorkspace().run(getBuilderFor(testProject.getProject()), null, IResource.NONE, new NullProgressMonitor());
+        assertEquals(org.eclipse.cdt.core.model.ICModelMarker.C_MODEL_PROBLEM_MARKER, findMarkersInProject()[0].getType());
+    }
 
-  @Test
-  public void testBuildWithoutErrors() throws Exception {
-    testProject = new CppManagedTestProject(true, false);
-    ResourcesPlugin.getWorkspace().run(getBuilderFor(testProject.getProject()), null,
-        IResource.NONE, new NullProgressMonitor());
-    File projectPath = testProject.getProject().getLocation().toFile();
-    assertTrue(new File(projectPath + File.separator + "hello").exists());
-    assertTrue(new File(projectPath + File.separator + "src/main.o").exists());
-    assertEquals(0, findMarkersInProject().length);
-  }
+    private IMarker[] findMarkersInProject() throws CoreException {
+        return testProject.getProject().findMarkers(org.eclipse.cdt.core.model.ICModelMarker.C_MODEL_PROBLEM_MARKER, true, IResource.DEPTH_INFINITE);
+    }
 
-  @Test
-  public void testClean() throws Exception {
-    testProject = new CppManagedTestProject(true, false);
-    final IProject project = testProject.getProject();
-    ResourcesPlugin.getWorkspace().run(getBuilderFor(project), null, IResource.NONE,
-        new NullProgressMonitor());
+    @Test
+    public void testBuildWithoutErrors() throws Exception {
+        testProject = new CppManagedTestProject(true, false);
+        ResourcesPlugin.getWorkspace().run(getBuilderFor(testProject.getProject()), null, IResource.NONE, new NullProgressMonitor());
+        File projectPath = testProject.getProject().getLocation().toFile();
+        assertTrue(new File(projectPath + File.separator + "hello").exists());
+        assertTrue(new File(projectPath + File.separator + "src/main.o").exists());
+        assertEquals(0, findMarkersInProject().length);
+    }
 
-    IWorkspaceRunnable cleanOperation = new IWorkspaceRunnable() {
-      @Override
-      public void run(final IProgressMonitor monitor) throws CoreException {
-        project.build(IncrementalProjectBuilder.CLEAN_BUILD, SConsBuilder.BUILDER_ID,
-            new HashMap<String, String>(), monitor);
-      }
-    };
-    ResourcesPlugin.getWorkspace().run(cleanOperation, null, IResource.NONE,
-        new NullProgressMonitor());
-    File projectPath = testProject.getProject().getLocation().toFile();
-    assertFalse(new File(projectPath + File.separator + "hello").exists());
-    assertFalse(new File(projectPath + File.separator + "src/main.o").exists());
-  }
+    @Test
+    public void testClean() throws Exception {
+        testProject = new CppManagedTestProject(true, false);
+        final IProject project = testProject.getProject();
+        ResourcesPlugin.getWorkspace().run(getBuilderFor(project), null, IResource.NONE, new NullProgressMonitor());
+
+        IWorkspaceRunnable cleanOperation = new IWorkspaceRunnable() {
+
+            @Override
+            public void run(final IProgressMonitor monitor) throws CoreException {
+                project.build(IncrementalProjectBuilder.CLEAN_BUILD, SConsBuilder.BUILDER_ID, new HashMap<String, String>(), monitor);
+            }
+        };
+        ResourcesPlugin.getWorkspace().run(cleanOperation, null, IResource.NONE, new NullProgressMonitor());
+        File projectPath = testProject.getProject().getLocation().toFile();
+        assertFalse(new File(projectPath + File.separator + "hello").exists());
+        assertFalse(new File(projectPath + File.separator + "src/main.o").exists());
+    }
 }

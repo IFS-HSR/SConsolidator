@@ -18,115 +18,116 @@ import jdepend.framework.PackageFilter;
 import org.junit.Before;
 import org.junit.Test;
 
+
 // Taken and adapted from http://clarkware.com/software/JDepend.html#junit
 public class JDependTests {
-  private JDepend jdepend;
-  private Collection<JavaPackage> packages;
 
-  @Before
-  public void setUp() throws IOException {
-    initJDepend();
-    startAnalysis();
-  }
+    private JDepend                 jdepend;
+    private Collection<JavaPackage> packages;
 
-  private void initJDepend() throws IOException {
-    PackageFilter filter = createPackageFilter();
-    jdepend = new JDepend(filter);
-    jdepend.addDirectory(getBinaryDirectory());
-    handleNotVolatilePackages();
-  }
+    @Before
+    public void setUp() throws IOException {
+        initJDepend();
+        startAnalysis();
+    }
 
-  private static PackageFilter createPackageFilter() {
-    PackageFilter filter = new PackageFilter();
-    filter.addPackage("java.*");
-    filter.addPackage("javax.*");
-    filter.addPackage("org.*");
-    filter.addPackage("ch.hsr.ifs.sconsolidator.core");
-    return filter;
-  }
+    private void initJDepend() throws IOException {
+        PackageFilter filter = createPackageFilter();
+        jdepend = new JDepend(filter);
+        jdepend.addDirectory(getBinaryDirectory());
+        handleNotVolatilePackages();
+    }
 
-  private void handleNotVolatilePackages() {
-    // Packages that are not expected to change can be specifically
-    // configured with a volatility (V) value.
-    // V can either be 0 or 1. If V=0, meaning the package is not at all
-    // subject to change, then the package will automatically fall
-    // directly on the main sequence (D=0). The following
-    // packages are not volatile and maximally stable. Creating
-    // dependencies on them is therefore no concern.
+    private static PackageFilter createPackageFilter() {
+        PackageFilter filter = new PackageFilter();
+        filter.addPackage("java.*");
+        filter.addPackage("javax.*");
+        filter.addPackage("org.*");
+        filter.addPackage("ch.hsr.ifs.sconsolidator.core");
+        return filter;
+    }
 
-    // addNotVolatilePackage("ch.hsr.ifs.mockator.plugin.base");
-  }
+    private void handleNotVolatilePackages() {
+        // Packages that are not expected to change can be specifically
+        // configured with a volatility (V) value.
+        // V can either be 0 or 1. If V=0, meaning the package is not at all
+        // subject to change, then the package will automatically fall
+        // directly on the main sequence (D=0). The following
+        // packages are not volatile and maximally stable. Creating
+        // dependencies on them is therefore no concern.
 
-  // private void addNotVolatilePackage(String packageName) {
-  // JavaPackage javaPackage = new JavaPackage(packageName);
-  // javaPackage.setVolatility(0);
-  // jdepend.addPackage(javaPackage);
-  // }
+        // addNotVolatilePackage("ch.hsr.ifs.mockator.plugin.base");
+    }
 
-  @SuppressWarnings("unchecked")
-  private void startAnalysis() {
-    packages = jdepend.analyze();
-  }
+    // private void addNotVolatilePackage(String packageName) {
+    // JavaPackage javaPackage = new JavaPackage(packageName);
+    // javaPackage.setVolatility(0);
+    // jdepend.addPackage(javaPackage);
+    // }
 
-  @Test
-  public void noCyclicPackageDependencies() throws Exception {
-    StringBuilder cycles = new StringBuilder();
+    @SuppressWarnings("unchecked")
+    private void startAnalysis() {
+        packages = jdepend.analyze();
+    }
 
-    for (JavaPackage p : packages) {
-      List<JavaPackage> packages = new ArrayList<JavaPackage>();
+    @Test
+    public void noCyclicPackageDependencies() throws Exception {
+        StringBuilder cycles = new StringBuilder();
 
-      if (p.collectCycle(packages)) {
-        cycles.append(String.format("%n$ %s $ [", p.getName()));
+        for (JavaPackage p : packages) {
+            List<JavaPackage> packages = new ArrayList<JavaPackage>();
 
-        for (int i = 0; i < packages.size(); i++) {
-          if (i > 0) {
-            cycles.append(" -> ");
-          }
+            if (p.collectCycle(packages)) {
+                cycles.append(String.format("%n$ %s $ [", p.getName()));
 
-          cycles.append(packages.get(i).getName());
+                for (int i = 0; i < packages.size(); i++) {
+                    if (i > 0) {
+                        cycles.append(" -> ");
+                    }
+
+                    cycles.append(packages.get(i).getName());
+                }
+
+                cycles.append("]");
+            }
         }
 
-        cycles.append("]");
-      }
+        assertEquals("Cycles exist in packages: " + cycles.toString(), false, jdepend.containsCycles());
     }
 
-    assertEquals("Cycles exist in packages: " + cycles.toString(), false, jdepend.containsCycles());
-  }
+    @Test
+    public void conformanceOfDistanceFromMainSequence() {
+        double ideal = 0.0;
+        double tolerance = 0.52;
 
-  @Test
-  public void conformanceOfDistanceFromMainSequence() {
-    double ideal = 0.0;
-    double tolerance = 0.52;
-
-    for (JavaPackage p : packages) {
-      assertEquals("Distance exceeded of package: " + p.getName(), ideal, p.distance(), tolerance);
-    }
-  }
-
-  private static String getBinaryDirectory() {
-    try {
-      // Locally we should take bin directory because Eclipse keeps this
-      // always up-to-date; on the build server only the target/classes
-      // directory
-      // exists because Maven stores the class files there
-      File eclipseBinDir = getEclipseBinaryDir();
-
-      if (eclipseBinDir.exists())
-        return eclipseBinDir.getPath();
-    } catch (Exception e) {
-      return getMavenTargetDir();
+        for (JavaPackage p : packages) {
+            assertEquals("Distance exceeded of package: " + p.getName(), ideal, p.distance(), tolerance);
+        }
     }
 
-    throw new IllegalStateException("Problems determining binary directory for metric tests");
-  }
+    private static String getBinaryDirectory() {
+        try {
+            // Locally we should take bin directory because Eclipse keeps this
+            // always up-to-date; on the build server only the target/classes
+            // directory
+            // exists because Maven stores the class files there
+            File eclipseBinDir = getEclipseBinaryDir();
 
-  private static String getMavenTargetDir() {
-    return "../ch.hsr.ifs.sconsolidator.core/target/classes";
-  }
+            if (eclipseBinDir.exists()) return eclipseBinDir.getPath();
+        } catch (Exception e) {
+            return getMavenTargetDir();
+        }
 
-  private static File getEclipseBinaryDir() throws URISyntaxException, MalformedURLException {
-    String relPathToMockatorPlugin = "../../../../../../../../ch.hsr.ifs.sconsolidator.core/";
-    URL currentDir = JDependTests.class.getResource("./");
-    return new File(new URL(currentDir, relPathToMockatorPlugin + "bin").toURI());
-  }
+        throw new IllegalStateException("Problems determining binary directory for metric tests");
+    }
+
+    private static String getMavenTargetDir() {
+        return "../ch.hsr.ifs.sconsolidator.core/target/classes";
+    }
+
+    private static File getEclipseBinaryDir() throws URISyntaxException, MalformedURLException {
+        String relPathToMockatorPlugin = "../../../../../../../../ch.hsr.ifs.sconsolidator.core/";
+        URL currentDir = JDependTests.class.getResource("./");
+        return new File(new URL(currentDir, relPathToMockatorPlugin + "bin").toURI());
+    }
 }

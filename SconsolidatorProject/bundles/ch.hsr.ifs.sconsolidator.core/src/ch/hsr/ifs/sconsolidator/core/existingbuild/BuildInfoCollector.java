@@ -31,176 +31,169 @@ import ch.hsr.ifs.sconsolidator.core.console.BuildConsole;
 import ch.hsr.ifs.sconsolidator.core.managed.ProjectSettingsWriter;
 import ch.hsr.ifs.sconsolidator.core.preferences.pages.ExecutableNotFoundHandler;
 
+
 public class BuildInfoCollector extends WorkspaceModifyOperation {
-  private final IProject project;
 
-  public BuildInfoCollector(IProject project) {
-    this.project = project;
-  }
+    private final IProject project;
 
-  @Override
-  protected void execute(IProgressMonitor pm) throws CoreException, InvocationTargetException,
-      InterruptedException {
-    pm.beginTask(SConsI18N.ExtractProjectInformationAction_ExtractingInProgressMessage,
-        IProgressMonitor.UNKNOWN);
-
-    try {
-      copyProjectInfoScript();
-
-      if (pm.isCanceled())
-        return;
-
-      String output = runSCons(pm);
-
-      if (pm.isCanceled())
-        return;
-
-      addSConsInfosToProject(output);
-    } catch (EmptySConsPathException e) {
-      ExecutableNotFoundHandler.handleError();
-    } catch (Exception e) {
-      SConsPlugin.log(e);
-      IStatus status =
-          new Status(IStatus.ERROR, SConsPlugin.PLUGIN_ID, 0,
-              SConsI18N.ExtractProjectInformationAction_ExtractingFailedMessage, e);
-      throw new CoreException(status);
-    } finally {
-      cleanUp();
-      pm.done();
-    }
-  }
-
-  private String runSCons(IProgressMonitor pm) throws EmptySConsPathException, IOException,
-      InterruptedException {
-    BuildConsole console = new BuildConsole(project);
-    BuildConsole.showConsole(console);
-    BuildInfoCollectorCommand command = new BuildInfoCollectorCommand(console, project);
-    return command.run(project.getLocation().toFile(), SubMonitor.convert(pm, 1));
-  }
-
-  private void copyProjectInfoScript() throws CoreException {
-    String srcPath = SCONS_FILES_DIR + File.separator + BUILD_INFO_COLLECTOR;
-    String destPath = project.getLocation().toOSString() + File.separator + BUILD_INFO_COLLECTOR;
-    FileUtil.copyBundleFile(new Path(srcPath), destPath);
-  }
-
-  private void addSConsInfosToProject(String output) throws FileNotFoundException, CoreException {
-    BuildInfoParser parser = new BuildInfoParser(output);
-    ProjectSettingsWriter writer = new ProjectSettingsWriter(project);
-    writer.setIncludePaths(parser.getCIncludes(), ProjectSettingsWriter.GNU_C);
-    writer.setIncludePaths(parser.getCPPIncludes(), ProjectSettingsWriter.GNU_CPP);
-    writer.setMacros(parser.getCMacros(), ProjectSettingsWriter.GNU_C);
-    writer.setMacros(parser.getCPPMacros(), ProjectSettingsWriter.GNU_CPP);
-  }
-
-  private void cleanUp() {
-    String extractorPath =
-        SConsHelper.findFileAbovePath(project.getLocation().toFile(), BUILD_INFO_COLLECTOR);
-    if (extractorPath == null)
-      return;
-    FileUtil.safelyDeleteFile(extractorPath + File.separator + BUILD_INFO_COLLECTOR);
-  }
-
-  private static class BuildInfoParser {
-    private final String buildInfos;
-    private final Collection<String> cIncludes;
-    private final Collection<String> cPPIncludes;
-    private final Collection<String> cMacros;
-    private final Collection<String> cPPMacros;
-
-    public BuildInfoParser(String buildInfos) throws FileNotFoundException {
-      this.buildInfos = buildInfos;
-      cIncludes = new ArrayList<String>();
-      cPPIncludes = new ArrayList<String>();
-      cMacros = new ArrayList<String>();
-      cPPMacros = new ArrayList<String>();
-      parse();
+    public BuildInfoCollector(IProject project) {
+        this.project = project;
     }
 
-    private void parse() throws FileNotFoundException {
-      Scanner scanner = new Scanner(buildInfos);
+    @Override
+    protected void execute(IProgressMonitor pm) throws CoreException, InvocationTargetException, InterruptedException {
+        pm.beginTask(SConsI18N.ExtractProjectInformationAction_ExtractingInProgressMessage, IProgressMonitor.UNKNOWN);
 
-      try {
-        while (scanner.hasNextLine()) {
-          processLine(scanner.nextLine());
+        try {
+            copyProjectInfoScript();
+
+            if (pm.isCanceled()) return;
+
+            String output = runSCons(pm);
+
+            if (pm.isCanceled()) return;
+
+            addSConsInfosToProject(output);
+        } catch (EmptySConsPathException e) {
+            ExecutableNotFoundHandler.handleError();
+        } catch (Exception e) {
+            SConsPlugin.log(e);
+            IStatus status = new Status(IStatus.ERROR, SConsPlugin.PLUGIN_ID, 0, SConsI18N.ExtractProjectInformationAction_ExtractingFailedMessage,
+                    e);
+            throw new CoreException(status);
+        } finally {
+            cleanUp();
+            pm.done();
         }
-      } finally {
-        scanner.close();
-      }
     }
 
-    private void processLine(String line) {
-      Scanner s = new Scanner(line);
+    private String runSCons(IProgressMonitor pm) throws EmptySConsPathException, IOException, InterruptedException {
+        BuildConsole console = new BuildConsole(project);
+        BuildConsole.showConsole(console);
+        BuildInfoCollectorCommand command = new BuildInfoCollectorCommand(console, project);
+        return command.run(project.getLocation().toFile(), SubMonitor.convert(pm, 1));
+    }
 
-      try {
-        s.useDelimiter(" = ");
+    private void copyProjectInfoScript() throws CoreException {
+        String srcPath = SCONS_FILES_DIR + File.separator + BUILD_INFO_COLLECTOR;
+        String destPath = project.getLocation().toOSString() + File.separator + BUILD_INFO_COLLECTOR;
+        FileUtil.copyBundleFile(new Path(srcPath), destPath);
+    }
 
-        if (!s.hasNext())
-          return;
+    private void addSConsInfosToProject(String output) throws FileNotFoundException, CoreException {
+        BuildInfoParser parser = new BuildInfoParser(output);
+        ProjectSettingsWriter writer = new ProjectSettingsWriter(project);
+        writer.setIncludePaths(parser.getCIncludes(), ProjectSettingsWriter.GNU_C);
+        writer.setIncludePaths(parser.getCPPIncludes(), ProjectSettingsWriter.GNU_CPP);
+        writer.setMacros(parser.getCMacros(), ProjectSettingsWriter.GNU_C);
+        writer.setMacros(parser.getCPPMacros(), ProjectSettingsWriter.GNU_CPP);
+    }
 
-        String name = s.next().trim();
+    private void cleanUp() {
+        String extractorPath = SConsHelper.findFileAbovePath(project.getLocation().toFile(), BUILD_INFO_COLLECTOR);
+        if (extractorPath == null) return;
+        FileUtil.safelyDeleteFile(extractorPath + File.separator + BUILD_INFO_COLLECTOR);
+    }
 
-        if (!s.hasNext())
-          return;
+    private static class BuildInfoParser {
 
-        String list = s.next();
+        private final String             buildInfos;
+        private final Collection<String> cIncludes;
+        private final Collection<String> cPPIncludes;
+        private final Collection<String> cMacros;
+        private final Collection<String> cPPMacros;
 
-        if (name.equals("USER_INCLUDES")) {
-          cIncludes.addAll(processBuildValuesList(list));
-          cPPIncludes.addAll(processBuildValuesList(list));
-        } else if (name.equals("SYS_CPP_INCLUDES")) {
-          cPPIncludes.addAll(processBuildValuesList(list));
-        } else if (name.equals("SYS_C_INCLUDES")) {
-          cIncludes.addAll(processBuildValuesList(list));
-        } else if (name.equals("MACROS")) {
-          cMacros.addAll(processBuildValuesList(list));
-          cPPMacros.addAll(processBuildValuesList(list));
-        } else if (name.equals("SYS_C_MACROS")) {
-          cMacros.addAll(processBuildValuesList(list));
-        } else if (name.equals("SYS_CPP_MACROS")) {
-          cPPMacros.addAll(processBuildValuesList(list));
+        public BuildInfoParser(String buildInfos) throws FileNotFoundException {
+            this.buildInfos = buildInfos;
+            cIncludes = new ArrayList<String>();
+            cPPIncludes = new ArrayList<String>();
+            cMacros = new ArrayList<String>();
+            cPPMacros = new ArrayList<String>();
+            parse();
         }
-      } finally {
-        s.close();
-      }
-    }
 
-    private Collection<String> processBuildValuesList(String values) {
-      List<String> elements = new ArrayList<String>();
-      Scanner s = new Scanner(removeListBrackets(values));
+        private void parse() throws FileNotFoundException {
+            Scanner scanner = new Scanner(buildInfos);
 
-      try {
-        s.useDelimiter(",");
-
-        while (s.hasNext()) {
-          String value = s.next();
-          elements.add(value.substring(1, value.length() - 1));
+            try {
+                while (scanner.hasNextLine()) {
+                    processLine(scanner.nextLine());
+                }
+            } finally {
+                scanner.close();
+            }
         }
-      } finally {
-        s.close();
-      }
 
-      return elements;
-    }
+        private void processLine(String line) {
+            Scanner s = new Scanner(line);
 
-    private String removeListBrackets(String list) {
-      return list.replace("[", "").replace("]", "");
-    }
+            try {
+                s.useDelimiter(" = ");
 
-    private String[] getCIncludes() {
-      return cIncludes.toArray(new String[0]);
-    }
+                if (!s.hasNext()) return;
 
-    private String[] getCPPIncludes() {
-      return cPPIncludes.toArray(new String[0]);
-    }
+                String name = s.next().trim();
 
-    private String[] getCMacros() {
-      return cMacros.toArray(new String[0]);
-    }
+                if (!s.hasNext()) return;
 
-    private String[] getCPPMacros() {
-      return cPPMacros.toArray(new String[0]);
+                String list = s.next();
+
+                if (name.equals("USER_INCLUDES")) {
+                    cIncludes.addAll(processBuildValuesList(list));
+                    cPPIncludes.addAll(processBuildValuesList(list));
+                } else if (name.equals("SYS_CPP_INCLUDES")) {
+                    cPPIncludes.addAll(processBuildValuesList(list));
+                } else if (name.equals("SYS_C_INCLUDES")) {
+                    cIncludes.addAll(processBuildValuesList(list));
+                } else if (name.equals("MACROS")) {
+                    cMacros.addAll(processBuildValuesList(list));
+                    cPPMacros.addAll(processBuildValuesList(list));
+                } else if (name.equals("SYS_C_MACROS")) {
+                    cMacros.addAll(processBuildValuesList(list));
+                } else if (name.equals("SYS_CPP_MACROS")) {
+                    cPPMacros.addAll(processBuildValuesList(list));
+                }
+            } finally {
+                s.close();
+            }
+        }
+
+        private Collection<String> processBuildValuesList(String values) {
+            List<String> elements = new ArrayList<String>();
+            Scanner s = new Scanner(removeListBrackets(values));
+
+            try {
+                s.useDelimiter(",");
+
+                while (s.hasNext()) {
+                    String value = s.next();
+                    elements.add(value.substring(1, value.length() - 1));
+                }
+            } finally {
+                s.close();
+            }
+
+            return elements;
+        }
+
+        private String removeListBrackets(String list) {
+            return list.replace("[", "").replace("]", "");
+        }
+
+        private String[] getCIncludes() {
+            return cIncludes.toArray(new String[0]);
+        }
+
+        private String[] getCPPIncludes() {
+            return cPPIncludes.toArray(new String[0]);
+        }
+
+        private String[] getCMacros() {
+            return cMacros.toArray(new String[0]);
+        }
+
+        private String[] getCPPMacros() {
+            return cPPMacros.toArray(new String[0]);
+        }
     }
-  }
 }

@@ -15,69 +15,68 @@ import ch.hsr.ifs.sconsolidator.core.SConsPlugin;
 import ch.hsr.ifs.sconsolidator.core.targets.model.SConsBuildTarget;
 import ch.hsr.ifs.sconsolidator.core.targets.model.SConsBuildTargetManager;
 
+
 public class DeleteTargetAction extends SelectionListenerAction {
-  private final Shell shell;
 
-  public DeleteTargetAction(Shell shell) {
-    super(SConsI18N.DeleteTargetAction_DeleteTargetName);
-    this.shell = shell;
-    setToolTipText(SConsI18N.DeleteTargetAction_DeleteTargetTooltip);
-    SConsImages.setImageDescriptors(this, SConsImages.SCONS_TARGET_DELETE);
-    setEnabled(false);
-  }
+    private final Shell shell;
 
-  private boolean confirmDelete() {
-    List<?> targets = getSelectedElements();
-    String title;
-    String msg;
-
-    if (targets.size() == 1) {
-      title = SConsI18N.DeleteTargetAction_ConfirmTitle;
-      SConsBuildTarget target = (SConsBuildTarget) targets.get(0);
-      msg = NLS.bind(SConsI18N.DeleteTargetAction_ConfirmMessage, target.getDescription());
-    } else {
-      title = SConsI18N.DeleteTargetAction_ConfirmMultipleTitle;
-      msg = NLS.bind(SConsI18N.DeleteTargetAction_ConfirmMultipleMessage, targets.size());
+    public DeleteTargetAction(Shell shell) {
+        super(SConsI18N.DeleteTargetAction_DeleteTargetName);
+        this.shell = shell;
+        setToolTipText(SConsI18N.DeleteTargetAction_DeleteTargetTooltip);
+        SConsImages.setImageDescriptors(this, SConsImages.SCONS_TARGET_DELETE);
+        setEnabled(false);
     }
 
-    return MessageDialog.openQuestion(shell, title, msg);
-  }
+    private boolean confirmDelete() {
+        List<?> targets = getSelectedElements();
+        String title;
+        String msg;
 
-  @Override
-  public void run() {
-    if (!canDelete() || !confirmDelete())
-      return;
-
-    SConsBuildTargetManager manager = SConsPlugin.getDefault().getSConsTargetManager();
-
-    try {
-      for (Object target : getSelectedElements())
-        if (target instanceof SConsBuildTarget) {
-          manager.removeTarget((SConsBuildTarget) target);
+        if (targets.size() == 1) {
+            title = SConsI18N.DeleteTargetAction_ConfirmTitle;
+            SConsBuildTarget target = (SConsBuildTarget) targets.get(0);
+            msg = NLS.bind(SConsI18N.DeleteTargetAction_ConfirmMessage, target.getDescription());
+        } else {
+            title = SConsI18N.DeleteTargetAction_ConfirmMultipleTitle;
+            msg = NLS.bind(SConsI18N.DeleteTargetAction_ConfirmMultipleMessage, targets.size());
         }
-    } catch (CoreException e) {
-      SConsPlugin.showExceptionInDisplayThread(
-          SConsI18N.DeleteTargetAction_TargetDeletionFailedTitle,
-          SConsI18N.DeleteTargetAction_TargetDeletionFailedMessage, e);
+
+        return MessageDialog.openQuestion(shell, title, msg);
     }
-  }
 
-  @Override
-  protected boolean updateSelection(IStructuredSelection selection) {
-    return super.updateSelection(selection) && canDelete();
-  }
+    @Override
+    public void run() {
+        if (!canDelete() || !confirmDelete()) return;
 
-  private List<?> getSelectedElements() {
-    return getStructuredSelection().toList();
-  }
+        SConsBuildTargetManager manager = SConsPlugin.getDefault().getSConsTargetManager();
 
-  private boolean canDelete() {
-    List<?> elements = getSelectedElements();
+        try {
+            for (Object target : getSelectedElements())
+                if (target instanceof SConsBuildTarget) {
+                    manager.removeTarget((SConsBuildTarget) target);
+                }
+        } catch (CoreException e) {
+            SConsPlugin.showExceptionInDisplayThread(SConsI18N.DeleteTargetAction_TargetDeletionFailedTitle,
+                    SConsI18N.DeleteTargetAction_TargetDeletionFailedMessage, e);
+        }
+    }
 
-    for (Object element : elements)
-      if (!(element instanceof SConsBuildTarget))
-        return false;
+    @Override
+    protected boolean updateSelection(IStructuredSelection selection) {
+        return super.updateSelection(selection) && canDelete();
+    }
 
-    return !elements.isEmpty();
-  }
+    private List<?> getSelectedElements() {
+        return getStructuredSelection().toList();
+    }
+
+    private boolean canDelete() {
+        List<?> elements = getSelectedElements();
+
+        for (Object element : elements)
+            if (!(element instanceof SConsBuildTarget)) return false;
+
+        return !elements.isEmpty();
+    }
 }

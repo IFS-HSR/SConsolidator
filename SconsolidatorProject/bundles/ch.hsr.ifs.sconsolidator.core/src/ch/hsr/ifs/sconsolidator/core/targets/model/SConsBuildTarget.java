@@ -13,108 +13,106 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.PlatformObject;
 
+
 public class SConsBuildTarget extends PlatformObject {
-  private final IProject project;
-  private final String targetBuilderID;
-  private String additionalCmdLineArgs;
-  private String description;
-  private IContainer container;
-  private String targetName;
-  private boolean isDefault;
 
-  public SConsBuildTarget(String targetName, IProject project, String targetBuilderID,
-      String description, String additionalCommandLineArgs) {
-    this.targetName = targetName;
-    this.project = project;
-    this.targetBuilderID = targetBuilderID;
-    this.description = description;
-    this.additionalCmdLineArgs = additionalCommandLineArgs;
-  }
+    private final IProject project;
+    private final String   targetBuilderID;
+    private String         additionalCmdLineArgs;
+    private String         description;
+    private IContainer     container;
+    private String         targetName;
+    private boolean        isDefault;
 
-  public String getDescription() {
-    return description;
-  }
+    public SConsBuildTarget(String targetName, IProject project, String targetBuilderID, String description, String additionalCommandLineArgs) {
+        this.targetName = targetName;
+        this.project = project;
+        this.targetBuilderID = targetBuilderID;
+        this.description = description;
+        this.additionalCmdLineArgs = additionalCommandLineArgs;
+    }
 
-  public void setDescription(String description) {
-    this.description = description;
-  }
+    public String getDescription() {
+        return description;
+    }
 
-  public IProject getProject() {
-    return project;
-  }
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
-  public void setContainer(IContainer container) {
-    this.container = container;
-  }
+    public IProject getProject() {
+        return project;
+    }
 
-  public String getAdditionalCmdLineArgs() {
-    return additionalCmdLineArgs;
-  }
+    public void setContainer(IContainer container) {
+        this.container = container;
+    }
 
-  public void setAdditionalCmdLineArgs(String additionalCommandLineArgs) {
-    this.additionalCmdLineArgs = additionalCommandLineArgs;
-  }
+    public String getAdditionalCmdLineArgs() {
+        return additionalCmdLineArgs;
+    }
 
-  public void build(IProgressMonitor pm) throws CoreException {
-    ResourcesPlugin.getWorkspace().run(createBuildRunnable(), null, IResource.NONE, pm);
-  }
+    public void setAdditionalCmdLineArgs(String additionalCommandLineArgs) {
+        this.additionalCmdLineArgs = additionalCommandLineArgs;
+    }
 
-  private IWorkspaceRunnable createBuildRunnable() {
-    final Map<String, String> buildInfoMap = new HashMap<String, String>();
-    buildInfoMap.put("targetName", getTargetName());
-    buildInfoMap.put("additionalArgs", getAdditionalCmdLineArgs());
-    return new IWorkspaceRunnable() {
-      @Override
-      public void run(IProgressMonitor monitor) throws CoreException {
-        project.build(IncrementalProjectBuilder.FULL_BUILD, getTargetBuilderID(), buildInfoMap,
-            monitor);
-      }
-    };
-  }
+    public void build(IProgressMonitor pm) throws CoreException {
+        ResourcesPlugin.getWorkspace().run(createBuildRunnable(), null, IResource.NONE, pm);
+    }
 
-  public IContainer getContainer() {
-    return container;
-  }
+    private IWorkspaceRunnable createBuildRunnable() {
+        final Map<String, String> buildInfoMap = new HashMap<String, String>();
+        buildInfoMap.put("targetName", getTargetName());
+        buildInfoMap.put("additionalArgs", getAdditionalCmdLineArgs());
+        return new IWorkspaceRunnable() {
 
-  public String getTargetBuilderID() {
-    return targetBuilderID;
-  }
+            @Override
+            public void run(IProgressMonitor monitor) throws CoreException {
+                project.build(IncrementalProjectBuilder.FULL_BUILD, getTargetBuilderID(), buildInfoMap, monitor);
+            }
+        };
+    }
 
-  public String getTargetName() {
-    return targetName;
-  }
+    public IContainer getContainer() {
+        return container;
+    }
 
-  public void setTargetName(String targetName) {
-    this.targetName = targetName;
-  }
+    public String getTargetBuilderID() {
+        return targetBuilderID;
+    }
 
-  @Override
-  public String toString() {
-    return description
-        + (additionalCmdLineArgs == null ? "" : String.format(" [%s]", additionalCmdLineArgs));
-  }
+    public String getTargetName() {
+        return targetName;
+    }
 
-  public String getCommandLine() {
-    if (additionalCmdLineArgs != null && !additionalCmdLineArgs.trim().equals(""))
-      return additionalCmdLineArgs + " " + targetName;
-    return targetName;
-  }
+    public void setTargetName(String targetName) {
+        this.targetName = targetName;
+    }
 
-  public void setDefault(boolean isDefault) {
-    this.isDefault = isDefault;
-  }
+    @Override
+    public String toString() {
+        return description + (additionalCmdLineArgs == null ? "" : String.format(" [%s]", additionalCmdLineArgs));
+    }
 
-  public boolean isDefault() {
-    return isDefault;
-  }
+    public String getCommandLine() {
+        if (additionalCmdLineArgs != null && !additionalCmdLineArgs.trim().equals("")) return additionalCmdLineArgs + " " + targetName;
+        return targetName;
+    }
 
-  @SuppressWarnings("unchecked")
-  @Override
-  public <T> T getAdapter(Class<T> adapter) {
-    if (adapter.equals(IProject.class))
-      return (T) getProject();
-    else if (adapter.equals(IResource.class))
-      return (T) container;
-    return super.getAdapter(adapter);
-  }
+    public void setDefault(boolean isDefault) {
+        this.isDefault = isDefault;
+    }
+
+    public boolean isDefault() {
+        return isDefault;
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T> T getAdapter(Class<T> adapter) {
+        if (adapter.equals(IProject.class))
+            return (T) getProject();
+        else if (adapter.equals(IResource.class)) return (T) container;
+        return super.getAdapter(adapter);
+    }
 }

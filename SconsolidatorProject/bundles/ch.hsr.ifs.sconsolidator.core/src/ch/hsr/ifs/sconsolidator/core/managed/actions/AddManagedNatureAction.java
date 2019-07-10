@@ -9,15 +9,17 @@ import ch.hsr.ifs.sconsolidator.core.WithSelectedProjectsAction;
 import ch.hsr.ifs.sconsolidator.core.base.functional.VoidFunction;
 import ch.hsr.ifs.sconsolidator.core.managed.AddManagedSConsSupportJob;
 
+
 public class AddManagedNatureAction extends WithSelectedProjectsAction {
 
-  @Override
-  public void run(IAction action) {
-    withProjects(new VoidFunction<Collection<IProject>>() {
-      @Override
-      public void apply(Collection<IProject> projects) {
-        new AddManagedSConsSupportJob(projects).schedule();
-      }
-    });
-  }
+    @Override
+    public void run(IAction action) {
+        withProjects(new VoidFunction<Collection<IProject>>() {
+
+            @Override
+            public void apply(Collection<IProject> projects) {
+                new AddManagedSConsSupportJob(projects).schedule();
+            }
+        });
+    }
 }

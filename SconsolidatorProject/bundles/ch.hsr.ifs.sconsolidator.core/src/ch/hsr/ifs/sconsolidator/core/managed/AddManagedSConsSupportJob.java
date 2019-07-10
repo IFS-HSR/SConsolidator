@@ -13,35 +13,36 @@ import org.eclipse.core.runtime.jobs.Job;
 import ch.hsr.ifs.sconsolidator.core.SConsI18N;
 import ch.hsr.ifs.sconsolidator.core.SConsPlugin;
 
+
 public class AddManagedSConsSupportJob extends Job {
-  private final Collection<IProject> projects;
 
-  public AddManagedSConsSupportJob(Collection<IProject> projects) {
-    super(SConsI18N.SConsExtractInformationDialog_ConvertToSConsProjectMsg);
-    this.projects = projects;
-  }
+    private final Collection<IProject> projects;
 
-  @Override
-  protected IStatus run(IProgressMonitor pm) {
-    pm.beginTask(getName(), projects.size());
-
-    try {
-      for (IProject p : projects) {
-        addSconsSupport(p, pm);
-
-        if (pm.isCanceled())
-          return Status.CANCEL_STATUS;
-      }
-    } catch (Exception e) {
-      return new Status(IStatus.ERROR, SConsPlugin.PLUGIN_ID, e.getMessage());
-    } finally {
-      pm.done();
+    public AddManagedSConsSupportJob(Collection<IProject> projects) {
+        super(SConsI18N.SConsExtractInformationDialog_ConvertToSConsProjectMsg);
+        this.projects = projects;
     }
 
-    return Status.OK_STATUS;
-  }
+    @Override
+    protected IStatus run(IProgressMonitor pm) {
+        pm.beginTask(getName(), projects.size());
 
-  private void addSconsSupport(IProject project, IProgressMonitor pm) throws CoreException {
-    new SConsManagedProjectHandler(project, SubMonitor.convert(pm)).configureProject();
-  }
+        try {
+            for (IProject p : projects) {
+                addSconsSupport(p, pm);
+
+                if (pm.isCanceled()) return Status.CANCEL_STATUS;
+            }
+        } catch (Exception e) {
+            return new Status(IStatus.ERROR, SConsPlugin.PLUGIN_ID, e.getMessage());
+        } finally {
+            pm.done();
+        }
+
+        return Status.OK_STATUS;
+    }
+
+    private void addSconsSupport(IProject project, IProgressMonitor pm) throws CoreException {
+        new SConsManagedProjectHandler(project, SubMonitor.convert(pm)).configureProject();
+    }
 }

@@ -6,7 +6,7 @@
     <parent>
         <groupId>ch.hsr.ifs.sconsolidator</groupId>
         <artifactId>ch.hsr.ifs.sconsolidator.configuration</artifactId>
-        <version>1.0.0-SNAPSHOT</version>
+        <version>1.0.1-SNAPSHOT</version>
         <relativePath>./releng/ch.hsr.ifs.sconsolidator.configuration</relativePath>
     </parent>
     <modules>
@@ -16,5 +16,5 @@
         <module>tests</module>
         <module>helps</module>
     </modules>
-<version>1.0.1-SNAPSHOT</version>
+<version>1.1.0-SNAPSHOT</version>
 </project>

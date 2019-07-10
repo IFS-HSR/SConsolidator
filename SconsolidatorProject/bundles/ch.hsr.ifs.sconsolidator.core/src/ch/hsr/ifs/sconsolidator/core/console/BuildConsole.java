@@ -33,125 +33,125 @@ import ch.hsr.ifs.sconsolidator.core.base.utils.UIUtil;
 import ch.hsr.ifs.sconsolidator.core.commands.SConsConsole;
 import ch.hsr.ifs.sconsolidator.core.preferences.PreferenceConstants;
 
+
 @SuppressWarnings("restriction")
 public class BuildConsole implements SConsConsole {
-  private static final String DEFAULT_NAME = SConsI18N.Console_Title;
-  private final MessageConsole console;
 
-  public BuildConsole(IProject project) {
-    this(getConsoleName(project));
-    addCompileErrorListener(project);
-  }
+    private static final String  DEFAULT_NAME = SConsI18N.Console_Title;
+    private final MessageConsole console;
 
-  public BuildConsole(String title) {
-    console = findOrCreateConsole(title);
-  }
+    public BuildConsole(IProject project) {
+        this(getConsoleName(project));
+        addCompileErrorListener(project);
+    }
 
-  private void addCompileErrorListener(IProject project) {
-    console.addPatternMatchListener(new CompileErrorPatternMatcher(project));
-    console.addPatternMatchListener(new FortranErrorPatternMatcher(project));
-  }
+    public BuildConsole(String title) {
+        console = findOrCreateConsole(title);
+    }
 
-  private static String getConsoleName(IProject project) {
-    return String.format("%s [%s]", DEFAULT_NAME, project.getName());
-  }
+    private void addCompileErrorListener(IProject project) {
+        console.addPatternMatchListener(new CompileErrorPatternMatcher(project));
+        console.addPatternMatchListener(new FortranErrorPatternMatcher(project));
+    }
 
-  private static MessageConsole findOrCreateConsole(String name) {
-    IConsoleManager manager = getConsoleManager();
+    private static String getConsoleName(IProject project) {
+        return String.format("%s [%s]", DEFAULT_NAME, project.getName());
+    }
 
-    for (IConsole console : manager.getConsoles())
-      if (name.equals(console.getName()))
-        return (MessageConsole) console;
+    private static MessageConsole findOrCreateConsole(String name) {
+        IConsoleManager manager = getConsoleManager();
 
-    return createConsole(name, manager);
-  }
+        for (IConsole console : manager.getConsoles())
+            if (name.equals(console.getName())) return (MessageConsole) console;
 
-  private static MessageConsole createConsole(String name, IConsoleManager manager) {
-    ImageDescriptor img = SConsImages.getImageDescriptor(SConsImages.SCONS_TARGET);
-    MessageConsole console = new MessageConsole(name, img);
-    manager.addConsoles(new IConsole[] {console});
-    return console;
-  }
+        return createConsole(name, manager);
+    }
 
-  private static IConsoleManager getConsoleManager() {
-    return ConsolePlugin.getDefault().getConsoleManager();
-  }
+    private static MessageConsole createConsole(String name, IConsoleManager manager) {
+        ImageDescriptor img = SConsImages.getImageDescriptor(SConsImages.SCONS_TARGET);
+        MessageConsole console = new MessageConsole(name, img);
+        manager.addConsoles(new IConsole[] { console });
+        return console;
+    }
 
-  @Override
-  public OutputStream getConsoleOutputStream(final ConsoleOutput kind) {
-    IOConsoleOutputStream output = console.newOutputStream();
-    output.setActivateOnWrite(false);
-    setColorInDisplayThread(output, kind.getColorPreference());
-    return output;
-  }
+    private static IConsoleManager getConsoleManager() {
+        return ConsolePlugin.getDefault().getConsoleManager();
+    }
 
-  @Override
-  public void print(String line) throws IOException {
-    MessageConsoleStream output = console.newMessageStream();
-    setColorInDisplayThread(output, BuildConsolePreferencePage.PREF_BUILDCONSOLE_INFO_COLOR);
-    output.print(line);
-    output.close();
-  }
+    @Override
+    public OutputStream getConsoleOutputStream(final ConsoleOutput kind) {
+        IOConsoleOutputStream output = console.newOutputStream();
+        output.setActivateOnWrite(false);
+        setColorInDisplayThread(output, kind.getColorPreference());
+        return output;
+    }
 
-  @Override
-  public void println(String line) throws IOException {
-    MessageConsoleStream output = console.newMessageStream();
-    setColorInDisplayThread(output, BuildConsolePreferencePage.PREF_BUILDCONSOLE_INFO_COLOR);
-    output.println(line);
-    output.close();
-  }
+    @Override
+    public void print(String line) throws IOException {
+        MessageConsoleStream output = console.newMessageStream();
+        setColorInDisplayThread(output, BuildConsolePreferencePage.PREF_BUILDCONSOLE_INFO_COLOR);
+        output.print(line);
+        output.close();
+    }
 
-  private void setColorInDisplayThread(final IOConsoleOutputStream output, final String preference) {
-    UIUtil.runInDisplayThread(new Runnable() {
-      @Override
-      public void run() {
-        output.setColor(createColor(Display.getCurrent(), preference));
-      }
-    });
-  }
-  
-  private Color createColor(final Display display, final String preference) {
-    RGB rgb = PreferenceConverter.getColor(CUIPlugin.getDefault().getPreferenceStore(), preference);
-    //FIXME the color should also get disposed somewhere
-    return new Color(display, rgb);
-  }
+    @Override
+    public void println(String line) throws IOException {
+        MessageConsoleStream output = console.newMessageStream();
+        setColorInDisplayThread(output, BuildConsolePreferencePage.PREF_BUILDCONSOLE_INFO_COLOR);
+        output.println(line);
+        output.close();
+    }
 
-  @Override
-  public void show() throws PartInitException {
-    IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-    IConsoleView view = (IConsoleView) page.showView(IConsoleConstants.ID_CONSOLE_VIEW);
-    view.display(console);
-  }
+    private void setColorInDisplayThread(final IOConsoleOutputStream output, final String preference) {
+        UIUtil.runInDisplayThread(new Runnable() {
 
-  @Override
-  public void clear() {
-    console.clearConsole();
-  }
+            @Override
+            public void run() {
+                output.setColor(createColor(Display.getCurrent(), preference));
+            }
+        });
+    }
 
-  public static void showConsole(final SConsConsole console) {
-    if (!openConsoleWhenBuildingActivated())
-      return;
+    private Color createColor(final Display display, final String preference) {
+        RGB rgb = PreferenceConverter.getColor(CUIPlugin.getDefault().getPreferenceStore(), preference);
+        //FIXME the color should also get disposed somewhere
+        return new Color(display, rgb);
+    }
 
-    UIUtil.runInDisplayThread(new Runnable() {
-      @Override
-      public void run() {
-        try {
-          console.show();
-        } catch (PartInitException e) {
-          SConsPlugin.log(new CoreException(new Status(IStatus.ERROR, SConsPlugin.PLUGIN_ID, e
-              .getMessage())));
-        }
-      }
-    });
-  }
+    @Override
+    public void show() throws PartInitException {
+        IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+        IConsoleView view = (IConsoleView) page.showView(IConsoleConstants.ID_CONSOLE_VIEW);
+        view.display(console);
+    }
 
-  private static boolean openConsoleWhenBuildingActivated() {
-    return SConsPlugin.getConfigPreferenceStore().getBoolean(
-        PreferenceConstants.OPEN_CONSOLE_WHEN_BUILDING);
-  }
-  
-  @Override
-  public void addBuildConsoleColorLink() {
-      console.addPatternMatchListener(new ConsoleLogPatternMatcher(SConsI18N.AbstractSConsCommand_ConsoleColorInfoLinkText));
-  }
+    @Override
+    public void clear() {
+        console.clearConsole();
+    }
+
+    public static void showConsole(final SConsConsole console) {
+        if (!openConsoleWhenBuildingActivated()) return;
+
+        UIUtil.runInDisplayThread(new Runnable() {
+
+            @Override
+            public void run() {
+                try {
+                    console.show();
+                } catch (PartInitException e) {
+                    SConsPlugin.log(new CoreException(new Status(IStatus.ERROR, SConsPlugin.PLUGIN_ID, e.getMessage())));
+                }
+            }
+        });
+    }
+
+    private static boolean openConsoleWhenBuildingActivated() {
+        return SConsPlugin.getConfigPreferenceStore().getBoolean(PreferenceConstants.OPEN_CONSOLE_WHEN_BUILDING);
+    }
+
+    @Override
+    public void addBuildConsoleColorLink() {
+        console.addPatternMatchListener(new ConsoleLogPatternMatcher(SConsI18N.AbstractSConsCommand_ConsoleColorInfoLinkText));
+    }
 }

@@ -8,25 +8,27 @@ import org.eclipse.ui.PartInitException;
 import ch.hsr.ifs.sconsolidator.core.base.utils.NullOutputStream;
 import ch.hsr.ifs.sconsolidator.core.commands.SConsConsole;
 
+
 public class NullConsole implements SConsConsole {
-  @Override
-  public OutputStream getConsoleOutputStream(ConsoleOutput kind) {
-    return new NullOutputStream();
-  }
 
-  @Override
-  public void print(final String line) throws IOException {}
+    @Override
+    public OutputStream getConsoleOutputStream(ConsoleOutput kind) {
+        return new NullOutputStream();
+    }
 
-  @Override
-  public void println(final String line) throws IOException {}
+    @Override
+    public void print(final String line) throws IOException {}
 
-  @Override
-  public void show() throws PartInitException {}
+    @Override
+    public void println(final String line) throws IOException {}
 
-  @Override
-  public void clear() {}
+    @Override
+    public void show() throws PartInitException {}
 
-  @Override
-  public void addBuildConsoleColorLink() {}
-  
+    @Override
+    public void clear() {}
+
+    @Override
+    public void addBuildConsoleColorLink() {}
+
 }

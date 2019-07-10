@@ -9,48 +9,46 @@ import org.eclipse.ui.model.WorkbenchLabelProvider;
 import ch.hsr.ifs.sconsolidator.core.SConsImages;
 import ch.hsr.ifs.sconsolidator.core.targets.model.SConsBuildTarget;
 
+
 class SConsTargetLabelProvider extends LabelProvider implements ITableLabelProvider {
-  private final Image targetImg = SConsImages.getImageDescriptor(SConsImages.SCONS_TARGET)
-      .createImage();
-  private final WorkbenchLabelProvider labelProvider = new WorkbenchLabelProvider();
 
-  @Override
-  public Image getImage(Object obj) {
-    if (obj instanceof SConsBuildTarget)
-      return targetImg;
-    else if (obj instanceof IProject)
-      return labelProvider.getImage(obj);
+    private final Image                  targetImg     = SConsImages.getImageDescriptor(SConsImages.SCONS_TARGET).createImage();
+    private final WorkbenchLabelProvider labelProvider = new WorkbenchLabelProvider();
 
-    return null;
-  }
+    @Override
+    public Image getImage(Object obj) {
+        if (obj instanceof SConsBuildTarget)
+            return targetImg;
+        else if (obj instanceof IProject) return labelProvider.getImage(obj);
 
-  @Override
-  public String getText(Object obj) {
-    if (obj instanceof SConsBuildTarget)
-      return ((SConsBuildTarget) obj).toString();
-    else if (obj instanceof IProject)
-      return labelProvider.getText(obj);
+        return null;
+    }
 
-    return null;
-  }
+    @Override
+    public String getText(Object obj) {
+        if (obj instanceof SConsBuildTarget)
+            return ((SConsBuildTarget) obj).toString();
+        else if (obj instanceof IProject) return labelProvider.getText(obj);
 
-  @Override
-  public void dispose() {
-    super.dispose();
-    labelProvider.dispose();
-    targetImg.dispose();
-  }
+        return null;
+    }
 
-  @Override
-  public Image getColumnImage(Object obj, int columnIndex) {
-    return columnIndex == 0 ? getImage(obj) : null;
-  }
+    @Override
+    public void dispose() {
+        super.dispose();
+        labelProvider.dispose();
+        targetImg.dispose();
+    }
 
-  @Override
-  public String getColumnText(Object obj, int columnIndex) {
-    if (columnIndex != 0)
-      throw new IllegalArgumentException("Unknown column index");
+    @Override
+    public Image getColumnImage(Object obj, int columnIndex) {
+        return columnIndex == 0 ? getImage(obj) : null;
+    }
 
-    return getText(obj);
-  }
+    @Override
+    public String getColumnText(Object obj, int columnIndex) {
+        if (columnIndex != 0) throw new IllegalArgumentException("Unknown column index");
+
+        return getText(obj);
+    }
 }
