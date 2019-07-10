@@ -65,6 +65,8 @@ Test:
       - 'xvfb-run ./tools/build verify -T 1C'
     dependencies: []
     artifacts:
+      paths:
+      - './*/tets/*/target/work/data/.metadata/.log'
       reports:
         junit: './*/tests/*/target/surefire-reports/TEST-*.xml'
 
