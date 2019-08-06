@@ -3,24 +3,91 @@
       id="ch.hsr.ifs.sconsolidator.depviz.feature"
       label="SConsolidator Depviz"
       version="1.1.0.qualifier"
-      provider-name="IFS Institute for Software"
-      plugin="ch.hsr.ifs.sconsolidator.depviz">
+      provider-name="IFS Institute for Software">
 
-   <description url="http://sconsolidator.com">
-      %description
+   <description url="https://cute-test.com/guides/scons">
+      Visualization of SCons target dependencies in a separate view (optional).
    </description>
 
    <copyright>
-      %copyright
+      Copyright (c) 2012 Institute for Software, HSR Hochschule für
+Technik Rapperswil
+The Software and Documentation are copyrighted by HSR and are
+protected by
+international copyright laws. The product contains copyrighted
+software of HSR.
+All rights reserved. You agree not to remove any trademarks or
+copyright notices
+from the Software or Documentation.
+Contributors:
+Michael Rüegg &lt;michael.ruegg@hsr.ch&gt;
+- initial API and implementation
    </copyright>
 
-   <license>
-      %license
-   </license>
+   <license url="">
+      Cevelop License Agreement
 
-   <url>
-      <update label="%updateSiteName" url="http://sconsolidator.com/update"/>
-   </url>
+This is a legal agreement between you, the end user, and Hochschule für Technik
+Rapperswil HSR, hereinafter referred to as &quot;HSR&quot;. SConsolidator  (the &quot;Software&quot;) is
+owned by HSR and is protected by copyright law. Upon acceptance of the terms of
+this License Agreement, your rights and obligations with respect to use of the
+Software are as follows.
+
+COPYRIGHT.
+
+The Software and Documentation are copyrighted by HSR and are protected by
+international copyright laws. The product contains copyrighted software of HSR.
+All rights reserved. You agree not to remove any trademarks or copyright notices
+from the Software or Documentation.
+
+OTHER RESTRICTIONS.
+
+You may not disclose, publish, translate, rent, lease, transfer, export or
+otherwise make the Software available in any form, to any person or entity,
+except as expressly licensed herein. You may not reverse engineer, decompile
+or disassemble the Software.
+
+You cannot use HSR or related names, logos or trademarks to market your
+software without express written permission.
+
+IN NO EVENT SHALL HSR BE LIABLE FOR ANY LOSS OF PROFIT OR ANY OTHER
+DAMAGE, INCLUDING BUT NOT LIMITED TO SPECIAL, INCIDENTAL, CONSEQUENTIAL OR
+OTHER DAMAGES. THE SOFTWARE IS PROVIDED &quot;AS IS&quot; WITHOUT WARRANTY OF ANY KIND.
+HSR SPECIFICALLY DISCLAIMS ALL OTHER WARRANTIES, EXPRESS OR IMPLIED,
+INCLUDING WITHOUT LIMITATION THE IMPLIED WARRANTIES OF MERCHANTABILITY OR
+FITNESS FOR A PARTICULAR USE.
+
+HSR DOES NOT WARRANT THAT THE SOFTWARE WILL MEET YOUR REQUIREMENTS
+OR THAT THE OPERATION OF THE SOFTWARE WILL BE UNINTERRUPTED OR ERROR-FREE.
+
+GOVERNING LAW.
+
+This Agreement shall be governed by Swiss law, without regard to conflict of
+laws principles. This Agreement may only be modified by a written document
+signed by the party or parties to be bound. Except as may be specified in such a
+written agreement, this is the entire agreement between you and HSR and all
+other terms are rejected. You agree not to use, ship, or export the Software in
+violation of any applicable law.
+
+In the event of any legal disputes in conjunction with this license and
+contracts based on it, the courts of Rapperswil/SG shall be the sole competent
+courts.
+
+ENTIRE AGREEMENT.
+
+You agree that this Agreement expresses the entire understanding between you and
+HSR, and supersedes all other communications, oral or written, relating to the
+Software.
+
+COPYRIGHT 2017 Hochschule für Technik Rapperswil
+
+MANUFACTURER:
+HSR Hochschule für Technik Rapperswil
+Oberseestrasse 10
+Postfach 1475
+8640 Rapperswil
+Switzerland
+   </license>
 
    <plugin
          id="ch.hsr.ifs.sconsolidator.depviz"
