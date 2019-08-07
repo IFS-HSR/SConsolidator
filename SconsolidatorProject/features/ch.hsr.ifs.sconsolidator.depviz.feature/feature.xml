@@ -24,11 +24,11 @@ Michael Rüegg &lt;michael.ruegg@hsr.ch&gt;
 - initial API and implementation
    </copyright>
 
-   <license url="">
+   <license url="https://www.cevelop.com/license">
       Cevelop License Agreement
 
 This is a legal agreement between you, the end user, and Hochschule für Technik
-Rapperswil HSR, hereinafter referred to as &quot;HSR&quot;. SConsolidator  (the &quot;Software&quot;) is
+Rapperswil HSR, hereinafter referred to as &quot;HSR&quot;. SConsolidator Depviz (the &quot;Software&quot;) is
 owned by HSR and is protected by copyright law. Upon acceptance of the terms of
 this License Agreement, your rights and obligations with respect to use of the
 Software are as follows.
@@ -88,6 +88,10 @@ Postfach 1475
 8640 Rapperswil
 Switzerland
    </license>
+
+   <url>
+      <update label="SConsolidator Update Site" url="http://sconsolidator.com/update"/>
+   </url>
 
    <plugin
          id="ch.hsr.ifs.sconsolidator.depviz"
