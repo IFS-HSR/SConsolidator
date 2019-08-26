@@ -79,7 +79,10 @@ def collect_sys_includes(lang, environ):
                     [get_compiler(environ), '-v', get_gcc_lang_param(lang)] + get_compiler_flags(lang, environ) + [in_path, '-o', out_path],
                     stdin='devnull', stderr=subprocess.PIPE, stdout=subprocess.PIPE)
                 (_, perr) = process.communicate()
-                return perr
+                try:
+                    return perr.decode()
+                except AttributeError:
+                    return perr
 
     def parse_includes(cc_output):
         cc_output = cc_output.replace('\r', '')
@@ -127,8 +130,11 @@ def collect_macros_from_cpp_defines(environ):
         return '{macro}={value}'.format(**locals())
 
     def handle_dict(d):
-        return set(macro_binding(k, v) for (k, v) in d.iteritems())
-    
+        try:
+            return set(macro_binding(k, v) for (k, v) in d.iteritems())
+        except AttributeError:
+            return set(macro_binding(k, v) for (k, v) in d.items())
+
     cpp_defines = environ['CPPDEFINES']
 
     if isinstance(cpp_defines, (list, tuple)):
@@ -160,6 +166,10 @@ def collect_sys_macros(lang, environ):
     (pout, _) = process.communicate()
     sysmacros = set()
 
+    try:
+        pout = pout.decode()
+    except AttributeError:
+        pass
     for it in re.finditer('^#define (.*) (.*)$', pout, re.M):
         sysmacros.add('%s=%s' % (it.groups()[0], it.groups()[1].strip()))
     return sysmacros
