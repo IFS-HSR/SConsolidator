@@ -2,7 +2,7 @@
 <feature
       id="ch.hsr.ifs.sconsolidator.feature"
       label="SConsolidator"
-      version="1.1.0.qualifier"
+      version="1.2.0.qualifier"
       provider-name="IFS Institute for Software">
 
    <description url="https://cute-test.com/guides/scons">

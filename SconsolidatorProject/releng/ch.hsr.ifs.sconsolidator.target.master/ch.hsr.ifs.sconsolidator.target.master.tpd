@@ -1,20 +1,20 @@
-target "SConsolidator" with source requirements
+target "SConsolidator for 2019-09" with source requirements
 
-location "http://download.eclipse.org/releases/2019-06" {
+location "http://download.eclipse.org/releases/2019-09" {
 	org.eclipse.swtbot.eclipse.feature.group 2.8.0
 	org.apache.log4j 1.2.15
 
-	org.eclipse.platform.sdk 4.12.0
-	org.eclipse.sdk.ide 4.12.0
+	org.eclipse.platform.sdk 4.13.0
+	org.eclipse.sdk.ide 4.13.0
 	org.eclipse.zest.feature.group 1.7.0
 
 	javax.xml.stream 1.0.1
 }
 
-location "http://download.eclipse.org/tools/cdt/releases/9.8" {
-	org.eclipse.cdt.sdk.feature.group 9.8.1
+location "http://download.eclipse.org/tools/cdt/releases/9.9" {
+	org.eclipse.cdt.sdk.feature.group 9.9.0
 }
 
 location "https://www.cevelop.com/iltis/" {
-	ch.hsr.ifs.iltis.testing.highlevel.feature.feature.group 2.2.1
+	ch.hsr.ifs.iltis.testing.highlevel.feature.feature.group 2.3.0
 }
