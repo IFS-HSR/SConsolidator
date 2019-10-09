@@ -183,6 +183,7 @@ def write_build_infos(includes, macros, environ):
                 strings.append("'%s'" % '='.join(obj))
             else:
                 strings.append("'%s'" % obj)
+        strings.sort()
         return ','.join([environ.subst(string) for string in strings])
 
     print('USER_INCLUDES = [%s]' % to_string(includes, environ))
