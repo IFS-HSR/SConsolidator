@@ -160,7 +160,7 @@ def collect_sys_macros(lang, environ):
     (pout, _) = process.communicate()
     sysmacros = set()
 
-    for it in re.finditer('^#define (.*) (.*)$', pout, re.M):
+    for it in re.finditer('^#define ([a-zA-Z0-9_]*(?:\(.*\))?) (.*)$', pout, re.M):
         sysmacros.add('%s=%s' % (it.groups()[0], it.groups()[1].strip()))
     return sysmacros
 
