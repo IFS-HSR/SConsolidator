@@ -34,7 +34,7 @@ Build Signed:
     - develop@cevelop/sconsolidator
   stage: build
   script:
-    - 'xvfb-run ./tools/build package -s'
+    - 'xvfb-run ./releng-tools/build package -s'
   artifacts:
     expire_in: 1 hour
     paths:
@@ -49,7 +49,7 @@ Build Unsigned:
     - develop@cevelop/sconsolidator
   stage: build
   script:
-    - 'xvfb-run ./tools/build package'
+    - 'xvfb-run ./releng-tools/build package'
   artifacts:
     expire_in: 1 hour
     paths:
@@ -62,7 +62,7 @@ Test:
     image: gitlab.dev.ifs.hsr.ch:45023/cevelop/docker-tycho-build-with-scons:latest
     stage: test
     script:
-      - 'xvfb-run ./tools/build verify -T 1C'
+      - 'xvfb-run ./releng-tools/build verify -T 1C'
     dependencies: []
     artifacts:
       reports:
@@ -84,5 +84,5 @@ Deploy:
   script:
     - "export P2_ROOT=${P2_ROOT_BASE}$( (echo ${CI_COMMIT_REF_NAME} | grep develop &>/dev/null) && echo '-unstable')"
     - "export P2_COMPOSITE_VERSION=$(sed -n 's/[ \\t]*<version>\\([0-9]\\.[0-9]\\.[0-9]\\)-SNAPSHOT<\\/version>/\\1/p' *Project/**/*.update/pom.xml | head -1)"
-    - "./tools/ci/deploy"
+    - "./releng-tools/ci/deploy"
 
