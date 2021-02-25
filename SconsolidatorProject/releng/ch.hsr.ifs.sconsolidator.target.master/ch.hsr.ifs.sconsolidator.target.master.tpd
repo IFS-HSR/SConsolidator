@@ -16,5 +16,5 @@ location "http://download.eclipse.org/tools/cdt/releases/9.10" {
 }
 
 location "https://www.cevelop.com/iltis/" {
-	ch.hsr.ifs.iltis.testing.highlevel.feature.feature.group 2.4.0
+	ch.hsr.ifs.iltis.testing.highlevel.feature.feature.group 4.0
 }
