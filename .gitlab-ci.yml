@@ -62,7 +62,7 @@ Test:
     image: gitlab.dev.ifs.hsr.ch:45023/cevelop/docker-tycho-build-with-scons:latest
     stage: test
     script:
-      - 'xvfb-run ./tools/releng-build verify -T 1C'
+      - 'xvfb-run ./relent-tools/build verify -T 1C'
     dependencies: []
     artifacts:
       reports:
