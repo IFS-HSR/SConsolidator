@@ -34,7 +34,7 @@ Build Signed:
     - develop@cevelop/sconsolidator
   stage: build
   script:
-    - 'xvfb-run ./tools/build package -s'
+    - 'xvfb-run ./releng-tools/build package -s'
   artifacts:
     expire_in: 1 hour
     paths:
@@ -49,7 +49,7 @@ Build Unsigned:
     - develop@cevelop/sconsolidator
   stage: build
   script:
-    - 'xvfb-run ./tools/build package'
+    - 'xvfb-run ./releng-tools/build package'
   artifacts:
     expire_in: 1 hour
     paths:
@@ -62,7 +62,7 @@ Test:
     image: gitlab.dev.ifs.hsr.ch:45023/cevelop/docker-tycho-build-with-scons:latest
     stage: test
     script:
-      - 'xvfb-run ./tools/build verify -T 1C'
+      - 'xvfb-run ./tools/releng-build verify -T 1C'
     dependencies: []
     artifacts:
       reports:
