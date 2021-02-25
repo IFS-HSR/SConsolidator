@@ -2,7 +2,7 @@
 <feature
       id="ch.hsr.ifs.sconsolidator.depviz.feature"
       label="SConsolidator Depviz"
-      version="1.3.0.qualifier"
+      version="1.4.0.qualifier"
       provider-name="IFS Institute for Software">
 
    <description url="https://cute-test.com/guides/scons">
